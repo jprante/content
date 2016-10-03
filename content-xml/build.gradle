@@ -1,0 +1,5 @@
+dependencies {
+    compile project(':content-core')
+    compile project(':content-resource')
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.8.3"
+}

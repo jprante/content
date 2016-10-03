@@ -1,0 +1,4 @@
+dependencies {
+    compile project(':content-core')
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.8.3"
+}

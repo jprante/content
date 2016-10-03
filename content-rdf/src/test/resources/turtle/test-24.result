@@ -1,0 +1,2 @@
+<http://example.org#a> <http://example.org#b> "true"^^xsd:boolean.
+<http://example.org#c> <http://example.org#d> "false"^^xsd:boolean.

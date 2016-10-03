@@ -1,0 +1,2 @@
+<> <rdf:first> "apple"<> <rdf:first> "banana"<> <rdf:rest> <><> <rdf:rest> <rdf:null>.
+<http://example.org/stuff/1.0/a> <http://example.org/stuff/1.0/b> <>.

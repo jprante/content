@@ -1,0 +1,72 @@
+<http://d-nb.info/gnd/4000196-9> gnd:gndIdentifier "4000196-9";
+	gnd:oldAuthorityNumber "(DE-588c)4000196-9";
+	gnd:variantNameForTheWork "Abrogans deutsch", "Deutsches Abrogans", "Keronisches Glossar";
+	gnd:preferredNameForTheWork "Abrogans";
+	gnd:broaderTermInstantial <http://d-nb.info/gnd/4157654-8>;
+	gnd:gndSubjectCategory <http://d-nb.info/vocab/gnd-sc#11.3d>;
+	gnd:geographicAreaCode <http://d-nb.info/standards/vocab/gnd/geographic-area-code#XA-DE>;
+	gnd:languageCode <http://id.loc.gov/vocabulary/iso639-2/goh>;
+	gnd:definition "Lateinisch-althochdeutsches Glossar, um 765 entstanden"@de;
+	a gnd:Work.
+<http://d-nb.info/gnd/4001191-4> gnd:gndIdentifier "4001191-4";
+	gnd:oldAuthorityNumber "(DE-588c)4001191-4";
+	gnd:variantNameForTheWork "Chanson d'Aliscans", "La @bataille d'Aliscans";
+	gnd:preferredNameForTheWork "Aliscans";
+	gnd:broaderTermPartitive <http://d-nb.info/gnd/4189913-1>;
+	gnd:gndSubjectCategory <http://d-nb.info/vocab/gnd-sc#12.2b>;
+	gnd:geographicAreaCode <http://d-nb.info/standards/vocab/gnd/geographic-area-code#XA-FR>;
+	a gnd:Work.
+<http://d-nb.info/gnd/4001270-0> gnd:gndIdentifier "4001270-0";
+	gnd:oldAuthorityNumber "(DE-588c)4001270-0";
+	gnd:preferredNameForTheWork "Allgemeine deutsche Bibliothek <Zeitschrift>";
+	gnd:broaderTermInstantial <http://d-nb.info/gnd/4035949-9>;
+	gnd:gndSubjectCategory <http://d-nb.info/vocab/gnd-sc#12.1b>, <http://d-nb.info/vocab/gnd-sc#2.3>;
+	gnd:geographicAreaCode <http://d-nb.info/standards/vocab/gnd/geographic-area-code#XA-DE>;
+	gnd:languageCode <http://id.loc.gov/vocabulary/iso639-2/ger>;
+	gnd:relatedPlaceOrGeographicName <http://d-nb.info/gnd/4011882-4>;
+	a gnd:Work.
+<http://d-nb.info/gnd/100003893> foaf:page <http://de.wikipedia.org/wiki/Adamantios>;
+	owl:sameAs <http://dbpedia.org/resource/Adamantius>;
+	gnd:gndIdentifier "100003893";
+	gnd:oldAuthorityNumber "(DE-588a)100003893";
+	gnd:variantNameForThePerson "Adamantius <aus Alexandrien>", "Adamantios <Sophista>", "Adamantius <Sophista>", "Adamantius <Iudaeus>", "Adamantius <Medicus>", "Adamantius <Physiognomonicus>", "Adamantios <Mediziner>", "Adamantios <Arzt>", "Adamantios <von Alexandria>", "Adamantios <von Alexandreia>";
+	gnd:variantNameEntityForThePerson [
+		gnd:personalName "Adamantius";
+		gnd:epithetGenericNameTitleOrTerritory "aus Alexandrien"
+	],[
+		gnd:personalName "Adamantios";
+		gnd:epithetGenericNameTitleOrTerritory "Sophista"
+	],[
+		gnd:personalName "Adamantius";
+		gnd:epithetGenericNameTitleOrTerritory "Sophista"
+	],[
+		gnd:personalName "Adamantius";
+		gnd:epithetGenericNameTitleOrTerritory "Iudaeus"
+	],[
+		gnd:personalName "Adamantius";
+		gnd:epithetGenericNameTitleOrTerritory "Medicus"
+	],[
+		gnd:personalName "Adamantius";
+		gnd:epithetGenericNameTitleOrTerritory "Physiognomonicus"
+	],[
+		gnd:personalName "Adamantios";
+		gnd:epithetGenericNameTitleOrTerritory "Mediziner"
+	],[
+		gnd:personalName "Adamantios";
+		gnd:epithetGenericNameTitleOrTerritory "Arzt"
+	],[
+		gnd:personalName "Adamantios";
+		gnd:epithetGenericNameTitleOrTerritory "von Alexandria"
+	],[
+		gnd:personalName "Adamantios";
+		gnd:epithetGenericNameTitleOrTerritory "von Alexandreia"
+	];
+	gnd:preferredNameForThePerson "Adamantius <Alexandrinus>";
+	gnd:preferredNameEntityForThePerson [
+		gnd:personalName "Adamantius";
+		gnd:epithetGenericNameTitleOrTerritory "Alexandrinus"
+	];
+	gnd:publication "Adamantius <Sophista>: Physiognomonica. - 1540", "Adamantius <Sophista>: Physiognomica. - 1587", "Adamantius <Sophista>: Physiognomonicon. - 1544", "Adamantius <Sophista>: Physionomia. - 1545", "Adamantius <Sophista>: Adamantii Sophistae Physiognomonicon. - 1544", "Aristoteles: Physiognomonica Pseudoaristotelis, graece et latine, Adamantii cum epitomis *", "Polemon, Marcus Antonius: Physiognomica";
+	gnd:dateOfBirthAndDeath "4./5. Jh. n. Chr.";
+	a gnd:DifferentiatedPerson;
+	gnd:gender <http://d-nb.info/standards/vocab/gnd/Gender#notKnown>.

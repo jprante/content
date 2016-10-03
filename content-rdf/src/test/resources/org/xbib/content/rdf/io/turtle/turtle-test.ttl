@@ -1,0 +1,16 @@
+<urn:res> dc:title "Hello", "World";
+	xbib:person "Jörg Prante";
+	dc:subject "An", "example", "for", "a", "sequence";
+	dcterms:place "Köln";
+	<urn:res1> [
+		<property1> "value1";
+		<property2> "value2"
+	];
+	<urn:res2> [
+		<property3> "value3";
+		<property4> "value4"
+	];
+	<urn:res3> [
+		<property5> "value5";
+		<property6> "value6"
+	].

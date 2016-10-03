@@ -1,0 +1,40 @@
+{
+   "@context": {
+      "type": "@type",
+      "id": "@id",
+      "article": "http://purl.org/ontology/bibo/Article",
+      "Journal": "http://purl.org/ontology/bibo/Journal",
+      "journal": "http://purl.org/dc/elements/1.1/isPartOf",
+      "title": "http://purl.org/dc/elements/1.1/title",
+      "issue": "http://purl.org/ontology/bibo/issue",
+      "author": {
+        "@id":"http://purl.org/dc/elements/1.1/creator",
+        "@container": "@set"
+      },
+      "Person": "http://xmlns.com/foaf/0.1/Person",
+      "link": {
+        "@id": "http://purl.org/dc/elements/1.1/link",
+        "@container": "@set"
+          },
+      "doi": {
+        "@id":"http://purl.org/ontology/bibo/doi",
+        "@container": "@set"
+      },
+      "name": "http://www.w3.org/2000/01/rdf-schema#label",
+      "year": "http://purl.org/dc/elements/1.1/date"
+   },
+
+  "@type": "article",
+  "author": {
+    "@type": "Person",
+    "@embed": "true"
+  } ,
+  "journal": {
+    "@type":"Journal",
+    "@embed": "true"
+  },
+  "link": {
+    "@type":"id",
+    "@embed": "true"
+  }
+}
