@@ -1,12 +1,13 @@
 package org.xbib.content.settings;
 
-import static org.xbib.content.settings.Settings.settingsBuilder;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.xbib.content.XContentHelper;
 
+import java.io.ByteArrayInputStream;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,12 @@ import java.util.Map;
  *
  */
 public class SettingsTest extends Assert {
+
+    @Test
+    public void testEmpty() {
+        Settings settings = Settings.EMPTY_SETTINGS;
+        assertTrue(settings.getAsMap().isEmpty());
+    }
 
     @Test
     public void testArray() {
@@ -51,7 +58,7 @@ public class SettingsTest extends Assert {
         map.put("hello", "world");
         Map<String, Object> settingsMap = new HashMap<>();
         settingsMap.put("map", map);
-        Settings settings = settingsBuilder().loadFromMap(settingsMap).build();
+        Settings settings = Settings.settingsBuilder().loadFromMap(settingsMap).build();
         assertEquals("{map.hello=world}", settings.getAsMap().toString());
     }
 
@@ -59,7 +66,7 @@ public class SettingsTest extends Assert {
     public void testMapSettingsFromReader() {
         StringReader reader = new StringReader("{\"map\":{\"hello\":\"world\"}}");
         Map<String, Object> spec = XContentHelper.convertFromJsonToMap(reader);
-        Settings settings = settingsBuilder().loadFromMap(spec).build();
+        Settings settings = Settings.settingsBuilder().loadFromMap(spec).build();
         assertEquals("{map.hello=world}", settings.getAsMap().toString());
     }
 
@@ -72,4 +79,27 @@ public class SettingsTest extends Assert {
         assertTrue(Integer.parseInt(settings.get("date")) > 2000);
     }
 
+    @Test
+    public void testSystemEnvironment() {
+        Settings settings = Settings.settingsBuilder()
+                .loadFromSystemEnvironment()
+                .build();
+        assertTrue(!settings.getAsMap().isEmpty());
+    }
+
+    @Test
+    public void testSystemProperties() {
+        Settings settings = Settings.settingsBuilder()
+                .loadFromSystemProperties()
+                .build();
+        assertTrue(!settings.getAsMap().isEmpty());
+    }
+
+    @Test
+    public void testPropertiesLoader() {
+        Settings settings = Settings.settingsBuilder()
+                .loadFromStream(".properties", new ByteArrayInputStream("a.b=c".getBytes(StandardCharsets.UTF_8)))
+                .build();
+        assertEquals("{a.b=c}", settings.getAsMap().toString());
+    }
 }

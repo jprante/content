@@ -17,6 +17,6 @@ public class XMLUtilTest extends Assert {
     @Test
     public void testWhitespaceCleanerWithReplacementCharacter() {
         String s = "Hello World\u001b";
-        assertEquals(XMLUtil.sanitizeXml10(s), "Hello World�");
+        assertEquals("Hello World\ufffd", XMLUtil.sanitizeXml10(s));
     }
 }

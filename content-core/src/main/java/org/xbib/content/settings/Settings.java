@@ -43,11 +43,7 @@ public class Settings {
     public static final int BUFFER_SIZE = 1024 * 8;
     private final Map<String, String> settings;
 
-    public Settings() {
-        this(new HashMap<>());
-    }
-
-    public Settings(Map<String, String> settings) {
+    private Settings(Map<String, String> settings) {
         this.settings = new HashMap<>(settings);
     }
 
@@ -667,6 +663,27 @@ public class Settings {
         }
 
         /**
+         * Load system properties to this settings.
+         * @return builder
+         */
+        public Builder loadFromSystemProperties() {
+            for (Map.Entry<Object, Object> entry : System.getProperties().entrySet()) {
+                put((String)entry.getKey(), (String)entry.getValue());
+            }
+            return this;
+        }
+
+        /**
+         * Load system environment to this settings.
+         * @return builder
+         */
+        public Builder loadFromSystemEnvironment() {
+            for (Map.Entry<String, String> entry : System.getenv().entrySet()) {
+                put(entry.getKey(), entry.getValue());
+            }
+            return this;
+        }
+        /**
          * Runs across all the settings set on this builder and replaces <tt>${...}</tt> elements in the
          * each setting value according to the following logic:
          *
@@ -679,14 +696,17 @@ public class Settings {
         public Builder replacePropertyPlaceholders() {
             PropertyPlaceholder propertyPlaceholder = new PropertyPlaceholder("${", "}", false);
             PropertyPlaceholder.PlaceholderResolver placeholderResolver = placeholderName -> {
+                // system property
                 String value = System.getProperty(placeholderName);
                 if (value != null) {
                     return value;
                 }
+                // environment
                 value = System.getenv(placeholderName);
                 if (value != null) {
                     return value;
                 }
+                // current date
                 try {
                     return DateTimeFormatter.ofPattern(placeholderName).format(LocalDate.now());
                 } catch (IllegalArgumentException | DateTimeException e) {

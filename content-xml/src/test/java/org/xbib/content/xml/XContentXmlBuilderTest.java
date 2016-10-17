@@ -189,7 +189,7 @@ public class XContentXmlBuilderTest extends Assert {
         QName root = new QName("root");
         XContentBuilder builder = XmlXContent.contentBuilder(new XmlXParams(root));
         builder.startObject().field("Hello", "World\u001b").endObject();
-        assertEquals("<root><Hello>World�</Hello></root>", builder.string());
+        assertEquals("<root><Hello>World\ufffd</Hello></root>", builder.string());
     }
 
     @Test

@@ -10,6 +10,10 @@ import java.util.Set;
  */
 public interface SettingsLoader {
 
+    /**
+     * Suffices for file names to load from.
+     * @return a set of suffices
+     */
     Set<String> suffixes();
 
     /**

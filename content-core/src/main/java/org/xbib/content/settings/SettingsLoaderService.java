@@ -16,9 +16,10 @@ public final class SettingsLoaderService {
 
     private static final Logger logger = Logger.getLogger(SettingsLoaderService.class.getName());
 
-    private static final Map<Set<String>, SettingsLoader> settingsLoaderMap = new HashMap<>();
+    private static final Map<Set<String>, SettingsLoader> settingsLoaderMap;
 
-    private SettingsLoaderService() {
+    static {
+        settingsLoaderMap = new HashMap<>();
         try {
             ServiceLoader<SettingsLoader> serviceLoader = ServiceLoader.load(SettingsLoader.class);
             for (SettingsLoader settingsLoader : serviceLoader) {
@@ -30,6 +31,10 @@ public final class SettingsLoaderService {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
+    private SettingsLoaderService() {
+    }
+
     /**
      * Returns a {@link SettingsLoader} based on the resource name.
      * @param resourceName the resource
