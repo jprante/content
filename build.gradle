@@ -1,14 +1,21 @@
 plugins {
-    id "org.sonarqube" version "2.1-rc1"
+    id "org.sonarqube" version "2.2"
     id "org.ajoberstar.github-pages" version "1.6.0-rc.1"
     id "org.xbib.gradle.plugin.jbake" version "1.1.0"
 }
 
-println "Host: " + java.net.InetAddress.getLocalHost()
-println "Gradle: " + gradle.gradleVersion + " JVM: " + org.gradle.internal.jvm.Jvm.current() + " Groovy: " + GroovySystem.getVersion()
-println "Build: group: '${project.group}', name: '${project.name}', version: '${project.version}'"
+
+
+ext {
+    versions = [
+            'jackson' : '2.8.3'
+    ]
+}
 
 allprojects {
+
+    group = 'org.xbib'
+    version = '1.0.1'
 
     apply plugin: 'java'
     apply plugin: 'maven'
@@ -25,8 +32,6 @@ allprojects {
 
     configurations {
         wagon
-        provided
-        testCompile.extendsFrom(provided)
     }
 
     dependencies {
@@ -41,51 +46,11 @@ allprojects {
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:all" << "-profile" << "compact2"
     }
+
     test {
-        classpath += configurations.provided
         testLogging {
             showStandardStreams = false
             exceptionFormat = 'full'
-        }
-    }
-    tasks.withType(FindBugs) {
-        ignoreFailures = true
-        reports {
-            xml.enabled = true
-            html.enabled = false
-        }
-    }
-    tasks.withType(Pmd) {
-        ignoreFailures = true
-        reports {
-            xml.enabled = true
-            html.enabled = true
-        }
-    }
-    tasks.withType(Checkstyle) {
-        ignoreFailures = true
-        reports {
-            xml.enabled = true
-            html.enabled = true
-        }
-    }
-    jacocoTestReport {
-        reports {
-            xml.enabled true
-            csv.enabled false
-            xml.destination "${buildDir}/reports/jacoco-xml"
-            html.destination "${buildDir}/reports/jacoco-html"
-        }
-    }
-
-    sonarqube {
-        properties {
-            property "sonar.projectName", "xbib content"
-            property "sonar.sourceEncoding", "UTF-8"
-            property "sonar.tests", "src/test/java"
-            property "sonar.scm.provider", "git"
-            property "sonar.java.coveragePlugin", "jacoco"
-            property "sonar.junit.reportsPath", "build/test-results/test/"
         }
     }
 
@@ -107,5 +72,6 @@ allprojects {
 
     apply from: "${rootProject.projectDir}/gradle/ext.gradle"
     apply from: "${rootProject.projectDir}/gradle/publish.gradle"
+    apply from: "${rootProject.projectDir}/gradle/sonarqube.gradle"
 
 }

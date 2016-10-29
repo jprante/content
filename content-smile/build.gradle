@@ -1,4 +1,4 @@
 dependencies {
     compile project(':content-core')
-    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.8.3"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:${versions.jackson}"
 }
