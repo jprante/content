@@ -1,55 +1,12 @@
 # xbib Content
 
 image:https://api.travis-ci.org/xbib/content.svg[title="Build status", link="https://travis-ci.org/xbib/content/build"]
-image:https://img.shields.io/sonar/http/nemo.sonarqube.com/org.xbib%20content/coverage.svg?style=flat-square[title="Coverage", link="https://sonarqube.com/dashboard/index?id=org.xbib%3Acontent"]
+image:https://img.shields.io/sonar/http/nemo.sonarqube.com/org.xbib%3Acontent/coverage.svg?style=flat-square[title="Coverage", link="https://sonarqube.com/dashboard/index?id=org.xbib%3Acontent"]
 image:https://maven-badges.herokuapp.com/maven-central/org.xbib/content/badge.svg[title="Maven Central", link="http://search.maven.org/#search%7Cga%7C1%7Cxbib%20content"]
+image:https://img.shields.io/badge/License-Apache%202.0-blue.svg[title="Apache License 2.0", link="https://opensource.org/licenses/Apache-2.0"]
 
 This is a Java library for processing structured data ("content") in the most popular formats, such as
 JSON, SMILE-JSON, YAML, XML, CSV, and also semantic descriptions in RDF (N-Triples, Turtle, RDF/XML).
 
 xbib Content offers stream-based Java builders, parsers, and a settings API oder the formats, so it is very convenienant
 to use. The only dependency is https://github.com/fasterxml/jackson[the Java Jackson library].
-
-## Usage
-
-The library is provided by Maven Central repository. You can use the library with Gradle
-
-```
-dependencies {
-    compile "org.xbib:content-core:1.0.1"
-    compile "org.xbib:content-csv:1.0.1"
-    compile "org.xbib:content-json:1.0.1"
-    compile "org.xbib:content-language:1.0.1"
-    compile "org.xbib:content-rdf:1.0.1"
-    compile "org.xbib:content-resource:1.0.1"
-    compile "org.xbib:content-smile:1.0.1"
-    compile "org.xbib:content-xml:1.0.1"
-    compile "org.xbib:content-yaml:1.0.1"
-}
-```
-
-or with Maven
-
-```
-   <dependency>
-     <groupId>org.xbib</groupId>
-     <artifactId>content-core</artifactId>
-     <version>1.0.1</version>
-   </dependency>
-```
-
-# License
-
-Copyright (C) 2016 Jörg Prante
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-you may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
