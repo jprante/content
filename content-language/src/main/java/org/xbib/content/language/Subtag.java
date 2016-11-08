@@ -173,6 +173,7 @@ public final class Subtag implements Comparable<Subtag> {
         }
     }
 
+    @Override
     public String toString() {
         switch (type) {
             case REGION:
@@ -184,6 +185,7 @@ public final class Subtag implements Comparable<Subtag> {
         }
     }
 
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -192,6 +194,7 @@ public final class Subtag implements Comparable<Subtag> {
         return result;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -345,6 +348,7 @@ public final class Subtag implements Comparable<Subtag> {
         }
     }
 
+    @Override
     public int compareTo(Subtag o) {
         int c = o.type.compareTo(type);
         return c != 0 ? c : o.name.compareTo(name);

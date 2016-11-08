@@ -41,10 +41,10 @@ public class Settings {
     public static final Settings EMPTY_SETTINGS = new Builder().build();
     public static final String[] EMPTY_ARRAY = new String[0];
     public static final int BUFFER_SIZE = 1024 * 8;
-    private final Map<String, String> settings;
+    private final Map<String, String> map;
 
     private Settings(Map<String, String> settings) {
-        this.settings = new HashMap<>(settings);
+        this.map = new HashMap<>(settings);
     }
 
     public static Settings readSettingsFromMap(Map<String, Object> map) throws IOException {
@@ -131,27 +131,27 @@ public class Settings {
     }
 
     public Map<String, String> getAsMap() {
-        return this.settings;
+        return this.map;
     }
 
     public Map<String, Object> getAsStructuredMap() {
-        Map<String, Object> map = new HashMap<>(2);
-        for (Map.Entry<String, String> entry : settings.entrySet()) {
-            processSetting(map, "", entry.getKey(), entry.getValue());
+        Map<String, Object> stringObjectMap = new HashMap<>(2);
+        for (Map.Entry<String, String> entry : this.map.entrySet()) {
+            processSetting(stringObjectMap, "", entry.getKey(), entry.getValue());
         }
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
+        for (Map.Entry<String, Object> entry : stringObjectMap.entrySet()) {
             if (entry.getValue() instanceof Map) {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> valMap = (Map<String, Object>) entry.getValue();
                 entry.setValue(convertMapsToArrays(valMap));
             }
         }
-        return map;
+        return stringObjectMap;
     }
 
     public Settings getByPrefix(String prefix) {
         Builder builder = new Builder();
-        for (Map.Entry<String, String> entry : settings.entrySet()) {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
             if (entry.getKey().startsWith(prefix)) {
                 if (entry.getKey().length() < prefix.length()) {
                     continue;
@@ -167,10 +167,10 @@ public class Settings {
     }
 
     public boolean containsSetting(String setting) {
-        if (settings.containsKey(setting)) {
+        if (map.containsKey(setting)) {
             return true;
         }
-        for (Map.Entry<String, String> entry : settings.entrySet()) {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
             if (entry.getKey().startsWith(setting)) {
                 return true;
             }
@@ -179,7 +179,7 @@ public class Settings {
     }
 
     public String get(String setting) {
-        String retVal = settings.get(setting);
+        String retVal = map.get(setting);
         if (retVal != null) {
             return retVal;
         }
@@ -187,7 +187,7 @@ public class Settings {
     }
 
     public String get(String setting, String defaultValue) {
-        String retVal = settings.get(setting);
+        String retVal = map.get(setting);
         return retVal == null ? defaultValue : retVal;
     }
 
@@ -251,15 +251,15 @@ public class Settings {
         return parseTimeValue(get(setting), defaultValue);
     }
 
-    public ByteSizeValue getAsBytesSize(String setting, ByteSizeValue defaultValue) throws SettingsException {
+    public ByteSizeValue getAsBytesSize(String setting, ByteSizeValue defaultValue) {
         return parseBytesSizeValue(get(setting), defaultValue);
     }
 
-    public String[] getAsArray(String settingPrefix) throws SettingsException {
+    public String[] getAsArray(String settingPrefix) {
         return getAsArray(settingPrefix, EMPTY_ARRAY);
     }
 
-    public String[] getAsArray(String settingPrefix, String[] defaultArray) throws SettingsException {
+    public String[] getAsArray(String settingPrefix, String[] defaultArray) {
         List<String> result = new ArrayList<>();
         if (get(settingPrefix) != null) {
             String[] strings = splitStringByCommaToArray(get(settingPrefix));
@@ -283,14 +283,14 @@ public class Settings {
         return result.toArray(new String[result.size()]);
     }
 
-    public Map<String, Settings> getGroups(String prefix) throws SettingsException {
+    public Map<String, Settings> getGroups(String prefix) {
         String settingPrefix = prefix;
         if (settingPrefix.charAt(settingPrefix.length() - 1) != '.') {
             settingPrefix = settingPrefix + ".";
         }
         // we don't really care that it might happen twice
-        Map<String, Map<String, String>> map = new LinkedHashMap<>();
-        for (Object o : settings.keySet()) {
+        Map<String, Map<String, String>> hashMap = new LinkedHashMap<>();
+        for (Object o : this.map.keySet()) {
             String setting = (String) o;
             if (setting.startsWith(settingPrefix)) {
                 String nameValue = setting.substring(settingPrefix.length());
@@ -302,16 +302,16 @@ public class Settings {
                 }
                 String name = nameValue.substring(0, dotIndex);
                 String value = nameValue.substring(dotIndex + 1);
-                Map<String, String> groupSettings = map.get(name);
+                Map<String, String> groupSettings = hashMap.get(name);
                 if (groupSettings == null) {
                     groupSettings = new LinkedHashMap<>();
-                    map.put(name, groupSettings);
+                    hashMap.put(name, groupSettings);
                 }
                 groupSettings.put(value, get(setting));
             }
         }
         Map<String, Settings> retVal = new LinkedHashMap<>();
-        for (Map.Entry<String, Map<String, String>> entry : map.entrySet()) {
+        for (Map.Entry<String, Map<String, String>> entry : hashMap.entrySet()) {
             retVal.put(entry.getKey(), new Settings(Collections.unmodifiableMap(entry.getValue())));
         }
         return Collections.unmodifiableMap(retVal);
@@ -319,19 +319,12 @@ public class Settings {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Settings that = (Settings) o;
-        return settings != null ? settings.equals(that.settings) : that.settings == null;
+        return this == o || !(o == null || getClass() != o.getClass()) && map.equals(((Settings) o).map);
     }
 
     @Override
     public int hashCode() {
-        return settings != null ? settings.hashCode() : 0;
+        return map.hashCode();
     }
 
     private void processSetting(Map<String, Object> map, String prefix, String setting, String value) {

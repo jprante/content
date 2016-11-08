@@ -89,7 +89,7 @@ public class ISO9075 {
         StringBuilder decoded = new StringBuilder();
         for (int i = 0, l = toDecode.length(); i < l; i++) {
             if (matchesEncodedPattern(toDecode, i)) {
-                decoded.append(((char) Integer.parseInt(toDecode.substring(i + 2, i + 6), 16)));
+                decoded.append((char) Integer.parseInt(toDecode.substring(i + 2, i + 6), 16));
                 i += 6;
             } else {
                 decoded.append(toDecode.charAt(i));

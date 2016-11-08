@@ -41,7 +41,7 @@ public class RouteRdfXContent implements RdfContent<RouteRdfXContentParams> {
      *
      */
     @FunctionalInterface
-    interface RouteHandler {
+    public interface RouteHandler {
         void complete(String content, RouteRdfXContentParams params) throws IOException;
     }
 }

@@ -103,7 +103,8 @@ final class LeastCommonSubsequence {
         }
 
         // return result out of the LCS lengths matrix
-        int x = size1, y = size2;
+        int x = size1;
+        int y = size2;
         while (x > 0 && y > 0) {
             if (lengths[x][y] == lengths[x - 1][y]) {
                 x--;

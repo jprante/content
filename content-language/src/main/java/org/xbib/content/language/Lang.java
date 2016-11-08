@@ -70,7 +70,8 @@ public final class Lang extends SubtagSet {
             return parse(locale.toString()).primary;
         } catch (Exception e) {
             logger.log(Level.FINE, e.getMessage(), e);
-            Subtag c = null, primary = new Subtag(Type.PRIMARY, locale.getLanguage());
+            Subtag c = null;
+            Subtag primary = new Subtag(Type.PRIMARY, locale.getLanguage());
             String country = locale.getCountry();
             String variant = locale.getVariant();
             if (country != null) {
@@ -344,7 +345,8 @@ public final class Lang extends SubtagSet {
     public Lang canonicalize() {
         Subtag primary = null;
         Subtag current;
-        int p = -1, t = -1;
+        int p = -1;
+        int t = -1;
         List<Subtag> tags = new LinkedList<>();
         for (Subtag tag : this) {
             tags.add(tag);

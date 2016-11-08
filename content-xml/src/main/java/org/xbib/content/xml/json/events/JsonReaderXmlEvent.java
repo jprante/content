@@ -199,7 +199,7 @@ public abstract class JsonReaderXmlEvent {
 
     public void addAttribute(QName name, String value) {
         if (null == attributes) {
-            attributes = new LinkedList<JsonReaderXmlEvent.Attribute>();
+            attributes = new LinkedList<>();
         }
         attributes.add(new Attribute(name, value));
     }

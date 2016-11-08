@@ -277,12 +277,15 @@ public class SaxEventConsumer implements XMLEventConsumer {
     }
 
     private void handleNamespace() {
+        // not used
     }
 
     private void handleAttribute() {
+        // not used
     }
 
     private void handleDTD() {
+        // not used
     }
 
     private void handleComment(Comment comment) throws XMLStreamException {
@@ -295,17 +298,22 @@ public class SaxEventConsumer implements XMLEventConsumer {
     }
 
     private void handleEntityReference() {
+        // not used
     }
 
     private void handleSpace() {
+        // not used
     }
 
     private void handleNotationDecl() {
+        // not used
     }
 
     private void handleEntityDecl() {
+        // not used
     }
 
     private void handleCDATA() {
+        // not used
     }
 }

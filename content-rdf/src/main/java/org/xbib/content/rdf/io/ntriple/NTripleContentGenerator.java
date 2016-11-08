@@ -45,7 +45,6 @@ public class NTripleContentGenerator
 
     @Override
     public NTripleContentGenerator receive(IRI iri) throws IOException {
-        //String compact = params.getNamespaceContext().compact(iri);
         return this;
     }
 

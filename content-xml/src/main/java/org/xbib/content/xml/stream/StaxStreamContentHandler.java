@@ -28,6 +28,7 @@ public class StaxStreamContentHandler extends AbstractStaxContentHandler {
 
     @Override
     public void setDocumentLocator(Locator locator) {
+        // not used
     }
 
     @Override
@@ -57,6 +58,7 @@ public class StaxStreamContentHandler extends AbstractStaxContentHandler {
 
     @Override
     protected void skippedEntityInternal(String name) {
+        // not used
     }
 
     @Override

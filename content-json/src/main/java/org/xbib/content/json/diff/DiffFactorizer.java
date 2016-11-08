@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ *
+ */
 final class DiffFactorizer {
 
     private static final Equivalence<JsonNode> EQUIVALENCE = JsonNumEquals.getInstance();
@@ -91,7 +94,8 @@ final class DiffFactorizer {
     private static void findPairs(final List<Diff> diffs) {
         final int diffsSize = diffs.size();
 
-        Diff addition, removal;
+        Diff addition;
+        Diff removal;
 
         for (int addIndex = 0; addIndex < diffsSize; addIndex++) {
             addition = diffs.get(addIndex);

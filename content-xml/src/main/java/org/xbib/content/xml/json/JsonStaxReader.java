@@ -64,7 +64,7 @@ public class JsonStaxReader implements XMLStreamReader {
     }
 
     @Override
-    public Object getProperty(String name) throws IllegalArgumentException {
+    public Object getProperty(String name) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

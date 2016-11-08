@@ -83,7 +83,7 @@ public class XMLFilterImplEx extends XMLFilterImpl implements LexicalHandler {
     }
 
     @Override
-    public void comment(char ch[], int start, int length) throws SAXException {
+    public void comment(char[] ch, int start, int length) throws SAXException {
         if (lexicalHandler != null) {
             lexicalHandler.comment(ch, start, length);
         }

@@ -37,7 +37,7 @@ public class StylesheetTransformer implements Closeable {
 
     private static final StylesheetPool pool = new StylesheetPool();
 
-    private final Map<String, Object> parameters = new HashMap<String, Object>();
+    private final Map<String, Object> parameters = new HashMap<>();
 
     private SAXTransformerFactory transformerFactory;
 

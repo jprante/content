@@ -43,6 +43,7 @@ public class XmlContentGenerator implements RdfContentGenerator<XmlContentParams
         this.writer = writer;
     }
 
+    @Override
     public XmlContentParams getParams() {
         return params;
     }

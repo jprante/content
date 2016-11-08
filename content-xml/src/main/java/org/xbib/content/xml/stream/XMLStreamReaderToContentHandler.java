@@ -324,29 +324,38 @@ public class XMLStreamReaderToContentHandler {
     }
 
     private void handleNamespace() {
+        // not used
     }
 
     private void handleAttribute() {
+        // not used
     }
 
     private void handleDTD() {
+        // not used
     }
 
     private void handleComment() {
+        // not used
     }
 
     private void handleEntityReference() {
+        // not used
     }
 
     private void handleSpace() {
+        // not used
     }
 
     private void handleNotationDecl() {
+        // not used
     }
 
     private void handleEntityDecl() {
+        // not used
     }
 
     private void handleCDATA() {
+        // not used
     }
 }

@@ -358,7 +358,8 @@ public final class JsonDiff {
      */
     private static void postLCS(final List<Diff> diffs, final JsonPointer path,
                                 final IndexedJsonArray source, final IndexedJsonArray target) {
-        JsonNode src, dst;
+        JsonNode src;
+        JsonNode dst;
 
         while (!(source.isEmpty() || target.isEmpty())) {
             src = source.getElement();

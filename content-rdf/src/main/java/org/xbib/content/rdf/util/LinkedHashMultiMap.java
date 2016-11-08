@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -13,15 +14,15 @@ import java.util.Set;
  */
 public class LinkedHashMultiMap<K, V> implements MultiMap<K, V> {
 
-    private final Map<K, Set<V>> map = new LinkedHashMap<>();
+    private final Map<K, Set<V>> map;
 
     public LinkedHashMultiMap() {
+        this.map = new LinkedHashMap<>();
     }
 
     public LinkedHashMultiMap(MultiMap<K, V> map) {
-        if (map == null) {
-            throw new IllegalArgumentException("must not be null");
-        }
+        Objects.requireNonNull(map);
+        this.map = new LinkedHashMap<>();
         for (K k : map.keySet()) {
             putAll(k, map.get(k));
         }

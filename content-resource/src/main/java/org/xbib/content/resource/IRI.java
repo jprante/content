@@ -520,8 +520,8 @@ public class IRI implements Comparable<IRI>, Node {
     }
 
     public boolean isPathAbsolute() {
-        String path = getPath();
-        return (path != null) && path.length() > 0 && path.charAt(0) == '/';
+        String s = getPath();
+        return s != null && s.length() > 0 && s.charAt(0) == '/';
     }
 
     public boolean isSameDocumentReference() {
@@ -545,9 +545,9 @@ public class IRI implements Comparable<IRI>, Node {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        String scheme = getScheme();
-        if (scheme != null && !scheme.isEmpty()) {
-            buf.append(scheme).append(':');
+        String s = getScheme();
+        if (s != null && !s.isEmpty()) {
+            buf.append(s).append(':');
         }
         buf.append(getSchemeSpecificPart());
         return buf.toString();
@@ -564,9 +564,9 @@ public class IRI implements Comparable<IRI>, Node {
 
     public String toASCIIString() {
         StringBuilder buf = new StringBuilder();
-        String scheme = getScheme();
-        if (scheme != null && !scheme.isEmpty()) {
-            buf.append(scheme).append(':');
+        String s = getScheme();
+        if (s != null && !s.isEmpty()) {
+            buf.append(s).append(':');
         }
         buf.append(getASCIISchemeSpecificPart());
         return buf.toString();

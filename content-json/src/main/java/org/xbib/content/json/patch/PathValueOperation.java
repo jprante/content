@@ -1,7 +1,6 @@
 package org.xbib.content.json.patch;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -46,7 +45,7 @@ public abstract class PathValueOperation
     @Override
     public final void serializeWithType(final JsonGenerator jgen,
                                         final SerializerProvider provider, final TypeSerializer typeSer)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         serialize(jgen, provider);
     }
 

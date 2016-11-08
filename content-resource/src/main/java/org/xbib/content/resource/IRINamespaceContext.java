@@ -60,7 +60,7 @@ public final class IRINamespaceContext extends XmlNamespaceContext {
     @Override
     public void addNamespace(String prefix, String namespace) {
         super.addNamespace(prefix, namespace);
-        sortedNamespacesByPrefixLength = new ArrayList<String>(getNamespaces().values());
+        sortedNamespacesByPrefixLength = new ArrayList<>(getNamespaces().values());
         // sort from longest to shortest prefix for successful matching
         Collections.sort(sortedNamespacesByPrefixLength, (s1, s2) -> {
             Integer l1 = s1.length();

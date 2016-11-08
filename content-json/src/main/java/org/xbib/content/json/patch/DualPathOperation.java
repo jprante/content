@@ -1,7 +1,6 @@
 package org.xbib.content.json.patch;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
@@ -32,8 +31,7 @@ public abstract class DualPathOperation extends JsonPatchOperation {
 
     @Override
     public final void serialize(final JsonGenerator jgen,
-                                final SerializerProvider provider)
-            throws IOException, JsonProcessingException {
+                                final SerializerProvider provider) throws IOException {
         jgen.writeStartObject();
         jgen.writeStringField("op", op);
         jgen.writeStringField("path", path.toString());
@@ -44,7 +42,7 @@ public abstract class DualPathOperation extends JsonPatchOperation {
     @Override
     public final void serializeWithType(final JsonGenerator jgen,
                                         final SerializerProvider provider, final TypeSerializer typeSer)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         serialize(jgen, provider);
     }
 

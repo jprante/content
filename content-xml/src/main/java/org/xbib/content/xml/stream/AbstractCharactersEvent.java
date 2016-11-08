@@ -25,9 +25,9 @@ public abstract class AbstractCharactersEvent extends AbstractXMLEvent implement
 
     @Override
     public boolean isWhiteSpace() {
-        String data = getData();
-        for (int i = 0, s = data.length(); i < s; i++) {
-            char ch = data.charAt(i);
+        String s1 = getData();
+        for (int i = 0, s = s1.length(); i < s; i++) {
+            char ch = s1.charAt(i);
             if (ch != ' ' && ch != '\n' && ch != '\t' && ch != '\r') {
                 return false;
             }

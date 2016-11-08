@@ -12,7 +12,7 @@ public final class SchemeRegistry {
     private final Map<String, Scheme> schemes;
 
     SchemeRegistry() {
-        schemes = new HashMap<String, Scheme>();
+        schemes = new HashMap<>();
         schemes.put(HttpScheme.HTTP_SCHEME_NAME, new HttpScheme());
         schemes.put(HttpsScheme.HTTPS_SCHEME_NAME, new HttpsScheme());
         schemes.put(FtpScheme.FTP_SCHEME_NAME, new FtpScheme());

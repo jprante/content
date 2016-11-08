@@ -5,11 +5,11 @@ import org.xbib.content.rdf.RdfConstants;
 import org.xbib.content.rdf.Resource;
 import org.xbib.content.rdf.Triple;
 import org.xbib.content.rdf.XSDResourceIdentifiers;
+import org.xbib.content.rdf.util.LinkedHashMultiMap;
+import org.xbib.content.rdf.util.MultiMap;
 import org.xbib.content.resource.IRI;
 import org.xbib.content.resource.IRINamespaceContext;
 import org.xbib.content.resource.Node;
-import org.xbib.content.rdf.util.LinkedHashMultiMap;
-import org.xbib.content.rdf.util.MultiMap;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -231,7 +231,7 @@ public class DefaultResource implements Resource, Comparable<Resource>, XSDResou
             if (object instanceof Map) {
                 add(predicate, (Map) object);
             } else if (object instanceof List) {
-                add(predicate, ((List) object));
+                add(predicate, (List) object);
             } else if (object instanceof Resource) {
                 add(predicate, (Resource) object);
             } else {
@@ -251,7 +251,7 @@ public class DefaultResource implements Resource, Comparable<Resource>, XSDResou
             if (obj instanceof Map) {
                 r.add(newPredicate(pred), (Map<Object, Object>) obj);
             } else if (obj instanceof List) {
-                r.add(newPredicate(pred), ((List) obj));
+                r.add(newPredicate(pred), (List) obj);
             } else if (obj instanceof Resource) {
                 r.add(newPredicate(pred), (Resource) obj);
             } else {
@@ -311,7 +311,7 @@ public class DefaultResource implements Resource, Comparable<Resource>, XSDResou
                 Resource r = newResource(newPredicate(pred));
                 r.add((Map) obj);
             } else if (obj instanceof List) {
-                add(newPredicate(pred), ((List) obj));
+                add(newPredicate(pred), (List) obj);
             } else if (obj instanceof Resource) {
                 add(newPredicate(pred), (Resource) obj);
             } else {
@@ -520,22 +520,22 @@ public class DefaultResource implements Resource, Comparable<Resource>, XSDResou
 
     private static class Triples {
 
-        private final List<Triple> triples;
+        private final List<Triple> tripleList;
 
         private final boolean recursive;
 
         Triples(Resource resource, boolean recursive) {
             this.recursive = recursive;
-            this.triples = unfold(resource);
+            this.tripleList = unfold(resource);
         }
 
         Triples(Resource resource, IRI predicate, Literal literal) {
             this.recursive = true;
-            this.triples = find(resource, predicate, literal);
+            this.tripleList = find(resource, predicate, literal);
         }
 
         List<Triple> list() {
-            return triples;
+            return tripleList;
         }
 
         private List<Triple> unfold(Resource resource) {

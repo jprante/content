@@ -8,6 +8,9 @@ import javax.xml.namespace.QName;
  */
 public class ToQName {
 
+    private ToQName() {
+    }
+
     public static QName toQName(QName root, NamespaceContext context, String string) {
         String name = string;
         String nsPrefix = root.getPrefix();

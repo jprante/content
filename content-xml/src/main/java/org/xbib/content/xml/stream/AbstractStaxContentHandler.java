@@ -85,7 +85,7 @@ abstract class AbstractStaxContentHandler implements ContentHandler {
             throws XMLStreamException;
 
     @Override
-    public final void characters(char ch[], int start, int length) throws SAXException {
+    public final void characters(char[] ch, int start, int length) throws SAXException {
         try {
             charactersInternal(ch, start, length);
         } catch (XMLStreamException ex) {

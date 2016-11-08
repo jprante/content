@@ -150,6 +150,8 @@ public class XmlXContentParser extends AbstractXContentParser {
                 return NumberType.BIG_INTEGER;
             case BIG_DECIMAL:
                 return NumberType.BIG_DECIMAL;
+            default:
+                break;
         }
         throw new IllegalStateException("No matching token for number_type [" + numberType + "]");
     }
@@ -181,6 +183,8 @@ public class XmlXContentParser extends AbstractXContentParser {
                 return Token.END_ARRAY;
             case VALUE_EMBEDDED_OBJECT:
                 return Token.VALUE_EMBEDDED_OBJECT;
+            default:
+                break;
         }
         throw new IllegalStateException("No matching token for json_token [" + token + "]");
     }

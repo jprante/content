@@ -19,6 +19,9 @@ import java.io.OutputStream;
  */
 public class RdfContentFactory {
 
+    private RdfContentFactory() {
+    }
+
     public static RdfContentBuilder<NTripleContentParams> ntripleBuilder() throws IOException {
         return NTripleContent.contentBuilder(NTripleContentParams.N_TRIPLE_CONTENT_PARAMS);
     }
@@ -67,7 +70,7 @@ public class RdfContentFactory {
 
     public static RdfContentBuilder<TurtleContentParams> turtleBuilder(OutputStream out, TurtleContentParams params)
             throws IOException {
-        return TurtleContent.contentBuilder(out, TurtleContentParams.TURTLE_CONTENT_PARAMS);
+        return TurtleContent.contentBuilder(out, params);
     }
 
     public static RdfContentBuilder<XmlContentParams> xmlBuilder() throws IOException {

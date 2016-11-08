@@ -10,15 +10,6 @@ public interface ToXContent {
 
     XContentBuilder toXContent(XContentBuilder builder, Params params) throws IOException;
 
-    /**
-     *
-     */
-    interface Params {
-        String param(String key);
-
-        String param(String key, String defaultValue);
-
-    }
 
     Params EMPTY_PARAMS = new Params() {
 
@@ -33,4 +24,14 @@ public interface ToXContent {
         }
 
     };
+
+    /**
+     *
+     */
+    interface Params {
+        String param(String key);
+
+        String param(String key, String defaultValue);
+
+    }
 }

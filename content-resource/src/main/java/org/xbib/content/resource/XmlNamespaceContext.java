@@ -116,6 +116,7 @@ public class XmlNamespaceContext implements NamespaceContext {
                 prefixes.get(namespace).iterator() : null;
     }
 
+    @Override
     public String toString() {
         return namespaces.toString();
     }

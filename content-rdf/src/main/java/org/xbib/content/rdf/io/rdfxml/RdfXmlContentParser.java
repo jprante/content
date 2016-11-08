@@ -136,27 +136,6 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
         return this;
     }
 
-    private void yield(Object s, Object p, Object o) throws IOException {
-        yield(new DefaultTriple(resource.newSubject(s), resource.newPredicate(p), resource.newObject(o)));
-    }
-
-    private void yield(Triple triple) throws IOException {
-        if (builder != null) {
-            builder.receive(triple);
-        }
-    }
-
-    // produce a (possibly) reified triple
-    private void yield(Object s, IRI p, Object o, IRI reified) throws IOException {
-        yield(s, p, o);
-        if (reified != null) {
-            yield(reified, RDF_TYPE, RDF_STATEMENT);
-            yield(reified, RDF_SUBJECT, s);
-            yield(reified, RDF_PREDICATE, p);
-            yield(reified, RDF_OBJECT, o);
-        }
-    }
-
     // get the most-specific language tag in scope
     private String getLanguage(Deque<Frame> stack) {
         String lang = "";
@@ -194,16 +173,6 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
         return ip;
     }
 
-    // do we expect to encounter a subject (rather than a predicate?)
-    private boolean expectSubject(Deque<Frame> stack) {
-        boolean b = true;
-        Iterator<Frame> it = stack.descendingIterator();
-        while (it.hasNext()) {
-            Frame frame = it.next();
-            b = !frame.isSubject;
-        }
-        return b;
-    }
 
     // if we're in a predicate, get its frame
     private Frame parentPredicateFrame(Deque<Frame> stack) throws SAXException {
@@ -247,15 +216,6 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
         return subjectFrame != null ? subjectFrame.node : null;
     }
 
-    // if we're looking at a subject, is it an item in a Collection?
-    private boolean isCollectionItem(Deque<Frame> stack) throws SAXException {
-        if (inPredicate(stack)) {
-            Frame predicateFrame = parentPredicateFrame(stack);
-            return predicateFrame != null && predicateFrame.isCollection;
-        } else {
-            return false;
-        }
-    }
 
     private Resource blankNode() {
         return new DefaultAnonymousResource("b" + (bn++));
@@ -566,7 +526,7 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
                             String aQn = attrs.getQName(i);
                             IRI aUri = IRI.create(attrs.getURI(i) + attrs.getLocalName(i));
                             String aVal = attrs.getValue(i);
-                            if (((aUri.toString().equals(RDF_TYPE.toString()) || !aUri.toString().startsWith(RDF_STRING)))
+                            if ((aUri.toString().equals(RDF_TYPE.toString()) || !aUri.toString().startsWith(RDF_STRING))
                                     && !aQn.startsWith("xml:")) {
                                 if (object == null) {
                                     object = blankNode().id();
@@ -666,5 +626,48 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
                 xmlLiteral.append("<?").append(target).append(" ").append(data).append("?>");
             }
         }
+
+        // do we expect to encounter a subject (rather than a predicate?)
+        private boolean expectSubject(Deque<Frame> stack) {
+            boolean b = true;
+            Iterator<Frame> it = stack.descendingIterator();
+            while (it.hasNext()) {
+                Frame frame = it.next();
+                b = !frame.isSubject;
+            }
+            return b;
+        }
+
+        // produce a (possibly) reified triple
+        private void yield(Object s, IRI p, Object o, IRI reified) throws IOException {
+            yield(s, p, o);
+            if (reified != null) {
+                yield(reified, RDF_TYPE, RDF_STATEMENT);
+                yield(reified, RDF_SUBJECT, s);
+                yield(reified, RDF_PREDICATE, p);
+                yield(reified, RDF_OBJECT, o);
+            }
+        }
+
+        private void yield(Object s, Object p, Object o) throws IOException {
+            yield(new DefaultTriple(resource.newSubject(s), resource.newPredicate(p), resource.newObject(o)));
+        }
+
+        private void yield(Triple triple) throws IOException {
+            if (builder != null) {
+                builder.receive(triple);
+            }
+        }
+
+        // if we're looking at a subject, is it an item in a Collection?
+        private boolean isCollectionItem(Deque<Frame> stack) throws SAXException {
+            if (inPredicate(stack)) {
+                Frame predicateFrame = parentPredicateFrame(stack);
+                return predicateFrame != null && predicateFrame.isCollection;
+            } else {
+                return false;
+            }
+        }
+
     }
 }

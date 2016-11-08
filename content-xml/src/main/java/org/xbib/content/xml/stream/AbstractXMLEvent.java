@@ -1,7 +1,6 @@
 package org.xbib.content.xml.stream;
 
 import java.io.StringWriter;
-import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -109,9 +108,6 @@ public abstract class AbstractXMLEvent implements XMLEvent {
     public boolean isStartElement() {
         return getEventType() == START_ELEMENT;
     }
-
-    @Override
-    public abstract void writeAsEncodedUnicode(Writer writer) throws XMLStreamException;
 
     @Override
     public String toString() {

@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ *
+ */
 abstract class SubtagSet implements Cloneable, Iterable<Subtag>, Comparable<SubtagSet> {
 
     protected final Subtag primary;

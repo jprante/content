@@ -108,7 +108,7 @@ public class StaxEventContentHandler extends AbstractStaxContentHandler {
      */
     @SuppressWarnings("unchecked")
     private List<Namespace> createNamespaces(SimpleNamespaceContext namespaceContext) {
-        List<Namespace> namespaces = new ArrayList<Namespace>();
+        List<Namespace> namespaces = new ArrayList<>();
         String defaultNamespaceUri = namespaceContext.getNamespaceURI(XMLConstants.DEFAULT_NS_PREFIX);
         if (defaultNamespaceUri != null && defaultNamespaceUri.length() > 0) {
             namespaces.add(eventFactory.createNamespace(defaultNamespaceUri));
@@ -122,7 +122,7 @@ public class StaxEventContentHandler extends AbstractStaxContentHandler {
     }
 
     private List<Attribute> getAttributes(Attributes attributes) {
-        List<Attribute> list = new ArrayList<Attribute>();
+        List<Attribute> list = new ArrayList<>();
         for (int i = 0; i < attributes.getLength(); i++) {
             QName name = toQName(attributes.getURI(i), attributes.getQName(i));
             if (!("xmlns".equals(name.getLocalPart()) || "xmlns".equals(name.getPrefix()))) {
@@ -134,6 +134,7 @@ public class StaxEventContentHandler extends AbstractStaxContentHandler {
 
     @Override
     protected void skippedEntityInternal(String name) throws XMLStreamException {
+        // not used
     }
 
     private static class SaxLocation implements Location {

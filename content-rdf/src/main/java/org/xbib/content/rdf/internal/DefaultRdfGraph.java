@@ -124,7 +124,7 @@ public class DefaultRdfGraph implements RdfGraph<RdfGraphParams> {
         // nothing to do here
     }
 
-    private Resource expand(Resource resource) {
+    public Resource expand(Resource resource) {
         Resource expanded = new DefaultResource(resource.id());
         new GraphTriples(resource).triples.forEach(expanded::add);
         return expanded;
@@ -165,6 +165,5 @@ public class DefaultRdfGraph implements RdfGraph<RdfGraphParams> {
             return list;
         }
     }
-
 
 }

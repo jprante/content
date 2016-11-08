@@ -18,7 +18,7 @@ public abstract class StreamWriterDelegate implements XMLStreamWriter {
     }
 
     @Override
-    public Object getProperty(String name) throws IllegalArgumentException {
+    public Object getProperty(String name) {
         return out.getProperty(name);
     }
 

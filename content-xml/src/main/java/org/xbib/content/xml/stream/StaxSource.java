@@ -74,8 +74,8 @@ public class StaxSource extends SAXSource {
         }
 
         int eventType = reader.getEventType();
-        if (!(eventType == XMLStreamConstants.START_DOCUMENT)
-                && !(eventType == XMLStreamConstants.START_ELEMENT)) {
+        if (eventType != XMLStreamConstants.START_DOCUMENT
+                && eventType != XMLStreamConstants.START_ELEMENT) {
             throw new IllegalStateException();
         }
 

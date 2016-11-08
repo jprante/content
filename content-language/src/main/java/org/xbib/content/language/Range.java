@@ -14,9 +14,9 @@ import java.util.regex.Pattern;
  */
 public class Range extends SubtagSet {
 
-    private static final String RANGE = "((?:[a-zA-Z]{1,8}|\\*))((?:[-_](?:[a-zA-Z0-9]{1,8}|\\*))*)";
+    private static final String RANGE_PATTERN = "((?:[a-zA-Z]{1,8}|\\*))((?:[-_](?:[a-zA-Z0-9]{1,8}|\\*))*)";
     private static final String RANGE_COMPONENT = "[-_]((?:[a-zA-Z0-9]{1,8}|\\*))";
-    private static final Pattern P_RANGE = Pattern.compile(RANGE);
+    private static final Pattern P_RANGE = Pattern.compile(RANGE_PATTERN);
     private static final Pattern P_RANGE_COMPONENT = Pattern.compile(RANGE_COMPONENT);
     private static final String LANGUAGE =
             "((?:[a-zA-Z]{2,3}(?:[-_](?:[a-zA-Z]{3}|\\*)){0,3})|[a-zA-Z]{4}|[a-zA-Z]{5,8}|\\*)";
@@ -309,7 +309,8 @@ public class Range extends SubtagSet {
                     list.add(tag);
                 }
             }
-            Subtag primary = null, current = null;
+            Subtag primary = null;
+            Subtag current = null;
             for (Subtag tag : list) {
                 tag.setNext(null);
                 tag.setPrevious(null);

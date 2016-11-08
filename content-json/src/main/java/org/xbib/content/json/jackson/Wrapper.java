@@ -39,9 +39,9 @@ public final class Wrapper<T> {
          * whatever type it is, it is assignable to the type handled by this wrapper's equivalence.
          */
             @SuppressWarnings("unchecked")
-            Equivalence<Object> equivalence = (Equivalence<Object>) this.equivalence;
-            return equivalence.equals(that.equivalence)
-                    && equivalence.equivalent(this.reference, that.reference);
+            Equivalence<Object> equiv = (Equivalence<Object>) this.equivalence;
+            return equiv.equals(that.equivalence)
+                    && equiv.equivalent(this.reference, that.reference);
         } else {
             return false;
         }

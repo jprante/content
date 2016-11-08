@@ -6,7 +6,7 @@ package org.xbib.content.resource.text;
 public class InvalidCharacterException extends RuntimeException {
 
     private static final long serialVersionUID = -3037013255350562940L;
-    private int input;
+    private final int input;
 
     public InvalidCharacterException(int input) {
         this.input = input;

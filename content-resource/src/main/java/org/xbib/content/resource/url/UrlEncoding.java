@@ -87,15 +87,6 @@ public final class UrlEncoding {
         return e;
     }
 
-    private static byte decode(char c, int shift) {
-        return (byte) ((((c >= '0' && c <= '9') ? c - '0' : (c >= 'A' && c <= 'F') ? c - 'A' + 10
-                : (c >= 'a' && c <= 'f') ? c - 'a' + 10 : -1) & 0xf) << shift);
-    }
-
-    private static byte decode(char c1, char c2) {
-        return (byte) (decode(c1, 4) | decode(c2, 0));
-    }
-
     /**
      *
      */
@@ -143,6 +134,15 @@ public final class UrlEncoding {
                 }
             }
             return i;
+        }
+
+        private static byte decode(char c, int shift) {
+            return (byte) ((((c >= '0' && c <= '9') ? c - '0' : (c >= 'A' && c <= 'F') ? c - 'A' + 10
+                    : (c >= 'a' && c <= 'f') ? c - 'a' + 10 : -1) & 0xf) << shift);
+        }
+
+        private static byte decode(char c1, char c2) {
+            return (byte) (decode(c1, 4) | decode(c2, 0));
         }
     }
 }

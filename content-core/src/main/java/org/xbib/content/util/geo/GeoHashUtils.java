@@ -2,7 +2,6 @@ package org.xbib.content.util.geo;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Utilities for encoding and decoding geohashes. Based on
@@ -81,7 +80,7 @@ public class GeoHashUtils {
      * @param geohash Geohash of the defined cell
      * @return geohashes of all neighbor cells
      */
-    public static Collection<? extends CharSequence> neighbors(String geohash) {
+    public static Collection<CharSequence> neighbors(String geohash) {
         return addNeighbors(geohash, geohash.length(), new ArrayList<CharSequence>(8));
     }
 
@@ -93,12 +92,7 @@ public class GeoHashUtils {
      * @return {@link Iterable} of path
      */
     public static Iterable<String> path(final String geohash) {
-        return new Iterable<String>() {
-            @Override
-            public Iterator<String> iterator() {
-                return new GeohashPathIterator(geohash);
-            }
-        };
+        return () -> new GeohashPathIterator(geohash);
     }
 
     /**

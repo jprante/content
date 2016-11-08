@@ -48,13 +48,13 @@ public enum NodeType {
      * Reverse map to find a node type out of this type's name.
      */
     private static final Map<String, NodeType> NAME_MAP
-            = new HashMap<String, NodeType>();
+            = new HashMap<>();
     /**
      * Mapping of {@link com.fasterxml.jackson.core.JsonToken} back to node types (used in {@link
      * #getNodeType(com.fasterxml.jackson.databind.JsonNode)}).
      */
     private static final Map<JsonToken, NodeType> TOKEN_MAP
-            = new EnumMap<JsonToken, NodeType>(JsonToken.class);
+            = new EnumMap<>(JsonToken.class);
 
     static {
         TOKEN_MAP.put(JsonToken.START_ARRAY, ARRAY);

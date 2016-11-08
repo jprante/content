@@ -14,6 +14,9 @@ import java.util.Map;
  */
 public class XmlXContentHelper {
 
+    private XmlXContentHelper() {
+    }
+
     public static Map<String, Object> convertFromXmlToMap(Reader reader) {
         try {
             return XmlXContent.xmlXContent().createParser(reader).mapOrderedAndClose();

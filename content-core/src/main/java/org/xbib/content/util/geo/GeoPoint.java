@@ -9,6 +9,7 @@ public final class GeoPoint {
     private double lon;
 
     public GeoPoint() {
+        this(0, 0);
     }
 
     /**
