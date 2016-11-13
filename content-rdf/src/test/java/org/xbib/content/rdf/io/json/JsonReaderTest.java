@@ -66,7 +66,7 @@ public class JsonReaderTest extends StreamTester {
         };
         RdfContentBuilder<JsonContentParams> builder = jsonBuilder();
         jsonHandler.setBuilder(builder);
-        new JsonContentParser(in)
+        new JsonContentParser<JsonContentParams>(in)
                 .setHandler(jsonHandler)
                 .root(new QName("http://purl.org/dc/elements/1.1/", "root", "dc"))
                 .parse();

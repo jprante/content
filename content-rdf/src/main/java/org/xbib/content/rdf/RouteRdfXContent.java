@@ -14,7 +14,7 @@ public class RouteRdfXContent implements RdfContent<RouteRdfXContentParams> {
     private RouteRdfXContent() {
     }
 
-    public static final RouteRdfXContent routeRdfXContent() {
+    public static RouteRdfXContent routeRdfXContent() {
         return ROUTE_RDF_X_CONTENT;
     }
 
@@ -33,8 +33,8 @@ public class RouteRdfXContent implements RdfContent<RouteRdfXContentParams> {
     }
 
     @Override
-    public RdfContentParser createParser(InputStream in) throws IOException {
-        return null;
+    public RdfContentParser<RouteRdfXContentParams> createParser(InputStream in) throws IOException {
+        throw new UnsupportedOperationException();
     }
 
     /**

@@ -22,7 +22,7 @@ public class TurtleConformanceTest extends StreamTester {
         for (int n = 0; n < 30; n++) {
             String testNum = String.format("%02d", n);
             InputStream in = getClass().getResource("/turtle/test-" + testNum + ".ttl").openStream();
-            TurtleContentParser turtleParser = new TurtleContentParser(in)
+            TurtleContentParser<TurtleContentParams> turtleParser = new TurtleContentParser<TurtleContentParams>(in)
                     .setBaseIRI(IRI.create("http://example/base/"));
             turtleParser.setRdfContentBuilderProvider(RdfContentFactory::turtleBuilder);
             turtleParser.setRdfContentBuilderHandler(b -> {

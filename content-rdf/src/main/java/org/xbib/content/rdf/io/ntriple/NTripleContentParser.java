@@ -1,6 +1,7 @@
 package org.xbib.content.rdf.io.ntriple;
 
 import org.xbib.content.rdf.RdfContentBuilder;
+import org.xbib.content.rdf.RdfContentParams;
 import org.xbib.content.rdf.RdfContentParser;
 import org.xbib.content.rdf.RdfContentType;
 import org.xbib.content.rdf.Resource;
@@ -24,8 +25,9 @@ import java.util.regex.PatternSyntaxException;
  * Parser for NTriple RDF format.
  * See also the <a href="http://www.w3.org/TR/rdf-testcases/#convert">NTriple
  * specification</a>.
+ * @param <R> RDF content parameter type
  */
-public class NTripleContentParser implements RdfContentParser {
+public class NTripleContentParser<R extends RdfContentParams> implements RdfContentParser<R> {
 
     private static final Resource resource = new DefaultAnonymousResource();
 
@@ -48,7 +50,7 @@ public class NTripleContentParser implements RdfContentParser {
 
     private boolean eof;
 
-    private RdfContentBuilder<NTripleContentParams> builder;
+    private RdfContentBuilder<R> builder;
 
     public NTripleContentParser(InputStream in) throws IOException {
         this(new InputStreamReader(in, StandardCharsets.UTF_8));
@@ -63,13 +65,13 @@ public class NTripleContentParser implements RdfContentParser {
         return StandardRdfContentType.NTRIPLE;
     }
 
-    public NTripleContentParser setBuilder(RdfContentBuilder<NTripleContentParams> builder) {
+    public NTripleContentParser<R> setBuilder(RdfContentBuilder<R> builder) {
         this.builder = builder;
         return this;
     }
 
     @Override
-    public NTripleContentParser parse() throws IOException {
+    public NTripleContentParser<R> parse() throws IOException {
         this.eof = false;
         try (BufferedReader br = new BufferedReader(reader)) {
             while (!eof) {

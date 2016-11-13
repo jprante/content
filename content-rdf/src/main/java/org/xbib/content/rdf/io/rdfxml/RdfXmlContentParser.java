@@ -52,7 +52,7 @@ import java.util.logging.Logger;
  * Note that the XMLLiteral datatype is not fully supported.
  * @param <R> parameter type
  */
-public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConstants, RdfContentParser {
+public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConstants, RdfContentParser<R> {
 
     private static final Logger logger = Logger.getLogger(RdfXmlContentParser.class.getName());
 

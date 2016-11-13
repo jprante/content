@@ -22,7 +22,7 @@ public class NTripleReaderTest extends StreamTester {
             throw new IOException("file " + filename + " not found");
         }
         RdfContentBuilder<NTripleContentParams> builder = ntripleBuilder();
-        NTripleContentParser reader = new NTripleContentParser(in);
+        NTripleContentParser<NTripleContentParams> reader = new NTripleContentParser<>(in);
         reader.setBuilder(builder);
         reader.parse();
         //assertStream(getClass().getResource("rdfxml.ttl").openStream(),

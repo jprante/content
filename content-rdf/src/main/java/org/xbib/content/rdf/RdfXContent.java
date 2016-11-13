@@ -33,7 +33,7 @@ public class RdfXContent implements RdfContent<RdfXContentParams> {
     }
 
     @Override
-    public RdfContentParser createParser(InputStream in) throws IOException {
+    public RdfContentParser<RdfXContentParams> createParser(InputStream in) throws IOException {
         throw new UnsupportedOperationException();
     }
 }

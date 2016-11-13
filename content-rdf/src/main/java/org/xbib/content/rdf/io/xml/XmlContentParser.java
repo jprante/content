@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
  * An XML reader for parsing XML into triples.
  * @param <P> parameter type
  */
-public class XmlContentParser<P extends RdfContentParams> implements RdfContentParser {
+public class XmlContentParser<P extends RdfContentParams> implements RdfContentParser<P> {
 
     private final Reader reader;
 

@@ -44,7 +44,7 @@ public class JsonContent implements RdfContent<JsonContentParams> {
     }
 
     @Override
-    public RdfContentParser createParser(InputStream in) throws IOException {
-        return new JsonContentParser(in);
+    public RdfContentParser<JsonContentParams> createParser(InputStream in) throws IOException {
+        return new JsonContentParser<>(in);
     }
 }

@@ -4,6 +4,7 @@ import org.xbib.content.rdf.Literal;
 import org.xbib.content.rdf.RdfContentBuilder;
 import org.xbib.content.rdf.RdfContentBuilderHandler;
 import org.xbib.content.rdf.RdfContentBuilderProvider;
+import org.xbib.content.rdf.RdfContentParams;
 import org.xbib.content.rdf.RdfContentParser;
 import org.xbib.content.rdf.RdfContentType;
 import org.xbib.content.rdf.Resource;
@@ -36,8 +37,9 @@ import java.util.logging.Logger;
  *
  * @see <a href="http://www.w3.org/TeamSubmission/turtle/">Turtle - Terse RDF
  * Triple Language</a>
+ * @param <R> RDF content type parameter
  */
-public class TurtleContentParser implements RdfContentParser {
+public class TurtleContentParser<R extends RdfContentParams> implements RdfContentParser<R> {
 
     private static final Logger logger = Logger.getLogger(TurtleContentParser.class.getName());
 
@@ -45,11 +47,11 @@ public class TurtleContentParser implements RdfContentParser {
 
     private final HashMap<String, Node> bnodes = new HashMap<>();
 
-    private RdfContentBuilderProvider<TurtleContentParams> provider;
+    private RdfContentBuilderProvider<R> provider;
 
-    private RdfContentBuilderHandler<TurtleContentParams> rdfContentBuilderHandler;
+    private RdfContentBuilderHandler<R> rdfContentBuilderHandler;
 
-    private RdfContentBuilder<TurtleContentParams> builder;
+    private RdfContentBuilder<R> builder;
 
     /**
      * The base IRI.
@@ -136,29 +138,29 @@ public class TurtleContentParser implements RdfContentParser {
         return StandardRdfContentType.TURTLE;
     }
 
-    public TurtleContentParser setRdfContentBuilderProvider(RdfContentBuilderProvider<TurtleContentParams> provider) {
+    public TurtleContentParser<R> setRdfContentBuilderProvider(RdfContentBuilderProvider<R> provider) {
         this.provider = provider;
         return this;
     }
 
-    public TurtleContentParser setRdfContentBuilderHandler(RdfContentBuilderHandler<TurtleContentParams>
+    public TurtleContentParser<R> setRdfContentBuilderHandler(RdfContentBuilderHandler<R>
                                                                    rdfContentBuilderHandler) {
         this.rdfContentBuilderHandler = rdfContentBuilderHandler;
         return this;
     }
 
-    public TurtleContentParser setBaseIRI(IRI baseIRI) {
+    public TurtleContentParser<R> setBaseIRI(IRI baseIRI) {
         this.baseIRI = baseIRI;
         return this;
     }
 
-    public TurtleContentParser context(XmlNamespaceContext context) {
+    public TurtleContentParser<R> context(XmlNamespaceContext context) {
         this.context = context;
         return this;
     }
 
     @Override
-    public TurtleContentParser parse() throws IOException {
+    public TurtleContentParser<R> parse() throws IOException {
         if (provider != null) {
             builder = provider.newContentBuilder();
             builder.startStream();
@@ -218,7 +220,7 @@ public class TurtleContentParser implements RdfContentParser {
      * relative URIs. It takes, itself, a relative URI, so it can be used to
      * change the base URI relative to the previous one.
      *
-     * @throws IOException
+     * @throws IOException if directive could not be parsed
      */
     private void parseDirective() throws IOException {
         String directive;

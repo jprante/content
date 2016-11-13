@@ -29,7 +29,7 @@ public class TurtleTest extends StreamTester {
         IRINamespaceContext context = IRINamespaceContext.newInstance();
         context.addNamespace("gnd", "http://d-nb.info/gnd/");
         InputStream in = getClass().getResourceAsStream("GND.ttl");
-        TurtleContentParser reader = new TurtleContentParser(in)
+        TurtleContentParser<TurtleContentParams> reader = new TurtleContentParser<TurtleContentParams>(in)
                 .setBaseIRI(IRI.create("http://d-nb.info/gnd/"))
                 .context(context);
         reader.parse();
@@ -40,7 +40,7 @@ public class TurtleTest extends StreamTester {
     public void testTurtleGND2() throws Exception {
         IRINamespaceContext context = IRINamespaceContext.newInstance();
         InputStream in = getClass().getResourceAsStream("gnd2.ttl");
-        TurtleContentParser reader = new TurtleContentParser(in)
+        TurtleContentParser<TurtleContentParams> reader = new TurtleContentParser<TurtleContentParams>(in)
                 .setBaseIRI(IRI.create("http://d-nb.info/gnd/"))
                 .context(context);
         reader.parse();
@@ -51,7 +51,7 @@ public class TurtleTest extends StreamTester {
     public void testTurtleGND3() throws Exception {
         IRINamespaceContext context = IRINamespaceContext.newInstance();
         InputStream in = getClass().getResourceAsStream("gnd2.ttl");
-        TurtleContentParser reader = new TurtleContentParser(in)
+        TurtleContentParser<TurtleContentParams> reader = new TurtleContentParser<TurtleContentParams>(in)
                 .setBaseIRI(IRI.create("http://d-nb.info/gnd/"))
                 .context(context);
         reader.setRdfContentBuilderProvider(RdfContentFactory::turtleBuilder);

@@ -5,10 +5,10 @@ import java.io.IOException;
 /**
  *
  */
-public interface RdfContentParser {
+public interface RdfContentParser<R extends RdfContentParams> {
 
     RdfContentType contentType();
 
-    RdfContentParser parse() throws IOException;
+    RdfContentParser<R> parse() throws IOException;
 
 }

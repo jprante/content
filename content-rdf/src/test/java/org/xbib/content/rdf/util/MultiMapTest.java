@@ -1,11 +1,11 @@
 package org.xbib.content.rdf.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -14,7 +14,7 @@ public class MultiMapTest {
 
     @Test
     public void testLinkedHashMultiMap() {
-        LinkedHashMultiMap<String,String> map = new LinkedHashMultiMap<>();
+        LinkedHashMultiMap<String, String> map = new LinkedHashMultiMap<>();
         map.put("a", "b");
         map.put("b", "c");
         map.put("a", "c");
@@ -28,7 +28,7 @@ public class MultiMapTest {
 
     @Test
     public void testTreeMultiMap() {
-        TreeMultiMap<String,String> map = new TreeMultiMap<>();
+        TreeMultiMap<String, String> map = new TreeMultiMap<>();
         map.put("a", "b");
         map.put("b", "c");
         map.put("a", "c");

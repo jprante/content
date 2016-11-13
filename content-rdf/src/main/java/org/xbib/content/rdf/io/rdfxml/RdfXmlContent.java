@@ -44,7 +44,7 @@ public class RdfXmlContent implements RdfContent<RdfXmlContentParams> {
     }
 
     @Override
-    public RdfContentParser createParser(InputStream in) throws IOException {
-        return new RdfXmlContentParser<RdfXmlContentParams>(in);
+    public RdfContentParser<RdfXmlContentParams> createParser(InputStream in) throws IOException {
+        return new RdfXmlContentParser<>(in);
     }
 }

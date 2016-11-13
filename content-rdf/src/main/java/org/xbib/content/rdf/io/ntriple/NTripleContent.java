@@ -44,7 +44,7 @@ public class NTripleContent implements RdfContent<NTripleContentParams> {
     }
 
     @Override
-    public RdfContentParser createParser(InputStream in) throws IOException {
-        return new NTripleContentParser(in);
+    public RdfContentParser<NTripleContentParams> createParser(InputStream in) throws IOException {
+        return new NTripleContentParser<>(in);
     }
 }

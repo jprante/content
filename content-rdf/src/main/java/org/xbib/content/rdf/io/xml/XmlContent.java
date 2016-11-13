@@ -44,7 +44,7 @@ public class XmlContent implements RdfContent<XmlContentParams> {
     }
 
     @Override
-    public RdfContentParser createParser(InputStream inputStream) throws IOException {
+    public RdfContentParser<XmlContentParams> createParser(InputStream inputStream) throws IOException {
         return new XmlContentParser<>(inputStream);
     }
 }

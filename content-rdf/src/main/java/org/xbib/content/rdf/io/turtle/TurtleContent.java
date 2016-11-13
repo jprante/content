@@ -44,8 +44,8 @@ public class TurtleContent implements RdfContent<TurtleContentParams> {
     }
 
     @Override
-    public RdfContentParser createParser(InputStream inputStream) throws IOException {
-        return new TurtleContentParser(inputStream);
+    public RdfContentParser<TurtleContentParams> createParser(InputStream inputStream) throws IOException {
+        return new TurtleContentParser<>(inputStream);
     }
 
 }

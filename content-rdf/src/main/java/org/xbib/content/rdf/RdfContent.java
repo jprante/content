@@ -13,6 +13,5 @@ public interface RdfContent<P extends RdfContentParams> {
 
     RdfContentGenerator<P> createGenerator(OutputStream out) throws IOException;
 
-    RdfContentParser createParser(InputStream in) throws IOException;
-
+    RdfContentParser<P> createParser(InputStream in) throws IOException;
 }

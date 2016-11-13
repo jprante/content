@@ -1,6 +1,7 @@
 package org.xbib.content.rdf.io.json;
 
 import org.xbib.content.rdf.RdfContentBuilder;
+import org.xbib.content.rdf.RdfContentParams;
 import org.xbib.content.rdf.RdfContentParser;
 import org.xbib.content.rdf.RdfContentType;
 import org.xbib.content.rdf.StandardRdfContentType;
@@ -18,14 +19,15 @@ import javax.xml.namespace.QName;
 
 /**
  * A parser for generic JSON (not JSON-LD) via JSON SaX adapter.
+ * @param <R> parameterized type
  */
-public class JsonContentParser implements RdfContentParser {
+public class JsonContentParser<R extends RdfContentParams> implements RdfContentParser<R> {
 
     private final Reader reader;
 
-    private XmlHandler<JsonContentParams> handler;
+    private XmlHandler<R> handler;
 
-    private RdfContentBuilder<JsonContentParams> builder;
+    private RdfContentBuilder<R> builder;
 
     private QName root;
 
@@ -42,27 +44,27 @@ public class JsonContentParser implements RdfContentParser {
         return StandardRdfContentType.JSON;
     }
 
-    public XmlHandler<JsonContentParams> getHandler() {
+    public XmlHandler<R> getHandler() {
         return handler;
     }
 
-    public JsonContentParser setHandler(XmlHandler<JsonContentParams> handler) {
+    public JsonContentParser<R> setHandler(XmlHandler<R> handler) {
         this.handler = handler;
         return this;
     }
 
-    public JsonContentParser root(QName root) {
+    public JsonContentParser<R> root(QName root) {
         this.root = root;
         return this;
     }
 
-    public JsonContentParser builder(RdfContentBuilder<JsonContentParams> builder) {
+    public JsonContentParser<R> builder(RdfContentBuilder<R> builder) {
         this.builder = builder;
         return this;
     }
 
     @Override
-    public JsonContentParser parse() throws IOException {
+    public JsonContentParser<R> parse() throws IOException {
         if (handler != null) {
             if (builder != null) {
                 handler.setBuilder(builder);
