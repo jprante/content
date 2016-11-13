@@ -53,6 +53,10 @@ public abstract class AbstractXmlHandler<P extends RdfContentParams>
         return resource;
     }
 
+    public LinkedList<QName> getParents() {
+        return parents;
+    }
+
     @Override
     public AbstractXmlHandler<P> setDefaultNamespace(String prefix, String namespaceURI) {
         this.defaultPrefix = prefix;

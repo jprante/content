@@ -127,6 +127,10 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
         return this;
     }
 
+    public RdfContentBuilder<R> getBuilder() {
+        return builder;
+    }
+
     public XmlHandler<R> getHandler() {
         return xmlHandler;
     }
@@ -357,6 +361,32 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
             l.lang(lang);
         }
         return l;
+    }
+
+    /**
+     * Allow to override this method to control triple stream generation.
+     * @param triple a triple
+     * @throws IOException if yield does not work
+     */
+    protected void yield(Triple triple) throws IOException {
+        if (builder != null) {
+            builder.receive(triple);
+        }
+    }
+
+    private void yield(Object s, Object p, Object o) throws IOException {
+        yield(new DefaultTriple(resource.newSubject(s), resource.newPredicate(p), resource.newObject(o)));
+    }
+
+    // produce a (possibly) reified triple
+    private void yield(Object s, IRI p, Object o, IRI reified) throws IOException {
+        yield(s, p, o);
+        if (reified != null) {
+            yield(reified, RDF_TYPE, RDF_STATEMENT);
+            yield(reified, RDF_SUBJECT, s);
+            yield(reified, RDF_PREDICATE, p);
+            yield(reified, RDF_OBJECT, o);
+        }
     }
 
     private static class Frame {
@@ -638,27 +668,6 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
             return b;
         }
 
-        // produce a (possibly) reified triple
-        private void yield(Object s, IRI p, Object o, IRI reified) throws IOException {
-            yield(s, p, o);
-            if (reified != null) {
-                yield(reified, RDF_TYPE, RDF_STATEMENT);
-                yield(reified, RDF_SUBJECT, s);
-                yield(reified, RDF_PREDICATE, p);
-                yield(reified, RDF_OBJECT, o);
-            }
-        }
-
-        private void yield(Object s, Object p, Object o) throws IOException {
-            yield(new DefaultTriple(resource.newSubject(s), resource.newPredicate(p), resource.newObject(o)));
-        }
-
-        private void yield(Triple triple) throws IOException {
-            if (builder != null) {
-                builder.receive(triple);
-            }
-        }
-
         // if we're looking at a subject, is it an item in a Collection?
         private boolean isCollectionItem(Deque<Frame> stack) throws SAXException {
             if (inPredicate(stack)) {
@@ -668,6 +677,5 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
                 return false;
             }
         }
-
     }
 }

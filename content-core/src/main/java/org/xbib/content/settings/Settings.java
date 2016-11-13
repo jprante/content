@@ -661,7 +661,7 @@ public class Settings {
          */
         public Builder loadFromSystemProperties() {
             for (Map.Entry<Object, Object> entry : System.getProperties().entrySet()) {
-                put((String)entry.getKey(), (String)entry.getValue());
+                put((String) entry.getKey(), (String) entry.getValue());
             }
             return this;
         }
