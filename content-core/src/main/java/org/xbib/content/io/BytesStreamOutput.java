@@ -96,6 +96,9 @@ public class BytesStreamOutput extends OutputStream {
         if (length == 0) {
             return;
         }
+        if ((long)count + length > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("overflow, stream output larger than " + Integer.MAX_VALUE);
+        }
         int newcount = count + length;
         if (newcount > buf.length) {
             buf = Arrays.copyOf(buf, oversize(newcount));
