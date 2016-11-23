@@ -92,7 +92,7 @@ public class ResourceTest extends Assert {
                 .add("urn:hasAttribute", "a") // another a, must be suppressed
                 .add("urn:hasAttribute", "c");
         StringBuilder sb = new StringBuilder();
-        r.objects("urn:hasAttribute").stream().forEach(sb::append);
+        r.objects("urn:hasAttribute").forEach(sb::append);
         assertEquals(sb.toString(), "abc");
     }
 
