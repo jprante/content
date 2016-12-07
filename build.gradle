@@ -4,17 +4,15 @@ plugins {
     id "org.xbib.gradle.plugin.jbake" version "1.2.1"
 }
 
-
 ext {
     versions = [
             'jackson' : '2.8.4'
     ]
 }
 
-allprojects {
+apply plugin: 'build-dashboard'
 
-    group = 'org.xbib'
-    version = '1.0.6'
+allprojects {
 
     apply plugin: 'java'
     apply plugin: 'maven'
@@ -42,7 +40,7 @@ allprojects {
 
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
     tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:all" << "-profile" << "compact2"
+        options.compilerArgs << "-Xlint:all" << "-profile" << "compact1"
     }
 
     test {

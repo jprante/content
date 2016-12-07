@@ -766,6 +766,15 @@ public final class XContentBuilder implements ToXContent, Flushable, Closeable {
         return this;
     }
 
+
+    public XContentBuilder flatMap(Map<String, String> map) throws IOException {
+        if (map == null) {
+            return nullValue();
+        }
+        writeFlatMap(map);
+        return this;
+    }
+
     public XContentBuilder value(Iterable<?> value) throws IOException {
         if (value == null) {
             return nullValue();
@@ -814,6 +823,20 @@ public final class XContentBuilder implements ToXContent, Flushable, Closeable {
     private void writeMap(Map<String, Object> map) throws IOException {
         generator.writeStartObject();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
+            field(entry.getKey());
+            Object value = entry.getValue();
+            if (value == null) {
+                generator.writeNull();
+            } else {
+                writeValue(value);
+            }
+        }
+        generator.writeEndObject();
+    }
+
+    private void writeFlatMap(Map<String, String> map) throws IOException {
+        generator.writeStartObject();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
             field(entry.getKey());
             Object value = entry.getValue();
             if (value == null) {

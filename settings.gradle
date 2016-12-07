@@ -1,4 +1,4 @@
-rootProject.name = 'content'
+rootProject.name = name
 include 'content-core'
 include 'content-resource'
 include 'content-language'

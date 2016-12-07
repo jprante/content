@@ -3,9 +3,13 @@ package org.xbib.content.settings;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.xbib.content.XContentBuilder;
 import org.xbib.content.XContentHelper;
+import org.xbib.content.json.JsonSettingsLoader;
+import org.xbib.content.json.JsonXContent;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -102,4 +106,21 @@ public class SettingsTest extends Assert {
                 .build();
         assertEquals("{a.b=c}", settings.getAsMap().toString());
     }
+
+    @Test
+    public void testFlatLoader() throws IOException {
+        String s = "{\"a\":{\"b\":\"c\"}}";
+        JsonSettingsLoader loader = new JsonSettingsLoader();
+        Map<String, String> flatMap = loader.load(s);
+        assertEquals("{a.b=c}", flatMap.toString());
+    }
+
+    @Test
+    public void testFlatLoaderToJsonString() throws IOException {
+        String s = "{\"a\":{\"b\":\"c\"}}";
+        JsonSettingsLoader loader = new JsonSettingsLoader();
+        String result = JsonXContent.contentBuilder().flatMap(loader.load(s)).string();
+        assertEquals("{\"a.b\":\"c\"}", result);
+    }
+
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 /**
  *
+ * @param <R> parameter type
  */
 public interface RdfContentParser<R extends RdfContentParams> {
 

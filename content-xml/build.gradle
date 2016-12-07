@@ -3,3 +3,8 @@ dependencies {
     compile project(':content-resource')
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${versions.jackson}"
 }
+
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:all" << "-profile" << "compact2"
+}
