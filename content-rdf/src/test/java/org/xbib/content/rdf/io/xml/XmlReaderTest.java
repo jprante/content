@@ -15,12 +15,12 @@ import org.xbib.content.rdf.io.ntriple.NTripleContentParams;
 import org.xbib.content.rdf.io.turtle.TurtleContentParams;
 import org.xbib.content.resource.IRI;
 import org.xbib.content.resource.IRINamespaceContext;
-import org.xbib.content.resource.text.CharUtils.Profile;
-import org.xbib.content.resource.url.UrlEncoding;
 import org.xbib.helper.StreamTester;
+import org.xbib.net.PercentEncoders;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -61,8 +61,8 @@ public class XmlReaderTest extends StreamTester {
                 if ("identifier".equals(name.getLocalPart()) && DefaultResource.isBlank(getResource())) {
                     try {
                         // make sure we can build an opaque IRI, whatever is out there
-                        String s = UrlEncoding.encode(value, Profile.SCHEMESPECIFICPART.filter());
-                        getResource().setId(IRI.create("id:" + s));
+                        getResource().setId(IRI.create("id:" +
+                                PercentEncoders.getRegNameEncoder(StandardCharsets.UTF_8).encode(value)));
                     } catch (IOException e) {
                         logger.log(Level.FINE, e.getMessage(), e);
                     }
@@ -210,7 +210,7 @@ public class XmlReaderTest extends StreamTester {
 
         @Override
         public MyBuilder receive(Resource resource) throws IOException {
-            resource.triples().forEach(triples::add);
+            triples.addAll(resource.triples());
             return this;
         }
 

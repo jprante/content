@@ -5,6 +5,7 @@ import org.xbib.content.rdf.RdfContentParams;
 import org.xbib.content.rdf.Resource;
 import org.xbib.content.rdf.internal.DefaultAnonymousResource;
 import org.xbib.content.resource.IRI;
+import org.xbib.content.xml.util.XMLUtil;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -185,7 +186,7 @@ public abstract class AbstractXmlHandler<P extends RdfContentParams>
     }
 
     public String content() {
-        String s = content.toString().trim();
+        String s = XMLUtil.sanitizeToLineFeed(content.toString()).trim();
         return s.length() > 0 ? s : null;
     }
 

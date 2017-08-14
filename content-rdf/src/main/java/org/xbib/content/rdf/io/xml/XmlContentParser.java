@@ -5,6 +5,7 @@ import org.xbib.content.rdf.RdfContentParams;
 import org.xbib.content.rdf.RdfContentParser;
 import org.xbib.content.rdf.RdfContentType;
 import org.xbib.content.rdf.StandardRdfContentType;
+import org.xbib.content.rdf.util.NormalizeEolFilter;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -37,7 +38,7 @@ public class XmlContentParser<P extends RdfContentParams> implements RdfContentP
     }
 
     public XmlContentParser(Reader reader) {
-        this.reader = reader;
+        this.reader = new NormalizeEolFilter(reader, System.getProperty("line.separator"), true);
     }
 
     @Override

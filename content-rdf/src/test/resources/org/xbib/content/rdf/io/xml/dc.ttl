@@ -1,7 +1,7 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix oaidc: <http://www.openarchives.org/OAI/2.0/oai_dc/> .
 
-<id:http://oro.open.ac.uk/25656/5/butler%2Decoop11.pdf> dc:title "Improving the tokenisation of identifier names";
+<id:http%3A%2F%2Foro.open.ac.uk%2F25656%2F5%2Fbutler%252Decoop11.pdf> dc:title "Improving the tokenisation of identifier names";
 	dc:creator "Butler, Simon", "Wermelinger, Michel", "Yu, Yijun", "Sharp, Helen";
 	dc:description """Identifier names are the main vehicle for semantic information during program comprehension. For tool-supported program comprehension tasks, including concept location and requirements traceability, identifier  names need to be tokenised into their semantic constituents. In this paper we present an approach to the automated tokenisation of identifier  names that improves on existing techniques in two ways. First, it improves the tokenisation accuracy for single-case identifier  names and for identifier  names containing digits, which existing techniques largely ignore. Second, performance gains over existing techniques are achieved using smaller oracles, making the approach easier to deploy.
 

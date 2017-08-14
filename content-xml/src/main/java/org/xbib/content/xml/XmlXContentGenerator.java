@@ -206,12 +206,12 @@ public class XmlXContentGenerator extends AbstractXContentGenerator {
 
         @Override
         public void writeString(String text) throws IOException {
-            generator.writeString(XMLUtil.sanitizeXml10(text));
+            generator.writeString(XMLUtil.sanitize(text));
         }
 
         @Override
         public void writeString(char[] text, int offset, int len) throws IOException {
-            generator.writeString(XMLUtil.sanitizeXml10(text, offset, len));
+            generator.writeString(XMLUtil.sanitize(new String(text, offset, len)));
         }
 
         @Override

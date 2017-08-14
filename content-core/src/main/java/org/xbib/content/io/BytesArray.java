@@ -40,6 +40,14 @@ public class BytesArray implements BytesReference {
         this.length = length;
     }
 
+    public void write(byte[] b) {
+        byte[] c = new byte[length + b.length];
+        System.arraycopy(bytes, 0, c, 0, length);
+        System.arraycopy(b, 0, c, bytes.length, b.length);
+        this.bytes = c;
+        this.offset = 0;
+        this.length = c.length;
+    }
 
     @Override
     public byte get(int index) {

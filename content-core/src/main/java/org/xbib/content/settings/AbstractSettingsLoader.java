@@ -1,7 +1,10 @@
 package org.xbib.content.settings;
 
 import org.xbib.content.XContent;
+import org.xbib.content.XContentGenerator;
 import org.xbib.content.XContentParser;
+import org.xbib.content.io.BytesReference;
+import org.xbib.content.io.BytesStreamOutput;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +24,32 @@ public abstract class AbstractSettingsLoader implements SettingsLoader {
     public Map<String, String> load(String source) throws IOException {
         try (XContentParser parser = content().createParser(source)) {
             return load(parser);
+        }
+    }
+
+    public Map<String, String> load(BytesReference bytesReference) throws IOException {
+        try (XContentParser parser = content().createParser(bytesReference)) {
+            return load(parser);
+        }
+    }
+
+    public String flatMapAsString(BytesReference bytesReference) throws IOException {
+        try (XContentParser parser = content().createParser(bytesReference);
+            BytesStreamOutput bytesStreamOutput = new BytesStreamOutput();
+            XContentGenerator generator = content().createGenerator(bytesStreamOutput)) {
+            generator.writeStartObject();
+            for (Map.Entry<String, String> entry : load(parser).entrySet()) {
+                generator.writeFieldName(entry.getKey());
+                String value = entry.getValue();
+                if (value == null) {
+                    generator.writeNull();
+                } else {
+                    generator.writeString(value);
+                }
+            }
+            generator.writeEndObject();
+            generator.flush();
+            return bytesStreamOutput.bytes().toUtf8();
         }
     }
 

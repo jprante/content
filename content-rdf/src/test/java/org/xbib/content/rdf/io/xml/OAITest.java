@@ -9,12 +9,12 @@ import org.xbib.content.rdf.io.IOTests;
 import org.xbib.content.rdf.io.turtle.TurtleContentParams;
 import org.xbib.content.resource.IRI;
 import org.xbib.content.resource.IRINamespaceContext;
-import org.xbib.content.resource.text.CharUtils;
-import org.xbib.content.resource.url.UrlEncoding;
 import org.xbib.helper.StreamTester;
+import org.xbib.net.PercentEncoders;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,8 +50,8 @@ public class OAITest extends StreamTester {
                 if ("identifier".equals(name.getLocalPart())) {
                     // make sure we can build an opaque IRI, whatever is out there
                     try {
-                        getResource().setId(IRI.create("id:"
-                                + UrlEncoding.encode(value, CharUtils.Profile.SCHEMESPECIFICPART.filter())));
+                        getResource().setId(IRI.create("id:" +
+                                PercentEncoders.getRegNameEncoder(StandardCharsets.UTF_8).encode(value)));
                     } catch (IOException e) {
                         logger.log(Level.FINE, e.getMessage(), e);
                     }
@@ -80,8 +80,7 @@ public class OAITest extends StreamTester {
                 .setDefaultNamespace("oai", "http://www.openarchives.org/OAI/2.0/oai_dc/");
         XmlContentParser<TurtleContentParams> parser = new XmlContentParser<>(in);
         parser.builder(builder);
-        parser.setHandler(xmlHandler)
-                .parse();
+        parser.setHandler(xmlHandler).parse();
         assertStream(getClass().getResourceAsStream("oai.ttl"), builder.streamInput());
     }
 }

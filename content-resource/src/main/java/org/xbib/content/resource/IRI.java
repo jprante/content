@@ -1,18 +1,19 @@
 package org.xbib.content.resource;
 
-import org.xbib.content.resource.scheme.HttpScheme;
-import org.xbib.content.resource.scheme.Scheme;
-import org.xbib.content.resource.scheme.SchemeRegistry;
 import org.xbib.content.resource.text.CharUtils;
 import org.xbib.content.resource.text.CharUtils.Profile;
 import org.xbib.content.resource.text.InvalidCharacterException;
-import org.xbib.content.resource.url.UrlEncoding;
+import org.xbib.net.PercentDecoder;
+import org.xbib.net.PercentEncoders;
+import org.xbib.net.scheme.Scheme;
+import org.xbib.net.scheme.SchemeRegistry;
 
 import java.io.IOException;
 import java.net.IDN;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -177,25 +178,6 @@ public class IRI implements Comparable<IRI>, Node {
         return new IRI(schemeClass, scheme, authority, userinfo, host, port, path, query, fragment);
     }
 
-    public static IRI normalize(IRI iri) {
-        if (iri.isOpaque() || iri.getPath() == null) {
-            return iri;
-        }
-        IRI normalized = null;
-        if (iri.schemeClass != null) {
-            normalized = iri.schemeClass.normalize(iri);
-        }
-        try {
-            return normalized != null ? normalized : new IRI(iri.schemeClass, iri.getScheme(), iri.getAuthority(), iri
-                    .getUserInfo(), iri.getHost(), iri.getPort(), normalize(iri.getPath()), UrlEncoding.encode(UrlEncoding
-                    .decode(iri.getQuery()), Profile.IQUERY.filter()), UrlEncoding
-                    .encode(UrlEncoding.decode(iri.getFragment()), Profile.IFRAGMENT.filter()));
-        } catch (IOException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
-            return null;
-        }
-    }
-
     private static String normalize(String path) {
         if (path == null || path.length() == 0) {
             return "/";
@@ -211,13 +193,14 @@ public class IRI implements Comparable<IRI>, Node {
                 segments[n] = null;
             }
         }
+        PercentDecoder percentDecoder = new PercentDecoder();
         for (String segment : segments) {
             if (segment != null) {
                 if (buf.length() > 1) {
                     buf.append('/');
                 }
                 try {
-                    buf.append(UrlEncoding.encode(UrlEncoding.decode(segment), Profile.IPATHNODELIMS_SEG.filter()));
+                    buf.append(PercentEncoders.getMatrixEncoder(StandardCharsets.UTF_8).encode(percentDecoder.decode(segment)));
                 } catch (IOException e) {
                     logger.log(Level.FINE, e.getMessage(), e);
                 }
@@ -440,13 +423,13 @@ public class IRI implements Comparable<IRI>, Node {
         if (authority != null && asciiAuthority == null) {
             asciiAuthority = buildASCIIAuthority();
         }
-        return (asciiAuthority != null && asciiAuthority.length() > 0) ? asciiAuthority : null;
+        return asciiAuthority != null && asciiAuthority.length() > 0 ? asciiAuthority : null;
     }
 
     public String getASCIIFragment() {
         if (fragment != null && asciiFragment == null) {
             try {
-                asciiFragment = UrlEncoding.encode(fragment, Profile.FRAGMENT.filter());
+                asciiFragment = PercentEncoders.getFragmentEncoder(StandardCharsets.UTF_8).encode(fragment);
             } catch (IOException e) {
                 logger.log(Level.FINE, e.getMessage(), e);
             }
@@ -457,7 +440,7 @@ public class IRI implements Comparable<IRI>, Node {
     public String getASCIIPath() {
         if (path != null && asciiPath == null) {
             try {
-                asciiPath = UrlEncoding.encode(path, Profile.PATH.filter());
+                asciiPath = PercentEncoders.getPathEncoder(StandardCharsets.UTF_8).encode(path);
             } catch (IOException e) {
                 logger.log(Level.FINE, e.getMessage(), e);
             }
@@ -468,7 +451,7 @@ public class IRI implements Comparable<IRI>, Node {
     public String getASCIIQuery() {
         if (query != null && asciiQuery == null) {
             try {
-                asciiQuery = UrlEncoding.encode(query, Profile.QUERY.filter(), Profile.PATH.filter());
+                asciiQuery = PercentEncoders.getQueryEncoder(StandardCharsets.UTF_8).encode(query);
             } catch (IOException e) {
                 logger.log(Level.FINE, e.getMessage(), e);
             }
@@ -479,7 +462,7 @@ public class IRI implements Comparable<IRI>, Node {
     public String getASCIIUserInfo() {
         if (userinfo != null && asciiUserinfo == null) {
             try {
-                asciiUserinfo = UrlEncoding.encode(userinfo, Profile.USERINFO.filter());
+                asciiUserinfo = PercentEncoders.getUnreservedEncoder(StandardCharsets.UTF_8).encode(userinfo);
             } catch (IOException e) {
                 logger.log(Level.FINE, e.getMessage(), e);
             }
@@ -497,18 +480,9 @@ public class IRI implements Comparable<IRI>, Node {
     }
 
     private String buildASCIIAuthority() {
-        if (schemeClass instanceof HttpScheme) {
-            StringBuilder buf = new StringBuilder();
-            buildAuthority(buf, getASCIIUserInfo(), getASCIIHost(), getPort());
-            return buf.toString();
-        } else {
-            try {
-                return UrlEncoding.encode(authority, Profile.AUTHORITY.filter());
-            } catch (IOException e) {
-                logger.log(Level.FINE, e.getMessage(), e);
-                return null;
-            }
-        }
+        StringBuilder buf = new StringBuilder();
+        buildAuthority(buf, getASCIIUserInfo(), getASCIIHost(), getPort());
+        return buf.toString();
     }
 
     public boolean isAbsolute() {
@@ -538,10 +512,6 @@ public class IRI implements Comparable<IRI>, Node {
         return resolve(this, new IRI(iri));
     }
 
-    public IRI normalize() {
-        return normalize(this);
-    }
-
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
@@ -555,7 +525,7 @@ public class IRI implements Comparable<IRI>, Node {
 
     public String toEncodedString() {
         try {
-            return UrlEncoding.encode(toString(), Profile.SCHEMESPECIFICPART.filter());
+            return PercentEncoders.getUnreservedEncoder(StandardCharsets.UTF_8).encode(toString());
         } catch (IOException e) {
             logger.log(Level.FINE, e.getMessage(), e);
             return null;

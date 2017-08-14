@@ -1,6 +1,6 @@
 @prefix oai: <http://www.openarchives.org/OAI/2.0/oai_dc/> .
 
-<id:oai:doaj-articles:8f128127aa68db508da01e428930bbcc> oai:OAI-PMH [
+<id:oai%3Adoaj-articles%3A8f128127aa68db508da01e428930bbcc> oai:OAI-PMH [
 		oai:responseDate "2013-06-29T18:31:40Z";
 		oai:request "http://www.doaj.org/oai.article";
 		oai:ListRecords [

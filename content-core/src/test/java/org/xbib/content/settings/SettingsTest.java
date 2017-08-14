@@ -1,10 +1,10 @@
 package org.xbib.content.settings;
 
-
 import org.junit.Assert;
 import org.junit.Test;
-import org.xbib.content.XContentBuilder;
 import org.xbib.content.XContentHelper;
+import org.xbib.content.io.BytesArray;
+import org.xbib.content.io.BytesReference;
 import org.xbib.content.json.JsonSettingsLoader;
 import org.xbib.content.json.JsonXContent;
 
@@ -123,4 +123,12 @@ public class SettingsTest extends Assert {
         assertEquals("{\"a.b\":\"c\"}", result);
     }
 
+    @Test
+    public void testFlatMapAsString() throws IOException {
+        String s = "{\"a\":{\"b\":\"c\"}}";
+        BytesReference ref = new BytesArray(s.getBytes(StandardCharsets.UTF_8));
+        JsonSettingsLoader loader = new JsonSettingsLoader();
+        String result = loader.flatMapAsString(ref);
+        assertEquals("{\"a.b\":\"c\"}", result);
+    }
 }

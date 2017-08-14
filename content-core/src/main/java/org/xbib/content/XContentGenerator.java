@@ -2,6 +2,8 @@ package org.xbib.content;
 
 import org.xbib.content.io.BytesReference;
 
+import java.io.Closeable;
+import java.io.Flushable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
@@ -10,7 +12,7 @@ import java.math.BigInteger;
 /**
  *
  */
-public interface XContentGenerator {
+public interface XContentGenerator extends Flushable, Closeable {
 
     XContent content();
 
@@ -115,7 +117,4 @@ public interface XContentGenerator {
 
     void copyCurrentStructure(XContentParser parser) throws IOException;
 
-    void flush() throws IOException;
-
-    void close() throws IOException;
 }

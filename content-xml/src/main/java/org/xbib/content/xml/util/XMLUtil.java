@@ -265,10 +265,24 @@ public final class XMLUtil {
         return sb.toString();
     }
 
+    public static String sanitizeToLineFeed(CharSequence string) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0, len = string.length(); i < len; i++) {
+            char c = string.charAt(i);
+            boolean legal = c == '\u0009' || c == '\n'
+                    || (c >= '\u0020' && c <= '\uD7FF')
+                    || (c >= '\uE000' && c <= '\uFFFD');
+            if (legal) {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
     /**
-     * Does not work.
+     * The pattern matching does not work.
      *
-     * @param sequence the charatcer sequence
+     * @param sequence the character sequence
      * @return sanitized string
      */
     public static String sanitizeXml10(CharSequence sequence) {

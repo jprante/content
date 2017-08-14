@@ -1,4 +1,4 @@
 dependencies {
     compile project(':content-core')
-    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${versions.jackson}"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${project.property('jackson.version')}"
 }

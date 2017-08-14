@@ -1,16 +1,25 @@
+
 plugins {
-    id "org.sonarqube" version "2.2"
-    id "org.ajoberstar.github-pages" version "1.6.0-rc.1"
-    id "org.xbib.gradle.plugin.jbake" version "1.2.1"
+    id "org.sonarqube" version "2.5"
+    id "org.xbib.gradle.plugin.asciidoctor" version "1.5.4.1.0"
+    id "io.codearte.nexus-staging" version "0.7.0"
 }
 
-ext {
-    versions = [
-            'jackson' : '2.8.4'
-    ]
-}
+printf "Host: %s\nOS: %s %s %s\nJVM: %s %s %s %s\nGroovy: %s\nGradle: %s\n" +
+        "Build: group: ${project.group} name: ${project.name} version: ${project.version}\n",
+        InetAddress.getLocalHost(),
+        System.getProperty("os.name"),
+        System.getProperty("os.arch"),
+        System.getProperty("os.version"),
+        System.getProperty("java.version"),
+        System.getProperty("java.vm.version"),
+        System.getProperty("java.vm.vendor"),
+        System.getProperty("java.vm.name"),
+        GroovySystem.getVersion(),
+        gradle.gradleVersion
 
 apply plugin: 'build-dashboard'
+apply plugin: "io.codearte.nexus-staging"
 
 allprojects {
 
@@ -21,18 +30,20 @@ allprojects {
     apply plugin: 'pmd'
     apply plugin: 'checkstyle'
     apply plugin: "jacoco"
+    apply plugin: 'org.xbib.gradle.plugin.asciidoctor'
 
     repositories {
         mavenCentral()
     }
 
     configurations {
+        asciidoclet
         wagon
     }
 
     dependencies {
         testCompile 'junit:junit:4.12'
-        wagon 'org.apache.maven.wagon:wagon-ssh-external:2.10'
+        wagon 'org.apache.maven.wagon:wagon-ssh:2.12'
     }
 
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -43,11 +54,21 @@ allprojects {
         options.compilerArgs << "-Xlint:all" << "-profile" << "compact1"
     }
 
+    jar {
+        manifest {
+            attributes('Implementation-Version': project.version)
+        }
+    }
+
     test {
         testLogging {
             showStandardStreams = false
             exceptionFormat = 'full'
         }
+    }
+
+    clean {
+        delete 'out'
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
