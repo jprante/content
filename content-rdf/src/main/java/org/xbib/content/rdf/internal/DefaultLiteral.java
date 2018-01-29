@@ -94,20 +94,25 @@ public class DefaultLiteral implements Literal, Comparable<Literal> {
             return value;
         }
         String s = value.toString();
-        switch (type.toString()) {
-            case "xsd:long":
-                return Long.parseLong(s);
-            case "xsd:int":
-            case "xsd:gYear":
-                return Integer.parseInt(s);
-            case "xsd:boolean":
-                return Boolean.parseBoolean(s);
-            case "xsd:float":
-                return Float.parseFloat(s);
-            case "xsd:double":
-                return Double.parseDouble(s);
-            default:
-                return s;
+        try {
+            switch (type.toString()) {
+                case "xsd:long":
+                    return Long.parseLong(s);
+                case "xsd:int":
+                    return Integer.parseInt(s);
+                case "xsd:gYear":
+                    return Integer.parseInt(s);
+                case "xsd:boolean":
+                    return Boolean.parseBoolean(s);
+                case "xsd:float":
+                    return Float.parseFloat(s);
+                case "xsd:double":
+                    return Double.parseDouble(s);
+                default:
+                    return s;
+            }
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 
