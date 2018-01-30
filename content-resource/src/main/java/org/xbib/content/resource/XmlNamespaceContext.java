@@ -31,9 +31,12 @@ public class XmlNamespaceContext implements NamespaceContext {
 
     private final SortedMap<String, Set<String>> prefixes;
 
+    protected final Object lock;
+
     protected XmlNamespaceContext() {
         this.namespaces = new TreeMap<>();
         this.prefixes = new TreeMap<>();
+        this.lock = new Object();
     }
 
     protected XmlNamespaceContext(ResourceBundle bundle) {
@@ -83,7 +86,7 @@ public class XmlNamespaceContext implements NamespaceContext {
 
     public void addNamespace(String prefix, String namespace) {
         if (prefix != null && namespace != null) {
-            synchronized (namespaces) {
+            synchronized (lock) {
                 namespaces.put(prefix, namespace);
                 if (prefixes.containsKey(namespace)) {
                     prefixes.get(namespace).add(prefix);

@@ -1,7 +1,6 @@
 package org.xbib.content.resource;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -22,11 +21,15 @@ public final class IRINamespaceContext extends XmlNamespaceContext {
      */
     private static final String DEFAULT_RESOURCE =
             XmlNamespaceContext.class.getPackage().getName().replace('.', '/') + '/' + "namespace";
+
     private static IRINamespaceContext instance;
+
     private static final IRINamespaceContext DEFAULT_CONTEXT = newInstance(DEFAULT_RESOURCE);
+
     private List<String> sortedNamespacesByPrefixLength;
 
     private IRINamespaceContext() {
+        super();
     }
 
     private IRINamespaceContext(ResourceBundle bundle) {
@@ -60,26 +63,30 @@ public final class IRINamespaceContext extends XmlNamespaceContext {
     @Override
     public void addNamespace(String prefix, String namespace) {
         super.addNamespace(prefix, namespace);
-        sortedNamespacesByPrefixLength = new ArrayList<>(getNamespaces().values());
-        // sort from longest to shortest prefix for successful matching
-        Collections.sort(sortedNamespacesByPrefixLength, (s1, s2) -> {
-            Integer l1 = s1.length();
-            Integer l2 = s2.length();
-            return l2.compareTo(l1);
-        });
+        synchronized (lock) {
+            sortedNamespacesByPrefixLength = new ArrayList<>(getNamespaces().values());
+            // sort from longest to shortest prefix for successful matching
+            sortedNamespacesByPrefixLength.sort((s1, s2) -> {
+                Integer l1 = s1.length();
+                Integer l2 = s2.length();
+                return l2.compareTo(l1);
+            });
+        }
     }
 
     public IRINamespaceContext add(Map<String, String> map) {
         for (Map.Entry<String, String> e : map.entrySet()) {
             super.addNamespace(e.getKey(), e.getValue());
         }
-        sortedNamespacesByPrefixLength = new ArrayList<>(getNamespaces().values());
-        // sort from longest to shortest prefix for successful matching
-        Collections.sort(sortedNamespacesByPrefixLength, (s1, s2) -> {
-            Integer l1 = s1.length();
-            Integer l2 = s2.length();
-            return l2.compareTo(l1);
-        });
+        synchronized (lock) {
+            sortedNamespacesByPrefixLength = new ArrayList<>(getNamespaces().values());
+            // sort from longest to shortest prefix for successful matching
+            sortedNamespacesByPrefixLength.sort((s1, s2) -> {
+                Integer l1 = s1.length();
+                Integer l2 = s2.length();
+                return l2.compareTo(l1);
+            });
+        }
         return this;
     }
 
@@ -100,12 +107,15 @@ public final class IRINamespaceContext extends XmlNamespaceContext {
             return null;
         }
         // drop fragment (useful for resource counters in fragments)
-        final String s = dropfragment ? new IRI(uri.getScheme(), uri.getSchemeSpecificPart(), null).toString() : uri.toString();
-        // search from longest to shortest namespace prefix
-        if (sortedNamespacesByPrefixLength != null) {
-            for (String ns : sortedNamespacesByPrefixLength) {
-                if (s.startsWith(ns)) {
-                    return getPrefix(ns) + ':' + s.substring(ns.length());
+        String s = dropfragment ? new IRI(uri.getScheme(), uri.getSchemeSpecificPart(), null).toString() : uri.toString();
+        synchronized (lock) {
+            // search from longest to shortest namespace prefix
+            if (sortedNamespacesByPrefixLength != null) {
+                for (String ns : sortedNamespacesByPrefixLength) {
+                    if (s.startsWith(ns)) {
+                        s = getPrefix(ns) + ':' + s.substring(ns.length());
+                        break;
+                    }
                 }
             }
         }
