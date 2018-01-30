@@ -27,14 +27,17 @@ public class XmlNamespaceContext implements NamespaceContext {
     private static final XmlNamespaceContext DEFAULT_CONTEXT = newDefaultInstance();
 
     // sort namespace by length in descending order, useful for compacting prefix
-    protected final SortedMap<String, String> namespaces = new TreeMap<>();
+    private final SortedMap<String, String> namespaces;
 
-    private final SortedMap<String, Set<String>> prefixes = new TreeMap<>();
+    private final SortedMap<String, Set<String>> prefixes;
 
     protected XmlNamespaceContext() {
+        this.namespaces = new TreeMap<>();
+        this.prefixes = new TreeMap<>();
     }
 
     protected XmlNamespaceContext(ResourceBundle bundle) {
+        this();
         Enumeration<String> en = bundle.getKeys();
         while (en.hasMoreElements()) {
             String prefix = en.nextElement();
@@ -79,13 +82,17 @@ public class XmlNamespaceContext implements NamespaceContext {
     }
 
     public void addNamespace(String prefix, String namespace) {
-        namespaces.put(prefix, namespace);
-        if (prefixes.containsKey(namespace)) {
-            prefixes.get(namespace).add(prefix);
-        } else {
-            Set<String> set = new HashSet<>();
-            set.add(prefix);
-            prefixes.put(namespace, set);
+        if (prefix != null && namespace != null) {
+            synchronized (namespaces) {
+                namespaces.put(prefix, namespace);
+                if (prefixes.containsKey(namespace)) {
+                    prefixes.get(namespace).add(prefix);
+                } else {
+                    Set<String> set = new HashSet<>();
+                    set.add(prefix);
+                    prefixes.put(namespace, set);
+                }
+            }
         }
     }
 
@@ -98,7 +105,7 @@ public class XmlNamespaceContext implements NamespaceContext {
         if (prefix == null) {
             return null;
         }
-        return namespaces.containsKey(prefix) ? namespaces.get(prefix) : null;
+        return namespaces.getOrDefault(prefix, null);
     }
 
     @Override
