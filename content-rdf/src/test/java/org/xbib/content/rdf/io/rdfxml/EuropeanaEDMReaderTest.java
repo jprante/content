@@ -51,6 +51,7 @@ public class EuropeanaEDMReaderTest extends StreamTester {
             Resource resource = resourceIterator.next();
             builder.receive(resource);
         }
+        //System.err.println(builder.string());
         assertStream(getClass().getResource("edm.nt").openStream(),
                 builder.streamInput());
     }

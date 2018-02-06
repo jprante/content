@@ -25,7 +25,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +40,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 /**
  * RdfXmlParser is an admittedly convoluted hand-coded SAX parser for RDF/XML.
@@ -71,7 +73,7 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
     // counter for blank node generation
     private int bn = 0;
 
-    public RdfXmlContentParser(InputStream in) throws IOException {
+    public RdfXmlContentParser(InputStream in) {
         this(new InputStreamReader(in, StandardCharsets.UTF_8));
     }
 
@@ -98,14 +100,19 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
     public RdfXmlContentParser<R> parse() throws IOException {
         try {
             parse(new InputSource(reader));
-        } catch (SAXException ex) {
+        } catch (SAXException | ParserConfigurationException ex) {
             throw new IOException(ex);
         }
         return this;
     }
 
-    public RdfXmlContentParser<R> parse(InputSource source) throws IOException, SAXException {
-        parse(XMLReaderFactory.createXMLReader(), source);
+    public RdfXmlContentParser<R> parse(InputSource source) throws IOException, SAXException, ParserConfigurationException {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setValidating(false);
+        SAXParser parser = factory.newSAXParser();
+        XMLReader xmlReader = parser.getXMLReader();
+        parse(xmlReader, source);
         return this;
     }
 

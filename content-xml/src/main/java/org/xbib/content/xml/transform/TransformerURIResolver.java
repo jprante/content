@@ -3,7 +3,6 @@ package org.xbib.content.xml.transform;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -18,6 +17,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
@@ -107,12 +109,16 @@ public class TransformerURIResolver implements URIResolver, Closeable {
             throw new TransformerException("href could not be resolved: " + href);
         }
         try {
-            XMLReader reader = XMLReaderFactory.createXMLReader();
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            factory.setValidating(false);
+            SAXParser parser = factory.newSAXParser();
+            XMLReader reader = parser.getXMLReader();
             inputStreams.add(in);
             SAXSource source = new SAXSource(reader, new InputSource(in));
             source.setSystemId(systemId);
             return source;
-        } catch (SAXException e) {
+        } catch (SAXException | ParserConfigurationException e) {
             throw new TransformerException("no XML reader for SAX source in URI resolving for:" + href, e);
         }
     }

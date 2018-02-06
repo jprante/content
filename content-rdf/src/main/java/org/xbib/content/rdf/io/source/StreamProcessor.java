@@ -6,6 +6,7 @@ import org.xbib.content.rdf.io.sink.XmlSink;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -58,8 +59,7 @@ public final class StreamProcessor<S extends Sink> extends BaseStreamProcessor {
         source.process(reader, mimeType, baseUri);
     }
 
-    public void setReader(XMLReader xmlReader) throws SAXException {
+    public void setReader(XMLReader xmlReader) throws SAXException, ParserConfigurationException {
         ((XmlSource) source).setXmlReader(xmlReader);
     }
-
 }

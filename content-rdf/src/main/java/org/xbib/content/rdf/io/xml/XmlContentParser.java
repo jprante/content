@@ -9,13 +9,15 @@ import org.xbib.content.rdf.util.NormalizeEolFilter;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 /**
  * An XML reader for parsing XML into triples.
@@ -33,7 +35,7 @@ public class XmlContentParser<P extends RdfContentParams> implements RdfContentP
 
     private boolean validate = false;
 
-    public XmlContentParser(InputStream in) throws IOException {
+    public XmlContentParser(InputStream in) {
         this(new InputStreamReader(in, StandardCharsets.UTF_8));
     }
 
@@ -73,9 +75,13 @@ public class XmlContentParser<P extends RdfContentParams> implements RdfContentP
     @Override
     public XmlContentParser<P> parse() throws IOException {
         try {
-            XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            factory.setValidating(false);
+            SAXParser parser = factory.newSAXParser();
+            XMLReader xmlReader = parser.getXMLReader();
             parse(xmlReader, new InputSource(reader));
-        } catch (SAXException ex) {
+        } catch (SAXException | ParserConfigurationException ex) {
             throw new IOException(ex);
         }
         return this;
@@ -88,8 +94,6 @@ public class XmlContentParser<P extends RdfContentParams> implements RdfContentP
             }
             reader.setContentHandler(handler);
         }
-        reader.setFeature("http://xml.org/sax/features/namespaces", namespaces);
-        reader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", validate);
         reader.parse(source);
         return this;
     }

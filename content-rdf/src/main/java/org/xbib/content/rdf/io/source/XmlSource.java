@@ -4,13 +4,15 @@ import org.xbib.content.rdf.io.sink.XmlSink;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 final class XmlSource extends AbstractSource<XmlSink> {
 
@@ -20,17 +22,19 @@ final class XmlSource extends AbstractSource<XmlSink> {
         super(sink);
     }
 
-    public static XMLReader getDefaultXmlReader() throws SAXException {
-        XMLReader result = XMLReaderFactory.createXMLReader();
-        result.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-        return result;
+    public static XMLReader getDefaultXmlReader() throws SAXException, ParserConfigurationException {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setValidating(false);
+        SAXParser parser = factory.newSAXParser();
+        return parser.getXMLReader();
     }
 
     @Override
     public void process(Reader reader, String mimeType, String baseUri) throws IOException {
         try {
             initXmlReader();
-        } catch (SAXException e) {
+        } catch (SAXException | ParserConfigurationException e) {
             throw new IOException("can not instantinate XMLReader", e);
         }
         try {
@@ -53,7 +57,7 @@ final class XmlSource extends AbstractSource<XmlSink> {
         }
     }
 
-    private void initXmlReader() throws SAXException {
+    private void initXmlReader() throws SAXException, ParserConfigurationException {
         if (xmlReader == null) {
             xmlReader = getDefaultXmlReader();
         }
@@ -61,7 +65,7 @@ final class XmlSource extends AbstractSource<XmlSink> {
         xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler", sink);
     }
 
-    public void setXmlReader(XMLReader xmlReader) throws SAXException {
+    public void setXmlReader(XMLReader xmlReader) throws SAXException, ParserConfigurationException {
         if (xmlReader == null) {
             this.xmlReader = getDefaultXmlReader();
         } else {

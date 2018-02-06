@@ -70,14 +70,14 @@ public class StaxEventContentHandler extends AbstractStaxContentHandler {
     @Override
     protected void startElementInternal(QName name, Attributes atts, SimpleNamespaceContext namespaceContext)
             throws XMLStreamException {
-        List<?> attributes = getAttributes(atts);
-        List<?> namespaces = createNamespaces(namespaceContext);
+        List<Attribute> attributes = getAttributes(atts);
+        List<Namespace> namespaces = createNamespaces(namespaceContext);
         consumeEvent(eventFactory.createStartElement(name, attributes.iterator(), namespaces.iterator()));
     }
 
     @Override
     protected void endElementInternal(QName name, SimpleNamespaceContext namespaceContext) throws XMLStreamException {
-        List<?> namespaces = createNamespaces(namespaceContext);
+        List<Namespace> namespaces = createNamespaces(namespaceContext);
         consumeEvent(eventFactory.createEndElement(name, namespaces.iterator()));
     }
 
