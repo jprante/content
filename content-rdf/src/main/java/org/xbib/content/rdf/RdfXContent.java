@@ -28,12 +28,12 @@ public class RdfXContent implements RdfContent<RdfXContentParams> {
     }
 
     @Override
-    public RdfContentGenerator<RdfXContentParams> createGenerator(OutputStream out) throws IOException {
+    public RdfContentGenerator<RdfXContentParams> createGenerator(OutputStream out) {
         return new RdfXContentGenerator<>(out);
     }
 
     @Override
-    public RdfContentParser<RdfXContentParams> createParser(InputStream in) throws IOException {
+    public RdfContentParser<RdfXContentParams> createParser(InputStream in) {
         throw new UnsupportedOperationException();
     }
 }

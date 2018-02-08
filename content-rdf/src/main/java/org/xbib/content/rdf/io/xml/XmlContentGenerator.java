@@ -29,17 +29,20 @@ import javax.xml.stream.util.XMLEventConsumer;
 public class XmlContentGenerator implements RdfContentGenerator<XmlContentParams>, Flushable, XmlConstants {
 
     private static final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+
     private static final XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+
     private final Writer writer;
+
     private Resource resource;
 
     private XmlContentParams params = XmlContentParams.XML_CONTENT_PARAMS;
 
-    public XmlContentGenerator(OutputStream out) throws IOException {
+    public XmlContentGenerator(OutputStream out) {
         this(new OutputStreamWriter(out, StandardCharsets.UTF_8));
     }
 
-    public XmlContentGenerator(Writer writer) throws IOException {
+    public XmlContentGenerator(Writer writer) {
         this.writer = writer;
     }
 

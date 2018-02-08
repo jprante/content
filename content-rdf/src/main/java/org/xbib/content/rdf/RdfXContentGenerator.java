@@ -19,12 +19,16 @@ import java.util.List;
 public class RdfXContentGenerator<P extends RdfXContentParams> implements RdfContentGenerator<P> {
 
     protected final OutputStream out;
+
     protected Resource resource;
+
     protected XContentBuilder builder;
+
     private P params;
+
     private boolean flushed;
 
-    RdfXContentGenerator(OutputStream out) throws IOException {
+    RdfXContentGenerator(OutputStream out) {
         this.out = out;
     }
 
@@ -112,14 +116,14 @@ public class RdfXContentGenerator<P extends RdfXContentParams> implements RdfCon
         return this;
     }
 
-    public String string() throws IOException {
+    public String string() {
         if (builder != null) {
             return builder.string();
         }
         return null;
     }
 
-    public String get() throws IOException {
+    public String get() {
         return string();
     }
 
