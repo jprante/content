@@ -1,4 +1,11 @@
 
+ext {
+    projectDescription = 'Content processing library for Java'
+    scmUrl = 'https://github.com/xbib/content'
+    scmConnection = 'scm:git:git://github.com/xbib/content.git'
+    scmDeveloperConnection = 'scm:git:git://github.com/xbib/content.git'
+}
+
 task xbibUpload(type: Upload, dependsOn: build) {
     group = 'publish'
     configuration = configurations.archives
@@ -44,7 +51,7 @@ task sonatypeUpload(type: Upload, dependsOn: build) {
                     }
                     developers {
                         developer {
-                            id user
+                            id 'xbib'
                             name 'Jörg Prante'
                             email 'joergprante@gmail.com'
                             url 'https://github.com/jprante'

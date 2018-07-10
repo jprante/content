@@ -20,9 +20,8 @@ printf "Host: %s\nOS: %s %s %s\nJVM: %s %s %s %s\nGradle: %s Groovy: %s Java: %s
         JavaVersion.current()
 
 apply plugin: 'build-dashboard'
-apply plugin: "io.codearte.nexus-staging"
 
-allprojects {
+subprojects {
 
     apply plugin: 'java'
     apply plugin: 'maven'
@@ -30,7 +29,6 @@ allprojects {
     apply plugin: 'findbugs'
     apply plugin: 'pmd'
     apply plugin: 'checkstyle'
-    apply plugin: "jacoco"
     apply plugin: 'org.xbib.gradle.plugin.asciidoctor'
 
     repositories {
@@ -44,6 +42,7 @@ allprojects {
 
     dependencies {
         testCompile "junit:junit:${project.property('junit.version')}"
+        asciidoclet "org.asciidoctor:asciidoclet:${project.property('asciidoclet.version')}"
         wagon "org.apache.maven.wagon:wagon-ssh:${project.property('wagon.version')}"
     }
 
@@ -52,7 +51,7 @@ allprojects {
 
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
     tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:all" //<< "--release" << "8"// << "-profile" << "compact1"
+        options.compilerArgs << "-Xlint:all" << "-profile" << "compact1"
     }
 
     jar {
@@ -91,8 +90,11 @@ allprojects {
         }
     }
 
-    apply from: "${rootProject.projectDir}/gradle/ext.gradle"
     apply from: "${rootProject.projectDir}/gradle/publish.gradle"
-    apply from: "${rootProject.projectDir}/gradle/sonarqube.gradle"
+    apply from: "${rootProject.projectDir}/gradle/qa.gradle"
 
+}
+
+nexusStaging {
+    packageGroup = "org.xbib"
 }
