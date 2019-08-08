@@ -675,7 +675,7 @@ public class Settings {
             return this;
         }
         /**
-         * Runs across all the settings set on this builder and replaces <tt>${...}</tt> elements in the
+         * Runs across all the settings set on this builder and replaces {@code ${...}} elements in the
          * each setting value according to the following logic:
          *
          * First, tries to resolve it against a System property ({@link System#getProperty(String)}), next,

@@ -2,33 +2,17 @@
 plugins {
     id "org.sonarqube" version "2.6.1"
     id "io.codearte.nexus-staging" version "0.11.0"
+    id "com.github.spotbugs" version "2.0.0"
     id "org.xbib.gradle.plugin.asciidoctor" version "1.5.6.0.1"
 }
-
-printf "Host: %s\nOS: %s %s %s\nJVM: %s %s %s %s\nGradle: %s Groovy: %s Java: %s\n" +
-        "Build: group: ${project.group} name: ${project.name} version: ${project.version}\n",
-        InetAddress.getLocalHost(),
-        System.getProperty("os.name"),
-        System.getProperty("os.arch"),
-        System.getProperty("os.version"),
-        System.getProperty("java.version"),
-        System.getProperty("java.vm.version"),
-        System.getProperty("java.vm.vendor"),
-        System.getProperty("java.vm.name"),
-        gradle.gradleVersion,
-        GroovySystem.getVersion(),
-        JavaVersion.current()
-
-apply plugin: 'build-dashboard'
 
 subprojects {
 
     apply plugin: 'java'
     apply plugin: 'maven'
-    apply plugin: 'signing'
-    apply plugin: 'findbugs'
     apply plugin: 'pmd'
     apply plugin: 'checkstyle'
+    apply plugin: 'com.github.spotbugs'
     apply plugin: 'org.xbib.gradle.plugin.asciidoctor'
 
     repositories {
@@ -37,21 +21,20 @@ subprojects {
 
     configurations {
         asciidoclet
-        wagon
     }
 
     dependencies {
         testCompile "junit:junit:${project.property('junit.version')}"
         asciidoclet "org.asciidoctor:asciidoclet:${project.property('asciidoclet.version')}"
-        wagon "org.apache.maven.wagon:wagon-ssh:${project.property('wagon.version')}"
     }
 
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    compileJava {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
 
-    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
     tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:all" << "-profile" << "compact1"
+        options.compilerArgs << "-Xlint:all"
     }
 
     jar {
@@ -84,17 +67,113 @@ subprojects {
         archives sourcesJar, javadocJar
     }
 
-    if (project.hasProperty('signing.keyId')) {
-        signing {
-            sign configurations.archives
+    tasks.withType(Checkstyle) {
+        ignoreFailures = true
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+    }
+    spotbugs {
+        effort = "max"
+        reportLevel = "low"
+        //includeFilter = file("findbugs-exclude.xml")
+    }
+
+    tasks.withType(com.github.spotbugs.SpotBugsTask) {
+        ignoreFailures = true
+        reports {
+            xml.enabled = false
+            html.enabled = true
         }
     }
 
-    apply from: "${rootProject.projectDir}/gradle/publish.gradle"
-    apply from: "${rootProject.projectDir}/gradle/qa.gradle"
+    tasks.withType(Pmd) {
+        ignoreFailures = true
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+    }
 
-}
+    checkstyle {
+        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+        ignoreFailures = true
+        showViolations = true
+    }
 
-nexusStaging {
-    packageGroup = "org.xbib"
+    sonarqube {
+        properties {
+            property "sonar.projectName", "${project.group} ${project.name}"
+            property "sonar.sourceEncoding", "UTF-8"
+            property "sonar.tests", "src/test/java"
+            property "sonar.scm.provider", "git"
+            property "sonar.junit.reportsPath", "build/test-results/test/"
+        }
+    }
+
+
+    ext {
+        projectDescription = 'Content processing library for Java'
+        scmUrl = 'https://github.com/xbib/content'
+        scmConnection = 'scm:git:git://github.com/xbib/content.git'
+        scmDeveloperConnection = 'scm:git:git://github.com/xbib/content.git'
+    }
+
+    task sonatypeUpload(type: Upload, dependsOn: build) {
+        group = 'publish'
+        configuration = configurations.archives
+        uploadDescriptor = true
+        repositories {
+            if (project.hasProperty('ossrhUsername')) {
+                mavenDeployer {
+                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+                    repository(url: uri(ossrhReleaseUrl)) {
+                        authentication(userName: ossrhUsername, password: ossrhPassword)
+                    }
+                    snapshotRepository(url: uri(ossrhSnapshotUrl)) {
+                        authentication(userName: ossrhUsername, password: ossrhPassword)
+                    }
+                    pom.project {
+                        groupId project.group
+                        artifactId project.name
+                        version project.version
+                        name project.name
+                        description projectDescription
+                        packaging 'jar'
+                        inceptionYear '2016'
+                        url scmUrl
+                        organization {
+                            name 'xbib'
+                            url 'http://xbib.org'
+                        }
+                        developers {
+                            developer {
+                                id 'xbib'
+                                name 'Jörg Prante'
+                                email 'joergprante@gmail.com'
+                                url 'https://github.com/jprante'
+                            }
+                        }
+                        scm {
+                            url scmUrl
+                            connection scmConnection
+                            developerConnection scmDeveloperConnection
+                        }
+                        licenses {
+                            license {
+                                name 'The Apache License, Version 2.0'
+                                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    nexusStaging {
+        packageGroup = "org.xbib"
+    }
+
 }
