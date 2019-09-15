@@ -3,4 +3,5 @@ dependencies {
     compile project(':content-resource')
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${project.property('jackson.version')}"
     compile "com.fasterxml.jackson.core:jackson-databind:${project.property('jackson-databind.version')}"
+    compile "com.fasterxml.woodstox:woodstox-core:${project.property('woodstox.version')}"
 }
