@@ -1,4 +1,3 @@
-
 dependencies {
     compile "org.xbib:net-url:${project.property('xbib-net.version')}"
     testCompile "com.fasterxml.jackson.core:jackson-databind:${project.property('jackson.version')}"

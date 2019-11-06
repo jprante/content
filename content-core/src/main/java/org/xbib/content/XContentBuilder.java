@@ -879,13 +879,17 @@ public final class XContentBuilder implements ToXContent, Flushable, Closeable {
         } else if (value instanceof Iterable) {
             generator.writeStartArray();
             for (Object v : (Iterable) value) {
-                writeValue(v);
+                if (v != value) {
+                    writeValue(v);
+                }
             }
             generator.writeEndArray();
         } else if (value instanceof Object[]) {
             generator.writeStartArray();
             for (Object v : (Object[]) value) {
-                writeValue(v);
+                if (v != value) {
+                    writeValue(v);
+                }
             }
             generator.writeEndArray();
         } else if (type == byte[].class) {

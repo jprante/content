@@ -1,10 +1,10 @@
 dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:${project.property('jackson.version')}"
-    testCompile("junit:junit:${project.property('junit.version')}") {
+    testCompile("junit:junit:${project.property('junit4.version')}") {
         exclude group: 'org.hamcrest'
     }
     testCompile("org.mockito:mockito-core:${project.property('mockito.version')}") {
         exclude group: 'org.hamcrest'
     }
-    testCompile "org.hamcrest:hamcrest-all:${project.property('hamcrest.version')}"
+    testCompile "org.hamcrest:hamcrest-library:${project.property('hamcrest.version')}"
 }
