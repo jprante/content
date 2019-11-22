@@ -171,8 +171,9 @@ public class SettingsTest extends Assert {
         map.put("code", code);
         map.put("name", name);
         map.put("list", list);
+        map.put("null", null);
         JsonSettingsLoader loader = new JsonSettingsLoader();
         Map<String, String> result = loader.load(map);
-        assertEquals("{code.a=b, code.b=c, name.a=b, name.b=c, list.0=a, list.1=b}", result.toString());
+        assertEquals("{code.a=b, code.b=c, name.a=b, name.b=c, list.0=a, list.1=b, null=null}", result.toString());
     }
 }
