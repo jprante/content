@@ -184,8 +184,9 @@ subprojects {
             }
         }
     }
+}
 
-    nexusStaging {
-        packageGroup = "org.xbib"
-    }
+nexusStaging {
+    packageGroup = "org.xbib"
+    //stagingProfileId = "org.xbib"
 }

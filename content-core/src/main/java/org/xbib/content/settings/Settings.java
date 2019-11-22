@@ -3,9 +3,7 @@ package org.xbib.content.settings;
 import static org.xbib.content.util.unit.ByteSizeValue.parseBytesSizeValue;
 import static org.xbib.content.util.unit.TimeValue.parseTimeValue;
 
-import org.xbib.content.XContentBuilder;
 import org.xbib.content.json.JsonSettingsLoader;
-import org.xbib.content.json.JsonXContent;
 import org.xbib.content.util.unit.ByteSizeValue;
 import org.xbib.content.util.unit.TimeValue;
 
@@ -614,8 +612,9 @@ public class Settings {
          * @return builder
          */
         public Builder loadFromMap(Map<String, Object> map) {
-            try (XContentBuilder builder = JsonXContent.contentBuilder()) {
-                put(new JsonSettingsLoader().load(builder.map(map).string()));
+            SettingsLoader settingsLoader = new JsonSettingsLoader();
+            try {
+                put(settingsLoader.load(map));
             } catch (Exception e) {
                 throw new SettingsException("Failed to load settings from [" + map + "]", e);
             }

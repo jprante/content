@@ -1,5 +1,6 @@
 package org.xbib.content.settings;
 
+import org.xbib.content.io.BytesReference;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -23,6 +24,10 @@ public interface SettingsLoader {
      * @throws IOException if load fails
      */
     Map<String, String> load(String source) throws IOException;
+
+    Map<String, String> load(BytesReference bytesReference) throws IOException;
+
+    Map<String, String> load(Map<String, Object> source) throws IOException;
 
     boolean canLoad(String source);
 }

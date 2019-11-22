@@ -1,6 +1,9 @@
 package org.xbib.content.settings;
 
+import org.xbib.content.io.BytesReference;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,6 +35,30 @@ public class PropertiesSettingsLoader implements SettingsLoader {
             }
             return result;
         }
+    }
+
+    @Override
+    public Map<String, String> load(BytesReference ref) throws IOException {
+        Properties props = new Properties();
+        try (Reader reader = new InputStreamReader(ref.streamInput())) {
+            props.load(reader);
+            Map<String, String> result = new HashMap<>();
+            for (Map.Entry<Object, Object> entry : props.entrySet()) {
+                result.put((String) entry.getKey(), (String) entry.getValue());
+            }
+            return result;
+        }
+    }
+
+    @Override
+    public Map<String, String> load(Map<String, Object> source) throws IOException {
+        Properties props = new Properties();
+        props.putAll(source);
+        Map<String, String> result = new HashMap<>();
+        for (Map.Entry<Object, Object> entry : props.entrySet()) {
+            result.put((String) entry.getKey(), (String) entry.getValue());
+        }
+        return result;
     }
 
     @Override
