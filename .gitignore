@@ -10,6 +10,7 @@
 /.project
 /.gradle
 build
+out
 /plugins
 /sessions
 *~
