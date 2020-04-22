@@ -12,12 +12,14 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
@@ -114,7 +116,7 @@ public class SettingsTest extends Assert {
         Settings settings = Settings.settingsBuilder()
                 .loadFromSystemEnvironment()
                 .build();
-        assertTrue(!settings.getAsMap().isEmpty());
+        assertFalse(settings.getAsMap().isEmpty());
     }
 
     @Test
@@ -122,7 +124,7 @@ public class SettingsTest extends Assert {
         Settings settings = Settings.settingsBuilder()
                 .loadFromSystemProperties()
                 .build();
-        assertTrue(!settings.getAsMap().isEmpty());
+        assertFalse(settings.getAsMap().isEmpty());
     }
 
     @Test
@@ -175,5 +177,15 @@ public class SettingsTest extends Assert {
         JsonSettingsLoader loader = new JsonSettingsLoader();
         Map<String, String> result = loader.load(map);
         assertEquals("{code.a=b, code.b=c, name.a=b, name.b=c, list.0=a, list.1=b, null=null}", result.toString());
+    }
+
+    @Test
+    public void testRefresher() throws Exception {
+        Settings settings = Settings.settingsBuilder()
+                .setRefresh(Paths.get("src/test/resources/settings.json"), 0L, 1L, TimeUnit.DAYS)
+                .build();
+        Thread.sleep(1000L);
+        assertEquals("Jörg Prante", settings.get("name"));
+        settings.close();
     }
 }

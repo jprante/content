@@ -15,6 +15,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,23 +26,39 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
  */
-public class Settings {
+public class Settings implements AutoCloseable {
 
     private static final Logger logger = Logger.getLogger(Settings.class.getName());
 
     public static final Settings EMPTY_SETTINGS = new Builder().build();
-    public static final String[] EMPTY_ARRAY = new String[0];
-    public static final int BUFFER_SIZE = 1024 * 8;
-    private final Map<String, String> map;
 
-    private Settings(Map<String, String> settings) {
-        this.map = new HashMap<>(settings);
+    public static final String[] EMPTY_ARRAY = new String[0];
+
+    public static final int BUFFER_SIZE = 1024 * 8;
+
+    private DefaultSettingsRefresher refresher;
+
+    private Map<String, String> map;
+
+    private Settings(Map<String, String> map) {
+        this(map, null, 0L, 0L, TimeUnit.SECONDS);
+    }
+
+    private Settings(Map<String, String> map, Path path, long initialDelay, long period, TimeUnit timeUnit) {
+        this.map = new LinkedHashMap<>(map);
+        if (path != null && initialDelay >= 0L && period > 0L) {
+            this.refresher = new DefaultSettingsRefresher(path, initialDelay, period, timeUnit);
+        }
     }
 
     public static Settings readSettingsFromMap(Map<String, Object> map) throws IOException {
@@ -175,11 +193,7 @@ public class Settings {
     }
 
     public String get(String setting) {
-        String retVal = map.get(setting);
-        if (retVal != null) {
-            return retVal;
-        }
-        return null;
+        return map.get(setting);
     }
 
     public String get(String setting, String defaultValue) {
@@ -298,11 +312,7 @@ public class Settings {
                 }
                 String name = nameValue.substring(0, dotIndex);
                 String value = nameValue.substring(dotIndex + 1);
-                Map<String, String> groupSettings = hashMap.get(name);
-                if (groupSettings == null) {
-                    groupSettings = new LinkedHashMap<>();
-                    hashMap.put(name, groupSettings);
-                }
+                Map<String, String> groupSettings = hashMap.computeIfAbsent(name, k -> new LinkedHashMap<>());
                 groupSettings.put(value, get(setting));
             }
         }
@@ -394,12 +404,27 @@ public class Settings {
         return map;
     }
 
+    @Override
+    public void close() throws IOException {
+        if (refresher != null) {
+            refresher.stop();
+        }
+    }
+
     /**
      *
      */
     public static class Builder {
 
         private final Map<String, String> map = new LinkedHashMap<>();
+
+        private Path path;
+
+        private long initialDelay;
+
+        private long period;
+
+        private TimeUnit timeUnit;
 
         private Builder() {
         }
@@ -709,14 +734,54 @@ public class Settings {
 
         public Builder replacePropertyPlaceholders(PropertyPlaceholder propertyPlaceholder,
                                                    PlaceholderResolver placeholderResolver) {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                map.put(entry.getKey(), propertyPlaceholder.replacePlaceholders(entry.getValue(), placeholderResolver));
-            }
+            map.replaceAll((k, v) -> propertyPlaceholder.replacePlaceholders(v, placeholderResolver));
+            return this;
+        }
+
+        public Builder setRefresh(Path path, long initialDelay, long period, TimeUnit timeUnit) {
+            this.path = path;
+            this.initialDelay = initialDelay;
+            this.period = period;
+            this.timeUnit = timeUnit;
             return this;
         }
 
         public Settings build() {
-            return new Settings(map);
+            return new Settings(map, path, initialDelay, period, timeUnit);
+        }
+    }
+
+    class DefaultSettingsRefresher implements Runnable {
+
+        private final Path path;
+
+        private final ScheduledExecutorService executorService;
+
+        private final AtomicBoolean closed;
+
+        DefaultSettingsRefresher(Path path, long initialDelay, long period, TimeUnit timeUnit) {
+            this.path = path;
+            this.executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.scheduleAtFixedRate(this, initialDelay, period, timeUnit);
+            this.closed = new AtomicBoolean();
+        }
+
+        @Override
+        public void run() {
+            try {
+                if (!closed.get()) {
+                    String settingsSource = Files.readString(path);
+                    SettingsLoader settingsLoader = SettingsLoaderService.loaderFromResource(path.toString());
+                    map = settingsLoader.load(settingsSource);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("unable to refresh settings from path " + path, e);
+            }
+        }
+
+        public void stop() {
+            closed.set(true);
+            executorService.shutdownNow();
         }
     }
 }
