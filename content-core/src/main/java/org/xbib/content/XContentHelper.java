@@ -7,15 +7,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public class XContentHelper {
-
-    private static final Logger logger = Logger.getLogger(XContentHelper.class.getName());
 
     private static final String UNKNOWN_FORMAT = "unknown format";
 
@@ -169,7 +165,6 @@ public class XContentHelper {
                         try {
                             generator.writeBinary(parseBase16(parser.text()));
                         } catch (IllegalArgumentException e) {
-                            logger.log(Level.FINE, e.getMessage(), e);
                             generator.writeString(parser.text());
                         }
                     } else {

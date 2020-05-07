@@ -8,35 +8,21 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public class XContentService {
 
-    private static final Logger logger = Logger.getLogger(XContentService.class.getName());
-
     private static final Map<String, XContent> xcontents = new HashMap<>();
 
-    private static final XContentService instance = new XContentService();
-
-    private XContentService() {
-        try {
-            ServiceLoader<XContent> loader = ServiceLoader.load(XContent.class);
-            for (XContent xContent : loader) {
-                if (!xcontents.containsKey(xContent.name())) {
-                    xcontents.put(xContent.name(), xContent);
-                }
+    static {
+        ServiceLoader<XContent> loader = ServiceLoader.load(XContent.class);
+        for (XContent xContent : loader) {
+            if (!xcontents.containsKey(xContent.name())) {
+                xcontents.put(xContent.name(), xContent);
             }
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
         }
-    }
-
-    public static XContentService getInstance() {
-        return instance;
     }
 
     public static XContentBuilder builder(String name) throws IOException {
@@ -59,5 +45,4 @@ public class XContentService {
         }
         return null;
     }
-
 }

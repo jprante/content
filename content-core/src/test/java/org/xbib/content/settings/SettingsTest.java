@@ -20,14 +20,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public class SettingsTest extends Assert {
-
-    private static final Logger logger = Logger.getLogger(SettingsTest.class.getName());
 
     @Test
     public void testEmpty() {
@@ -60,7 +57,6 @@ public class SettingsTest extends Assert {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             list.add((Map<String, Object>) entry.getValue());
         }
-        logger.info(list.toString());
         assertEquals("[{name=Name 0, code=Code 0}, {name=Name 1, code=Code 1}]", list.toString());
     }
 

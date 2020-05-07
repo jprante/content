@@ -9,8 +9,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.namespace.NamespaceContext;
 
@@ -18,8 +16,6 @@ import javax.xml.namespace.NamespaceContext;
  * Contains a simple context for XML namespaces.
  */
 public class XmlNamespaceContext implements NamespaceContext {
-
-    private static final Logger logger = Logger.getLogger(XmlNamespaceContext.class.getName());
 
     private static final String DEFAULT_RESOURCE =
             XmlNamespaceContext.class.getPackage().getName().replace('.', '/') + '/' + "namespace";
@@ -79,7 +75,6 @@ public class XmlNamespaceContext implements NamespaceContext {
         try {
             return new XmlNamespaceContext(ResourceBundle.getBundle(bundleName, locale, classLoader));
         } catch (MissingResourceException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
             return new XmlNamespaceContext();
         }
     }

@@ -2,11 +2,9 @@ package org.xbib.content.xml;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 import org.xbib.content.XContentBuilder;
 import org.xbib.content.resource.XmlNamespaceContext;
-
 import javax.xml.namespace.QName;
 
 /**

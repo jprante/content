@@ -14,8 +14,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,8 +21,6 @@ import java.util.regex.Pattern;
  *
  */
 public class IRI implements Comparable<IRI>, Node {
-
-    private static final Logger logger = Logger.getLogger(IRI.class.getName());
 
     private static final SchemeRegistry registry = SchemeRegistry.getInstance();
     private static final Pattern IRIPATTERN =
@@ -202,7 +198,7 @@ public class IRI implements Comparable<IRI>, Node {
                 try {
                     buf.append(PercentEncoders.getMatrixEncoder(StandardCharsets.UTF_8).encode(percentDecoder.decode(segment)));
                 } catch (IOException e) {
-                    logger.log(Level.FINE, e.getMessage(), e);
+                    //logger.log(Level.FINE, e.getMessage(), e);
                 }
             }
         }
@@ -431,7 +427,7 @@ public class IRI implements Comparable<IRI>, Node {
             try {
                 asciiFragment = PercentEncoders.getFragmentEncoder(StandardCharsets.UTF_8).encode(fragment);
             } catch (IOException e) {
-                logger.log(Level.FINE, e.getMessage(), e);
+                //logger.log(Level.FINE, e.getMessage(), e);
             }
         }
         return asciiFragment;
@@ -442,7 +438,7 @@ public class IRI implements Comparable<IRI>, Node {
             try {
                 asciiPath = PercentEncoders.getPathEncoder(StandardCharsets.UTF_8).encode(path);
             } catch (IOException e) {
-                logger.log(Level.FINE, e.getMessage(), e);
+                //logger.log(Level.FINE, e.getMessage(), e);
             }
         }
         return asciiPath;
@@ -453,7 +449,7 @@ public class IRI implements Comparable<IRI>, Node {
             try {
                 asciiQuery = PercentEncoders.getQueryEncoder(StandardCharsets.UTF_8).encode(query);
             } catch (IOException e) {
-                logger.log(Level.FINE, e.getMessage(), e);
+                //logger.log(Level.FINE, e.getMessage(), e);
             }
         }
         return asciiQuery;
@@ -464,7 +460,7 @@ public class IRI implements Comparable<IRI>, Node {
             try {
                 asciiUserinfo = PercentEncoders.getUnreservedEncoder(StandardCharsets.UTF_8).encode(userinfo);
             } catch (IOException e) {
-                logger.log(Level.FINE, e.getMessage(), e);
+                //logger.log(Level.FINE, e.getMessage(), e);
             }
         }
         return asciiUserinfo;
@@ -527,7 +523,7 @@ public class IRI implements Comparable<IRI>, Node {
         try {
             return PercentEncoders.getUnreservedEncoder(StandardCharsets.UTF_8).encode(toString());
         } catch (IOException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
+            //logger.log(Level.FINE, e.getMessage(), e);
             return null;
         }
     }

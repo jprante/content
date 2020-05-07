@@ -7,7 +7,6 @@ import org.xbib.content.XContentBuilder;
 import org.xbib.content.XContentGenerator;
 import org.xbib.content.XContentParser;
 import org.xbib.content.io.BytesReference;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

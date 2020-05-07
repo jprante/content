@@ -30,21 +30,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public class Settings implements AutoCloseable {
 
-    private static final Logger logger = Logger.getLogger(Settings.class.getName());
-
     public static final Settings EMPTY_SETTINGS = new Builder().build();
 
     public static final String[] EMPTY_ARRAY = new String[0];
 
-    public static final int BUFFER_SIZE = 1024 * 8;
+    public static final int BUFFER_SIZE = 1024 * 4;
 
     private DefaultSettingsRefresher refresher;
 
@@ -621,7 +617,8 @@ public class Settings implements AutoCloseable {
          * @return builder
          */
         public Builder loadFromString(String source) {
-            SettingsLoader settingsLoader = SettingsLoaderService.loaderFromString(source);
+            SettingsLoaderService settingsLoaderService = new SettingsLoaderService();
+            SettingsLoader settingsLoader = settingsLoaderService.loaderFromString(source);
             try {
                 Map<String, String> loadedSettings = settingsLoader.load(source);
                 put(loadedSettings);
@@ -666,7 +663,8 @@ public class Settings implements AutoCloseable {
          * @return builder
          */
         public Builder loadFromStream(String resourceName, InputStream inputStream) throws SettingsException {
-            SettingsLoader settingsLoader = SettingsLoaderService.loaderFromResource(resourceName);
+            SettingsLoaderService settingsLoaderService = new SettingsLoaderService();
+            SettingsLoader settingsLoader = settingsLoaderService.loaderFromResource(resourceName);
             try {
                 Map<String, String> loadedSettings = settingsLoader
                         .load(copyToString(new InputStreamReader(inputStream, StandardCharsets.UTF_8)));
@@ -725,7 +723,6 @@ public class Settings implements AutoCloseable {
                         try {
                             return DateTimeFormatter.ofPattern(placeholderName).format(LocalDate.now());
                         } catch (IllegalArgumentException | DateTimeException e) {
-                            logger.log(Level.FINER, e.getMessage(), e);
                             return map.get(placeholderName);
                         }
                     }
@@ -759,11 +756,14 @@ public class Settings implements AutoCloseable {
 
         private final AtomicBoolean closed;
 
+        private final SettingsLoaderService settingsLoaderService;
+
         DefaultSettingsRefresher(Path path, long initialDelay, long period, TimeUnit timeUnit) {
             this.path = path;
             this.executorService = Executors.newSingleThreadScheduledExecutor();
             executorService.scheduleAtFixedRate(this, initialDelay, period, timeUnit);
             this.closed = new AtomicBoolean();
+            this.settingsLoaderService = new SettingsLoaderService();
         }
 
         @Override
@@ -771,7 +771,7 @@ public class Settings implements AutoCloseable {
             try {
                 if (!closed.get()) {
                     String settingsSource = Files.readString(path);
-                    SettingsLoader settingsLoader = SettingsLoaderService.loaderFromResource(path.toString());
+                    SettingsLoader settingsLoader = settingsLoaderService.loaderFromResource(path.toString());
                     map = settingsLoader.load(settingsSource);
                 }
             } catch (IOException e) {

@@ -6,15 +6,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public final class IRINamespaceContext extends XmlNamespaceContext {
-
-    private static final Logger logger = Logger.getLogger(IRINamespaceContext.class.getName());
 
     /**
      * Share namespace.properties with {@link XmlNamespaceContext}.
@@ -49,7 +45,6 @@ public final class IRINamespaceContext extends XmlNamespaceContext {
             try {
                 instance = new IRINamespaceContext(ResourceBundle.getBundle(bundleName, locale, classLoader));
             } catch (MissingResourceException e) {
-                logger.log(Level.FINE, e.getMessage(), e);
                 instance = new IRINamespaceContext();
             }
         }

@@ -2,15 +2,12 @@ package org.xbib.content.resource.text;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Provides an iterator over Unicode Codepoints.
  */
 public abstract class CodepointIterator implements Iterator<Codepoint> {
 
-    private static final Logger logger = Logger.getLogger(CodepointIterator.class.getName());
     protected int position = -1;
     protected int limit = -1;
 
@@ -346,7 +343,6 @@ public abstract class CodepointIterator implements Iterator<Codepoint> {
                         return false;
                     }
                 } catch (InvalidCharacterException e) {
-                    logger.log(Level.FINE, e.getMessage(), e);
                     return false;
                 }
             }

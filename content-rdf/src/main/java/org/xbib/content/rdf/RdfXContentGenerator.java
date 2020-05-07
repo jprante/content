@@ -116,14 +116,14 @@ public class RdfXContentGenerator<P extends RdfXContentParams> implements RdfCon
         return this;
     }
 
-    public String string() {
+    public String string() throws IOException {
         if (builder != null) {
             return builder.string();
         }
         return null;
     }
 
-    public String get() {
+    public String get() throws IOException {
         return string();
     }
 

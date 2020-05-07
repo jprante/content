@@ -4,12 +4,10 @@ import org.junit.Test;
 import org.xbib.content.resource.XmlNamespaceContext;
 import org.xbib.content.xml.transform.StylesheetTransformer;
 import org.xml.sax.InputSource;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-
 import javax.xml.namespace.QName;
 import javax.xml.transform.sax.SAXSource;
 
@@ -20,7 +18,7 @@ public class StylesheetTransformerTest {
 
     private final QName root = new QName("http://example.org", "result", "ex");
 
-    private XmlNamespaceContext context = XmlNamespaceContext.newDefaultInstance();
+    private final XmlNamespaceContext context = XmlNamespaceContext.newDefaultInstance();
 
     @Test
     public void testJsonAsXML() throws Exception {

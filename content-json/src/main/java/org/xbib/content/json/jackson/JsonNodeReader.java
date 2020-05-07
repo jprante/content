@@ -11,8 +11,6 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Class dedicated to reading JSON values from {@link java.io.InputStream}s and {@link
@@ -32,8 +30,6 @@ import java.util.logging.Logger;
  * @see com.fasterxml.jackson.databind.ObjectMapper#readValues(com.fasterxml.jackson.core.JsonParser, Class)
  */
 public final class JsonNodeReader {
-
-    private static final Logger logger = Logger.getLogger(JsonNodeReader.class.getName());
 
     private final ObjectReader reader;
 
@@ -59,7 +55,6 @@ public final class JsonNodeReader {
                 throw builder.build();
             }
         } catch (JsonParseException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
             throw builder.setLocation(e.getLocation()).build();
         }
         return ret;

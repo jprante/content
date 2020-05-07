@@ -3,7 +3,6 @@ package org.xbib.content.xml.json;
 import org.junit.Test;
 import org.xbib.content.resource.XmlNamespaceContext;
 import org.xml.sax.InputSource;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,7 +12,6 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-
 import javax.xml.namespace.QName;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;

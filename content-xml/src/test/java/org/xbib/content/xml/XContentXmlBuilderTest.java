@@ -5,13 +5,11 @@ import org.junit.Test;
 import org.xbib.content.XContentBuilder;
 import org.xbib.content.XContentHelper;
 import org.xbib.content.resource.XmlNamespaceContext;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
-
 import javax.xml.namespace.QName;
 
 /**

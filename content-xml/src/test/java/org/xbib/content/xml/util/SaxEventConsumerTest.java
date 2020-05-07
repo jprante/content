@@ -3,10 +3,8 @@ package org.xbib.content.xml.util;
 import org.junit.Test;
 import org.xbib.content.xml.stream.SaxEventConsumer;
 import org.xml.sax.helpers.DefaultHandler;
-
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.events.Attribute;

@@ -20,15 +20,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public final class XContentBuilder implements ToXContent, Flushable, Closeable {
-
-    private static final Logger logger = Logger.getLogger(XContentBuilder.class.getName());
 
     private final OutputStream outputStream;
     private final XContentGenerator generator;
@@ -802,12 +798,8 @@ public final class XContentBuilder implements ToXContent, Flushable, Closeable {
         generator.close();
     }
 
-    public BytesReference bytes() {
-        try {
-            generator.close();
-        } catch (IOException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
-        }
+    public BytesReference bytes() throws IOException {
+        generator.close();
         return ((BytesStreamOutput) outputStream).bytes();
     }
 
@@ -815,8 +807,9 @@ public final class XContentBuilder implements ToXContent, Flushable, Closeable {
      * Returns a string representation of the builder (only applicable for text based xcontent).
      * Only applicable when the builder is constructed with {@link BytesStreamOutput}.
      * @return string
+     * @throws IOException if string can not be converted to UTF-8
      */
-    public String string() {
+    public String string() throws IOException {
         return bytes().toUtf8();
     }
 

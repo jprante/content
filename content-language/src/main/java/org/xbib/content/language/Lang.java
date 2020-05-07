@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,8 +13,6 @@ import java.util.regex.Pattern;
  * Implementation of Language Tags (RFC 5646).
  */
 public final class Lang extends SubtagSet {
-
-    private static final Logger logger = Logger.getLogger(Lang.class.getName());
 
     private static final String LANGUAGE = "((?:[a-zA-Z]{2,3}(?:[-_][a-zA-Z]{3}){0,3})|[a-zA-Z]{4}|[a-zA-Z]{5,8})";
     private static final String SCRIPT = "((?:[-_][a-zA-Z]{4})?)";
@@ -69,7 +65,6 @@ public final class Lang extends SubtagSet {
         try {
             return parse(locale.toString()).primary;
         } catch (Exception e) {
-            logger.log(Level.FINE, e.getMessage(), e);
             Subtag c = null;
             Subtag primary = new Subtag(Type.PRIMARY, locale.getLanguage());
             String country = locale.getCountry();

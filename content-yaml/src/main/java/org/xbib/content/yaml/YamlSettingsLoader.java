@@ -2,7 +2,6 @@ package org.xbib.content.yaml;
 
 import org.xbib.content.XContent;
 import org.xbib.content.settings.AbstractSettingsLoader;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;

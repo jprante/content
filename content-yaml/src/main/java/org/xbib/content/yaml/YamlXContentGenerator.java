@@ -5,7 +5,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import org.xbib.content.XContent;
 import org.xbib.content.io.BytesReference;
 import org.xbib.content.json.JsonXContentGenerator;
-
 import java.io.IOException;
 import java.io.OutputStream;
 

@@ -14,8 +14,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Utility class for Jackson.
@@ -26,8 +24,6 @@ import java.util.logging.Logger;
  *
  */
 public final class JacksonUtils {
-
-    private static final Logger logger = Logger.getLogger(JacksonUtils.class.getName());
 
     private static final JsonNodeFactory FACTORY = JsonNodeFactory.instance;
 
@@ -91,17 +87,11 @@ public final class JacksonUtils {
      *
      * @param node the JSON value to print
      * @return the pretty printed value as a string
-     * @see #newMapper()
+     * @throws IOException if writing as UTF-8 fails
      */
-    public static String prettyPrint(final JsonNode node) {
+    public static String prettyPrint(final JsonNode node) throws IOException {
         final StringWriter writer = new StringWriter();
-
-        try {
-            WRITER.writeValue(writer, node);
-            writer.flush();
-        } catch (IOException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
-        }
+        WRITER.writeValue(writer, node);
         return writer.toString();
     }
 
