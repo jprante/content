@@ -1,6 +1,6 @@
 package org.xbib.content.xml.json;
 
-import org.xbib.content.resource.XmlNamespaceContext;
+import org.xbib.content.xml.XmlNamespaceContext;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.DTDHandler;
 import org.xml.sax.EntityResolver;
@@ -33,9 +33,9 @@ public class JsonXmlReader implements XMLReader {
 
     private QName root = new QName("root");
 
-    private XmlNamespaceContext context = XmlNamespaceContext.newDefaultInstance();
+    private XmlNamespaceContext context;
 
-    private Map<String, Boolean> map = new HashMap<>();
+    private final Map<String, Boolean> map;
 
     private ContentHandler contentHandler;
 
@@ -44,6 +44,10 @@ public class JsonXmlReader implements XMLReader {
     private DTDHandler dtdHandler;
 
     private ErrorHandler errorHandler;
+
+    public JsonXmlReader() {
+        this.map = new HashMap<>();
+    }
 
     public JsonXmlReader root(QName root) {
         this.root = root;

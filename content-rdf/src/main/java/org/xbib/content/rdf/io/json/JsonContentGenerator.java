@@ -15,15 +15,12 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public class JsonContentGenerator implements RdfContentGenerator<JsonContentParams>, Flushable {
 
-    private static final Logger logger = Logger.getLogger(JsonContentGenerator.class.getName());
     private final Writer writer;
 
     private boolean nsWritten;
@@ -54,16 +51,12 @@ public class JsonContentGenerator implements RdfContentGenerator<JsonContentPara
     }
 
     @Override
-    public JsonContentGenerator receive(IRI iri) {
+    public JsonContentGenerator receive(IRI iri) throws IOException {
         if (!iri.equals(resource.id())) {
-            try {
-                if (!nsWritten) {
-                    writeNamespaces();
-                }
-                resource = new DefaultResource(iri);
-            } catch (IOException e) {
-                logger.log(Level.FINE, e.getMessage(), e);
+            if (!nsWritten) {
+                writeNamespaces();
             }
+            resource = new DefaultResource(iri);
         }
         return this;
     }

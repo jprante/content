@@ -6,15 +6,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public class CSVParser {
-
-    private static final Logger logger = Logger.getLogger(CSVParser.class.getName());
 
     private final CSVLexer lexer;
 
@@ -43,7 +39,7 @@ public class CSVParser {
     }
 
     public Iterator<List<String>> iterator() {
-        return new Iterator<List<String>>() {
+        return new Iterator<>() {
             private List<String> current;
 
             private List<String> getNextRow() throws IOException {
@@ -56,7 +52,6 @@ public class CSVParser {
                     try {
                         current = getNextRow();
                     } catch (IOException e) {
-                        logger.log(Level.FINE, e.getMessage(), e);
                         throw new NoSuchElementException(e.getMessage());
                     }
                 }

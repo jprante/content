@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Implementation of {@link org.xbib.content.rdf.io.sink.TripleSink} which serializes triples to {@link
@@ -17,8 +15,6 @@ import java.util.logging.Logger;
  * <a href="http://www.w3.org/TR/2012/WD-turtle-20120710/">Turtle</a> syntax. *
  */
 public final class TurtleSerializer implements TripleSink, RDF {
-
-    private static final Logger logger = Logger.getLogger(TurtleSerializer.class.getName());
 
     private static final String DOT_EOL = " .\n";
     private static final String COMMA_EOL = " ,\n";
@@ -58,47 +54,35 @@ public final class TurtleSerializer implements TripleSink, RDF {
     }
 
     @Override
-    public void addNonLiteral(String subj, String pred, String obj) {
-        try {
-            startTriple(subj, pred);
-            if (obj.startsWith(BNODE_PREFIX)) {
-                if (!namedBnodes.contains(obj) && obj.endsWith(SHORTENABLE_BNODE_SUFFIX)) {
-                    openBnode(obj);
-                } else {
-                    sink.process(obj);
-                }
+    public void addNonLiteral(String subj, String pred, String obj) throws IOException {
+        startTriple(subj, pred);
+        if (obj.startsWith(BNODE_PREFIX)) {
+            if (!namedBnodes.contains(obj) && obj.endsWith(SHORTENABLE_BNODE_SUFFIX)) {
+                openBnode(obj);
             } else {
-                serializeUri(obj);
+                sink.process(obj);
             }
-        } catch (IOException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
+        } else {
+            serializeUri(obj);
         }
     }
 
     @Override
-    public void addPlainLiteral(String subj, String pred, String content, String lang) {
-        try {
-            startTriple(subj, pred);
-            addContent(content);
-            if (lang != null) {
-                sink.process('@').process(lang);
-            }
-        } catch (IOException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
+    public void addPlainLiteral(String subj, String pred, String content, String lang) throws IOException {
+        startTriple(subj, pred);
+        addContent(content);
+        if (lang != null) {
+            sink.process('@').process(lang);
         }
     }
 
     @Override
-    public void addTypedLiteral(String subj, String pred, String content, String type) {
-        try {
-            startTriple(subj, pred);
-            addContent(content);
-            sink.process("^^");
-            serializeUri(type);
-        } catch (IOException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
-        }
-    }
+    public void addTypedLiteral(String subj, String pred, String content, String type) throws IOException {
+        startTriple(subj, pred);
+        addContent(content);
+        sink.process("^^");
+        serializeUri(type);
+}
 
     @Override
     public void startStream() throws IOException {

@@ -2,21 +2,18 @@ package org.xbib.content.rdf.io.xml;
 
 import static org.xbib.content.rdf.RdfContentFactory.turtleBuilder;
 
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.RdfContentBuilder;
-import org.xbib.content.rdf.io.IOTests;
 import org.xbib.content.rdf.io.turtle.TurtleContentParams;
 import org.xbib.content.resource.IRI;
 import org.xbib.content.resource.IRINamespaceContext;
-import org.xbib.helper.StreamTester;
+import org.xbib.content.resource.NamespaceContext;
+import org.xbib.content.rdf.StreamTester;
 import org.xbib.net.PercentEncoders;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 
@@ -25,10 +22,7 @@ import javax.xml.namespace.QName;
  */
 public class OAITest extends StreamTester {
 
-    private static final Logger logger = Logger.getLogger(OAITest.class.getName());
-
     @Test
-    @Category(IOTests.class)
     public void testOAIListRecordsToTurtle() throws Exception {
         String filename = "oai-listrecords.xml";
         InputStream in = getClass().getResourceAsStream(filename);
@@ -38,7 +32,7 @@ public class OAITest extends StreamTester {
 
         IRINamespaceContext context = IRINamespaceContext.newInstance();
         XmlContentParams params = new XmlContentParams(context);
-        XmlHandler<TurtleContentParams> xmlHandler = new AbstractXmlResourceHandler<TurtleContentParams>(params) {
+        XmlHandler<TurtleContentParams> xmlHandler = new AbstractXmlResourceHandler<>(params) {
 
             @Override
             public boolean isResourceDelimiter(QName name) {
@@ -53,7 +47,7 @@ public class OAITest extends StreamTester {
                         getResource().setId(IRI.create("id:" +
                                 PercentEncoders.getRegNameEncoder(StandardCharsets.UTF_8).encode(value)));
                     } catch (IOException e) {
-                        logger.log(Level.FINE, e.getMessage(), e);
+                        // ignore
                     }
                 }
             }
@@ -64,7 +58,7 @@ public class OAITest extends StreamTester {
             }
 
             @Override
-            public XmlHandler<TurtleContentParams> setNamespaceContext(IRINamespaceContext namespaceContext) {
+            public XmlHandler<TurtleContentParams> setNamespaceContext(NamespaceContext namespaceContext) {
                 return this;
             }
 

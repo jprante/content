@@ -18,15 +18,11 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * RDF/XML writer.
  */
 public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContentParams>, Flushable, RdfConstants {
-
-    private static final Logger logger = Logger.getLogger(RdfXmlContentGenerator.class.getName());
 
     private final Writer writer;
 
@@ -119,7 +115,9 @@ public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContent
         }
         startRDF();
         writeHeader();
-        resource.triples().forEach(this::writeTriple);
+        for (Triple t : resource.triples()) {
+            writeTriple(t);
+        }
         endRDF();
         return this;
     }
@@ -213,74 +211,70 @@ public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContent
         }
     }
 
-    private RdfXmlContentGenerator writeTriple(Triple triple) {
-        try {
-            if (!writingStarted) {
-                throw new IOException("document writing has not yet been started");
-            }
-            Resource subj = triple.subject();
-            IRI pred = triple.predicate();
-            Node obj = triple.object();
-            String predString = pred.toString();
-            int predSplitIdx = findURISplitIndex(predString);
-            if (predSplitIdx == -1) {
-                throw new IOException("unable to create XML namespace-qualified name for predicate: " + predString);
-            }
-            String predNamespace = predString.substring(0, predSplitIdx);
-            String predLocalName = predString.substring(predSplitIdx);
-            if (!headerWritten) {
-                writeHeader();
-            }
-            if (!subj.equals(lastWrittenSubject)) {
-                flushPendingStatements();
-                writeNewLine();
-                writeStartOfStartTag(NS_URI, "Description");
-                if (subj.isEmbedded()) {
-                    writeAttribute(NS_URI, "nodeID", subj.toString());
-                } else {
-                    writeAttribute(NS_URI, "about", subj.toString());
-                }
-                writer.write(">");
-                writeNewLine();
-                lastWrittenSubject = subj;
-            }
-            writer.write("\t");
-            writeStartOfStartTag(predNamespace, predLocalName);
-            if (obj instanceof Resource) {
-                Resource objRes = (Resource) obj;
-                if (objRes.isEmbedded()) {
-                    writeAttribute(NS_URI, "nodeID", objRes.id().toString());
-                } else {
-                    writeAttribute(NS_URI, "resource", objRes.id().toString());
-                }
-                writer.write("/>");
-            } else if (obj instanceof Literal) {
-                Literal l = (Literal) obj;
-                if (l.lang() != null) {
-                    writeAttribute("xml:lang", l.lang());
-                }
-                boolean isXMLLiteral = false;
-                IRI datatype = l.type();
-                if (datatype != null) {
-                    isXMLLiteral = datatype.equals(RDF_XMLLITERAL);
-                    if (isXMLLiteral) {
-                        writeAttribute(NS_URI, "parseType", "Literal");
-                    } else {
-                        writeAttribute(NS_URI, "datatype", datatype.toString());
-                    }
-                }
-                writer.write(">");
-                if (isXMLLiteral) {
-                    writer.write(obj.toString());
-                } else {
-                    writer.write(escapeCharacterData(obj.toString()));
-                }
-                writeEndTag(predNamespace, predLocalName);
-            }
-            writeNewLine();
-        } catch (IOException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
+    private RdfXmlContentGenerator writeTriple(Triple triple) throws IOException {
+        if (!writingStarted) {
+            throw new IOException("document writing has not yet been started");
         }
+        Resource subj = triple.subject();
+        IRI pred = triple.predicate();
+        Node obj = triple.object();
+        String predString = pred.toString();
+        int predSplitIdx = findURISplitIndex(predString);
+        if (predSplitIdx == -1) {
+            throw new IOException("unable to create XML namespace-qualified name for predicate: " + predString);
+        }
+        String predNamespace = predString.substring(0, predSplitIdx);
+        String predLocalName = predString.substring(predSplitIdx);
+        if (!headerWritten) {
+            writeHeader();
+        }
+        if (!subj.equals(lastWrittenSubject)) {
+            flushPendingStatements();
+            writeNewLine();
+            writeStartOfStartTag(NS_URI, "Description");
+            if (subj.isEmbedded()) {
+                writeAttribute(NS_URI, "nodeID", subj.toString());
+            } else {
+                writeAttribute(NS_URI, "about", subj.toString());
+            }
+            writer.write(">");
+            writeNewLine();
+            lastWrittenSubject = subj;
+        }
+        writer.write("\t");
+        writeStartOfStartTag(predNamespace, predLocalName);
+        if (obj instanceof Resource) {
+            Resource objRes = (Resource) obj;
+            if (objRes.isEmbedded()) {
+                writeAttribute(NS_URI, "nodeID", objRes.id().toString());
+            } else {
+                writeAttribute(NS_URI, "resource", objRes.id().toString());
+            }
+            writer.write("/>");
+        } else if (obj instanceof Literal) {
+            Literal l = (Literal) obj;
+            if (l.lang() != null) {
+                writeAttribute("xml:lang", l.lang());
+            }
+            boolean isXMLLiteral = false;
+            IRI datatype = l.type();
+            if (datatype != null) {
+                isXMLLiteral = datatype.equals(RDF_XMLLITERAL);
+                if (isXMLLiteral) {
+                    writeAttribute(NS_URI, "parseType", "Literal");
+                } else {
+                    writeAttribute(NS_URI, "datatype", datatype.toString());
+                }
+            }
+            writer.write(">");
+            if (isXMLLiteral) {
+                writer.write(obj.toString());
+            } else {
+                writer.write(escapeCharacterData(obj.toString()));
+            }
+            writeEndTag(predNamespace, predLocalName);
+        }
+        writeNewLine();
         return this;
     }
 

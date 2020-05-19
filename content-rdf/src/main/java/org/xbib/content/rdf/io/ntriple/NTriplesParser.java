@@ -5,15 +5,11 @@ import org.xbib.content.rdf.io.sink.TripleSink;
 
 import java.io.IOException;
 import java.util.BitSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Implementation of streaming <a href="http://www.w3.org/2001/sw/RDFCore/ntriples/">NTriples</a> parser.
  */
 public final class NTriplesParser implements CharSink {
-
-    private static final Logger logger = Logger.getLogger(NTriplesParser.class.getName());
 
     private static final short PARSING_OUTSIDE = 0;
     private static final short PARSING_URI = 1;
@@ -118,7 +114,7 @@ public final class NTriplesParser implements CharSink {
                     parsingState = PARSING_OUTSIDE;
                     processOutsideChar(buffer, pos);
                 } else {
-                    logger.log(Level.SEVERE, "unexpected character '" + buffer[pos] + "' after literal");
+                    throw new IOException("unexpected character '" + buffer[pos] + "' after literal");
                 }
             } else if (parsingState == PARSING_LITERAL_TYPE) {
                 processLiteralTypeChar(buffer, pos);
@@ -159,7 +155,7 @@ public final class NTriplesParser implements CharSink {
             } else if (type.startsWith("^^<") && type.charAt(type.length() - 2) == '>') {
                 onTypedLiteral(literalObj, type.substring(3, type.length() - 2 - trimSize));
             } else {
-                logger.log(Level.SEVERE, "literal type '" + type + "' can not be parsed");
+                throw new IOException("literal type '" + type + "' can not be parsed");
             }
             parsingState = PARSING_OUTSIDE;
             if (trimSize > 0) {
@@ -190,7 +186,7 @@ public final class NTriplesParser implements CharSink {
                 break;
             default:
                 if (!WHITESPACE.get(buffer[pos])) {
-                    logger.log(Level.SEVERE, "unexpected character '" + buffer[pos] + "'");
+                    throw new IOException("unexpected character '" + buffer[pos] + "'");
                 }
         }
     }
@@ -199,13 +195,13 @@ public final class NTriplesParser implements CharSink {
         if (waitingForSentenceEnd) {
             waitingForSentenceEnd = false;
         } else {
-            logger.log(Level.SEVERE, "unexpected end of sentence");
+            throw new IOException("unexpected end of sentence");
         }
     }
 
     private void onNonLiteral(String uri) throws IOException {
         if (waitingForSentenceEnd) {
-            logger.log(Level.SEVERE, "endStream of sentence expected");
+            throw new IOException("endStream of sentence expected");
         }
         if (subj == null) {
             subj = uri;
@@ -220,9 +216,9 @@ public final class NTriplesParser implements CharSink {
     private void onPlainLiteral(String value, String lang) throws IOException {
         if (subj == null || pred == null) {
             if (waitingForSentenceEnd) {
-                logger.log(Level.SEVERE, "end of sentence expected");
+                throw new IOException("end of sentence expected");
             } else {
-                logger.log(Level.SEVERE, "literal is not an object");
+                throw new IOException("literal is not an object");
             }
         }
         sink.addPlainLiteral(subj, pred, value, lang);
@@ -232,9 +228,9 @@ public final class NTriplesParser implements CharSink {
     private void onTypedLiteral(String value, String type) throws IOException {
         if (subj == null || pred == null) {
             if (waitingForSentenceEnd) {
-                logger.log(Level.SEVERE, "end of sentence expected");
+                throw new IOException("end of sentence expected");
             } else {
-                logger.log(Level.SEVERE, "literal is not an object");
+                throw new IOException("literal is not an object");
             }
         }
         sink.addTypedLiteral(subj, pred, value, type);
@@ -281,7 +277,7 @@ public final class NTriplesParser implements CharSink {
     @Override
     public void endStream() throws IOException {
         if (tokenStartPos != -1 || waitingForSentenceEnd) {
-            logger.log(Level.SEVERE, "unexpected end of stream");
+            throw new IOException("unexpected end of stream");
         }
         sink.endStream();
     }
@@ -331,7 +327,7 @@ public final class NTriplesParser implements CharSink {
                 case 'U':
                     int sequenceLength = ch == 'u' ? 4 : 8;
                     if (i + sequenceLength >= limit) {
-                        logger.log(Level.SEVERE, "error parsing escape sequence '\\" + ch + "'");
+                        throw new IOException("error parsing escape sequence '\\" + ch + "'");
                     }
                     String code = str.substring(i + 1, i + 1 + sequenceLength);
                     i += sequenceLength;
@@ -340,7 +336,7 @@ public final class NTriplesParser implements CharSink {
                         int value = Integer.parseInt(code, 16);
                         result.append((char) value);
                     } catch (NumberFormatException nfe) {
-                        logger.log(Level.SEVERE, "error parsing escape sequence '\\" + ch + "'");
+                        throw new IOException("error parsing escape sequence '\\" + ch + "'");
                     }
                     break;
                 default:

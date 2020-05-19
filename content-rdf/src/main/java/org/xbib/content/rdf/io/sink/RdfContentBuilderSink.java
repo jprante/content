@@ -13,15 +13,12 @@ import org.xbib.content.rdf.internal.DefaultTriple;
 import org.xbib.content.resource.IRI;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Iterator;
 
 /**
  *
  */
 public class RdfContentBuilderSink implements QuadSink {
-
-    private static final Logger logger = Logger.getLogger(RdfContentBuilderSink.class.getName());
 
     private final RdfGraph<RdfGraphParams> graph;
 
@@ -34,81 +31,57 @@ public class RdfContentBuilderSink implements QuadSink {
     }
 
     @Override
-    public void addNonLiteral(String subj, String pred, String obj) {
-        try {
-            Resource s = DefaultResource.create(graph.getParams().getNamespaceContext(), subj);
-            IRI p = IRI.create(pred);
-            Resource o = DefaultResource.create(graph.getParams().getNamespaceContext(), obj);
-            Triple t = new DefaultTriple(s, p, o);
-            graph.receive(t);
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
+    public void addNonLiteral(String subj, String pred, String obj) throws IOException {
+        Resource s = DefaultResource.create(graph.getParams().getNamespaceContext(), subj);
+        IRI p = IRI.create(pred);
+        Resource o = DefaultResource.create(graph.getParams().getNamespaceContext(), obj);
+        Triple t = new DefaultTriple(s, p, o);
+        graph.receive(t);
     }
 
     @Override
-    public void addNonLiteral(String subj, String pred, String obj, String graphIRI) {
-        try {
-            Resource s = DefaultResource.create(graph.getParams().getNamespaceContext(), subj);
-            IRI p = IRI.create(pred);
-            Resource o = DefaultResource.create(graph.getParams().getNamespaceContext(), obj);
-            Triple t = new DefaultTriple(s, p, o);
-            graph.receive(t);
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
+    public void addNonLiteral(String subj, String pred, String obj, String graphIRI) throws IOException {
+        Resource s = DefaultResource.create(graph.getParams().getNamespaceContext(), subj);
+        IRI p = IRI.create(pred);
+        Resource o = DefaultResource.create(graph.getParams().getNamespaceContext(), obj);
+        Triple t = new DefaultTriple(s, p, o);
+        graph.receive(t);
     }
 
     @Override
-    public void addPlainLiteral(String subj, String pred, String content, String lang) {
-        try {
-            Resource s = DefaultResource.create(graph.getParams().getNamespaceContext(), subj);
-            IRI p = IRI.create(pred);
-            Literal o = new DefaultLiteral(content).lang(lang);
-            Triple t = new DefaultTriple(s, p, o);
-            graph.receive(t);
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
+    public void addPlainLiteral(String subj, String pred, String content, String lang) throws IOException {
+        Resource s = DefaultResource.create(graph.getParams().getNamespaceContext(), subj);
+        IRI p = IRI.create(pred);
+        Literal o = new DefaultLiteral(content).lang(lang);
+        Triple t = new DefaultTriple(s, p, o);
+        graph.receive(t);
     }
 
     @Override
-    public void addPlainLiteral(String subj, String pred, String content, String lang, String graphIRI) {
-        try {
-            Resource s = DefaultResource.create(graph.getParams().getNamespaceContext(), subj);
-            IRI p = IRI.create(pred);
-            Literal o = new DefaultLiteral(content).lang(lang);
-            Triple t = new DefaultTriple(s, p, o);
-            graph.receive(t);
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
+    public void addPlainLiteral(String subj, String pred, String content, String lang, String graphIRI) throws IOException {
+        Resource s = DefaultResource.create(graph.getParams().getNamespaceContext(), subj);
+        IRI p = IRI.create(pred);
+        Literal o = new DefaultLiteral(content).lang(lang);
+        Triple t = new DefaultTriple(s, p, o);
+        graph.receive(t);
     }
 
     @Override
-    public void addTypedLiteral(String subj, String pred, String content, String type) {
-        try {
-            Resource s = DefaultResource.create(graph.getParams().getNamespaceContext(), subj);
-            IRI p = IRI.create(pred);
-            Literal o = new DefaultLiteral(content).type(IRI.create(type));
-            Triple t = new DefaultTriple(s, p, o);
-            graph.receive(t);
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
+    public void addTypedLiteral(String subj, String pred, String content, String type) throws IOException {
+        Resource s = DefaultResource.create(graph.getParams().getNamespaceContext(), subj);
+        IRI p = IRI.create(pred);
+        Literal o = new DefaultLiteral(content).type(IRI.create(type));
+        Triple t = new DefaultTriple(s, p, o);
+        graph.receive(t);
     }
 
     @Override
-    public void addTypedLiteral(String subj, String pred, String content, String type, String graphIRI) {
-        try {
-            Resource s = DefaultResource.create(graph.getParams().getNamespaceContext(), subj);
-            IRI p = IRI.create(pred);
-            Literal o = new DefaultLiteral(content).type(IRI.create(type));
-            Triple t = new DefaultTriple(s, p, o);
-            graph.receive(t);
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
+    public void addTypedLiteral(String subj, String pred, String content, String type, String graphIRI) throws IOException {
+        Resource s = DefaultResource.create(graph.getParams().getNamespaceContext(), subj);
+        IRI p = IRI.create(pred);
+        Literal o = new DefaultLiteral(content).type(IRI.create(type));
+        Triple t = new DefaultTriple(s, p, o);
+        graph.receive(t);
     }
 
     @Override
@@ -125,22 +98,16 @@ public class RdfContentBuilderSink implements QuadSink {
     public void endStream() throws IOException {
         if (graph.getResources() != null) {
             if (provider != null) {
-                graph.getResources().forEachRemaining(resource -> {
+                Iterator<Resource> iterator = graph.getResources();
+                while (iterator.hasNext()) {
+                    Resource resource = iterator.next();
                     RdfContentBuilder<RdfGraphParams> rdfContentBuilder;
-                    try {
                         rdfContentBuilder = provider.newContentBuilder();
                         rdfContentBuilder.startStream();
                         rdfContentBuilder.receive(resource);
                         rdfContentBuilder.endStream();
-                    } catch (IOException e) {
-                        logger.log(Level.SEVERE, e.getMessage(), e);
-                    }
-                });
-            } else {
-                logger.log(Level.WARNING, "no RDF content builder provider");
+                }
             }
-        } else {
-            logger.log(Level.WARNING, "no graph resources");
         }
     }
 

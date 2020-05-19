@@ -1,12 +1,12 @@
 package org.xbib.content.xml.util;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
  *
  */
-public class XMLUtilTest extends Assert {
+public class XMLUtilTest {
 
     @Test
     public void testWhitespaceCleaner() {

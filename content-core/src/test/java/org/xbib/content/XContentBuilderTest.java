@@ -1,9 +1,10 @@
 package org.xbib.content;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.xbib.content.json.JsonXContent.contentBuilder;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.json.JsonXContent;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.Map;
 /**
  *
  */
-public class XContentBuilderTest extends Assert {
+public class XContentBuilderTest {
 
     @Test
     public void testCopy() throws IOException {
@@ -141,10 +142,11 @@ public class XContentBuilderTest extends Assert {
         assertEquals(map.toString(), "{value=4AC3B67267}");
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testNullKey() throws IOException {
-        XContentBuilder builder = contentBuilder();
-        builder.field((String) null);
+    @Test
+    public void testNullKey()  {
+        assertThrows(NullPointerException.class, () -> {
+            XContentBuilder builder = contentBuilder();
+            builder.field((String) null);
+        });
     }
-
 }

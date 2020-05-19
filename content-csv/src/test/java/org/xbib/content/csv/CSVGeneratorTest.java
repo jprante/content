@@ -1,7 +1,6 @@
 package org.xbib.content.csv;
 
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Arrays;

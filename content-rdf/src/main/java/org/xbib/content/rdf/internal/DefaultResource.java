@@ -18,7 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -27,8 +26,9 @@ import java.util.stream.Collectors;
 public class DefaultResource implements Resource, Comparable<Resource>, XSDResourceIdentifiers {
 
     static final String GENID = "genid";
+
     static final String PLACEHOLDER = "_:";
-    private static final Logger logger = Logger.getLogger(DefaultResource.class.getName());
+
     private static final String UNDERSCORE = "_";
 
     private final MultiMap<IRI, Node> attributes;
@@ -164,7 +164,6 @@ public class DefaultResource implements Resource, Comparable<Resource>, XSDResou
                 return child.add(triple);
             } else {
                 // nothing found, continue with a new resource with new subject
-                logger.info("nothing found!!! my ID is " + id());
                 return new DefaultResource(otherId).add(triple);
             }
         }

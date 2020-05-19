@@ -1,6 +1,6 @@
 package org.xbib.content.xml.util;
 
-import javax.xml.namespace.NamespaceContext;
+import org.xbib.content.resource.NamespaceContext;
 import javax.xml.namespace.QName;
 
 /**

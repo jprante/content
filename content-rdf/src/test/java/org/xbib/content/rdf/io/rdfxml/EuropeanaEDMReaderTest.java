@@ -2,8 +2,7 @@ package org.xbib.content.rdf.io.rdfxml;
 
 import static org.xbib.content.rdf.RdfContentFactory.ntripleBuilder;
 
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.RdfContent;
 import org.xbib.content.rdf.RdfContentBuilder;
 import org.xbib.content.rdf.Resource;
@@ -11,12 +10,11 @@ import org.xbib.content.rdf.Triple;
 import org.xbib.content.rdf.internal.DefaultLiteral;
 import org.xbib.content.rdf.internal.DefaultRdfGraph;
 import org.xbib.content.rdf.internal.DefaultTriple;
-import org.xbib.content.rdf.io.IOTests;
 import org.xbib.content.rdf.io.ntriple.NTripleContent;
 import org.xbib.content.rdf.io.ntriple.NTripleContentParams;
 import org.xbib.content.resource.IRI;
 import org.xbib.content.resource.Node;
-import org.xbib.helper.StreamTester;
+import org.xbib.content.rdf.StreamTester;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,14 +23,12 @@ import java.util.Iterator;
 /**
  *
  */
-@Category(IOTests.class)
 public class EuropeanaEDMReaderTest extends StreamTester {
 
     private static final IRI GEO_LAT = IRI.create("http://www.w3.org/2003/01/geo/wgs84_pos#lat");
     private static final IRI GEO_LON = IRI.create("http://www.w3.org/2003/01/geo/wgs84_pos#long");
     private static final IRI location = IRI.create("location");
 
-    @SuppressWarnings("unchecked")
     @Test
     public void testEuropeana() throws Exception {
         String filename = "oai_edm.xml";
@@ -56,7 +52,7 @@ public class EuropeanaEDMReaderTest extends StreamTester {
                 builder.streamInput());
     }
 
-    private class GeoJSONFilter extends RdfContentBuilder<NTripleContentParams> {
+    private static class GeoJSONFilter extends RdfContentBuilder<NTripleContentParams> {
 
         DefaultRdfGraph graph;
 

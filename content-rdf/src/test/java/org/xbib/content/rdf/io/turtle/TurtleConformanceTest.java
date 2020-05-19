@@ -1,21 +1,17 @@
 package org.xbib.content.rdf.io.turtle;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.RdfContentFactory;
 import org.xbib.content.resource.IRI;
-import org.xbib.helper.StreamTester;
+import org.xbib.content.rdf.StreamTester;
 
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public class TurtleConformanceTest extends StreamTester {
-
-    private static final Logger logger = Logger.getLogger(TurtleConformanceTest.class.getName());
 
     @Test
     public void conformance() throws Exception {
@@ -26,10 +22,9 @@ public class TurtleConformanceTest extends StreamTester {
                     .setBaseIRI(IRI.create("http://example/base/"));
             turtleParser.setRdfContentBuilderProvider(RdfContentFactory::turtleBuilder);
             turtleParser.setRdfContentBuilderHandler(b -> {
-                logger.log(Level.INFO, MessageFormat.format("turtle test {0}", b.string()));
+                //logger.log(Level.INFO, MessageFormat.format("turtle test {0}", b.string()));
             });
             turtleParser.parse();
         }
     }
-
 }

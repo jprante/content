@@ -5,8 +5,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -32,8 +30,6 @@ import javax.xml.stream.events.XMLEvent;
  */
 public class StaxEventXMLReader extends AbstractStaxXMLReader {
 
-    private static final Logger logger = Logger.getLogger(StaxEventXMLReader.class.getName());
-
     private final XMLEventReader reader;
 
     /**
@@ -52,7 +48,6 @@ public class StaxEventXMLReader extends AbstractStaxXMLReader {
                 throw new IllegalStateException("XMLEventReader not at start of document or element");
             }
         } catch (XMLStreamException ex) {
-            logger.log(Level.FINE, ex.getMessage(), ex);
             throw new IllegalStateException("Could not read first element: " + ex.getMessage());
         }
         this.reader = reader;

@@ -13,19 +13,15 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public class DefaultRdfGraph implements RdfGraph<RdfGraphParams> {
 
-    private static final Logger logger = Logger.getLogger(DefaultRdfGraph.class.getName());
-
     private RdfGraphParams params = DefaultRdfGraphParams.DEFAULT_PARAMS;
 
-    private Map<IRI, Resource> resources = new LinkedHashMap<>();
+    private final Map<IRI, Resource> resources = new LinkedHashMap<>();
 
     @Override
     public Iterator<Resource> getResources() {
@@ -151,8 +147,6 @@ public class DefaultRdfGraph implements RdfGraph<RdfGraphParams> {
                                 if (r != null) {
                                     list.add(new DefaultTriple(resource1, pred, r.id()));
                                     list.addAll(unfold(r));
-                                } else {
-                                    logger.log(Level.SEVERE, "huh? {}", resource1.id());
                                 }
                             } else {
                                 list.addAll(unfold(resource1));

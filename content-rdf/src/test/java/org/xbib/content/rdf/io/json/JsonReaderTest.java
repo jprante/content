@@ -2,12 +2,13 @@ package org.xbib.content.rdf.io.json;
 
 import static org.xbib.content.rdf.RdfContentFactory.jsonBuilder;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.RdfContentBuilder;
 import org.xbib.content.rdf.io.xml.XmlHandler;
 import org.xbib.content.resource.IRI;
 import org.xbib.content.resource.IRINamespaceContext;
-import org.xbib.helper.StreamTester;
+import org.xbib.content.resource.NamespaceContext;
+import org.xbib.content.rdf.StreamTester;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +56,7 @@ public class JsonReaderTest extends StreamTester {
             }
 
             @Override
-            public XmlHandler<JsonContentParams> setNamespaceContext(IRINamespaceContext namespaceContext) {
+            public XmlHandler<JsonContentParams> setNamespaceContext(NamespaceContext namespaceContext) {
                 return this;
             }
 

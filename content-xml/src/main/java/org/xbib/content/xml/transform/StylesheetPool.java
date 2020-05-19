@@ -3,8 +3,6 @@ package org.xbib.content.xml.transform;
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
@@ -17,8 +15,6 @@ import javax.xml.transform.stream.StreamSource;
  * A pool of precompiled XSLT stylesheets ({@link javax.xml.transform.Templates}).
  */
 public final class StylesheetPool {
-
-    private static final Logger logger = Logger.getLogger(StylesheetPool.class.getName());
 
     /**
      * A map of precompiled stylesheets ({@link javax.xml.transform.Templates} objects).
@@ -61,8 +57,6 @@ public final class StylesheetPool {
         String systemId = source.getSystemId();
         Templates template = stylesheets.get(systemId);
         if (template == null) {
-            logger.log(Level.FINE, MessageFormat.format("new source={0} {1}",
-                    source.getSystemId(), source.getClass().getName()));
             template = transformerFactory.newTemplates(source);
             stylesheets.put(systemId, template);
         }

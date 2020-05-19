@@ -51,7 +51,7 @@ public class StylesheetTransformer implements Closeable {
         if (transformerFactory == null) {
             transformerFactory = (SAXTransformerFactory) TransformerFactory.newInstance();
         }
-        transformerFactory.setErrorListener(new StylesheetErrorListener());
+        transformerFactory.setErrorListener(new DefaultStylesheetErrorListener());
         setResolver(path == null ? new TransformerURIResolver() : new TransformerURIResolver(path));
         return this;
     }

@@ -1,36 +1,39 @@
 package org.xbib.content.resource;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  *
  */
-public final class IRINamespaceContext extends XmlNamespaceContext {
+public final class IRINamespaceContext implements NamespaceContext {
 
-    /**
-     * Share namespace.properties with {@link XmlNamespaceContext}.
-     */
     private static final String DEFAULT_RESOURCE =
-            XmlNamespaceContext.class.getPackage().getName().replace('.', '/') + '/' + "namespace";
+            IRINamespaceContext.class.getPackage().getName().replace('.', '/') + '/' + "namespace";
 
     private static IRINamespaceContext instance;
 
     private static final IRINamespaceContext DEFAULT_CONTEXT = newInstance(DEFAULT_RESOURCE);
 
+    // sort namespace by length in descending order, useful for compacting prefix
+    private final SortedMap<String, String> namespaces;
+
+    private final SortedMap<String, Set<String>> prefixes;
+
+    protected final Object lock;
+
     private List<String> sortedNamespacesByPrefixLength;
 
-    private IRINamespaceContext() {
-        super();
-    }
-
-    private IRINamespaceContext(ResourceBundle bundle) {
-        super(bundle);
-    }
 
     public static IRINamespaceContext getInstance() {
         return DEFAULT_CONTEXT;
@@ -55,9 +58,36 @@ public final class IRINamespaceContext extends XmlNamespaceContext {
         return new IRINamespaceContext();
     }
 
+    protected IRINamespaceContext() {
+        this.namespaces = new TreeMap<>();
+        this.prefixes = new TreeMap<>();
+        this.lock = new Object();
+    }
+
+    private IRINamespaceContext(ResourceBundle bundle) {
+        this();
+        Enumeration<String> en = bundle.getKeys();
+        while (en.hasMoreElements()) {
+            String prefix = en.nextElement();
+            String namespace = bundle.getString(prefix);
+            addNamespace(prefix, namespace);
+        }
+    }
+
     @Override
     public void addNamespace(String prefix, String namespace) {
-        super.addNamespace(prefix, namespace);
+        if (prefix != null && namespace != null) {
+            synchronized (lock) {
+                namespaces.put(prefix, namespace);
+                if (prefixes.containsKey(namespace)) {
+                    prefixes.get(namespace).add(prefix);
+                } else {
+                    Set<String> set = new HashSet<>();
+                    set.add(prefix);
+                    prefixes.put(namespace, set);
+                }
+            }
+        }
         synchronized (lock) {
             sortedNamespacesByPrefixLength = new ArrayList<>(getNamespaces().values());
             // sort from longest to shortest prefix for successful matching
@@ -71,7 +101,7 @@ public final class IRINamespaceContext extends XmlNamespaceContext {
 
     public IRINamespaceContext add(Map<String, String> map) {
         for (Map.Entry<String, String> e : map.entrySet()) {
-            super.addNamespace(e.getKey(), e.getValue());
+            addNamespace(e.getKey(), e.getValue());
         }
         synchronized (lock) {
             sortedNamespacesByPrefixLength = new ArrayList<>(getNamespaces().values());
@@ -130,5 +160,38 @@ public final class IRINamespaceContext extends XmlNamespaceContext {
 
     public String getPrefix(IRI uri) {
         return getNamespaceURI(uri.getScheme()) != null ? uri.getScheme() : getPrefix(uri.toString());
+    }
+
+    @Override
+    public SortedMap<String, String> getNamespaces() {
+        return namespaces;
+    }
+
+    @Override
+    public String getNamespaceURI(String prefix) {
+        if (prefix == null) {
+            return null;
+        }
+        return namespaces.getOrDefault(prefix, null);
+    }
+
+    @Override
+    public String getPrefix(String namespaceURI) {
+        Iterator<String> it = getPrefixes(namespaceURI);
+        return it != null && it.hasNext() ? it.next() : null;
+    }
+
+    @Override
+    public Iterator<String> getPrefixes(String namespace) {
+        if (namespace == null) {
+            throw new IllegalArgumentException("namespace URI cannot be null");
+        }
+        return prefixes.containsKey(namespace) ?
+                prefixes.get(namespace).iterator() : null;
+    }
+
+    @Override
+    public String toString() {
+        return namespaces.toString();
     }
 }

@@ -1,22 +1,19 @@
 package org.xbib.content.rdf.io.xml;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.xbib.content.rdf.RdfContentFactory.xmlBuilder;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.RdfContentBuilder;
 import org.xbib.content.rdf.Resource;
 import org.xbib.content.rdf.internal.DefaultAnonymousResource;
 import org.xbib.content.rdf.internal.DefaultResource;
-import org.xbib.content.rdf.io.IOTests;
 import org.xbib.content.resource.IRI;
 
 /**
  *
  */
-@Category(IOTests.class)
-public class XmlResourceWriterTest extends Assert {
+public class XmlResourceWriterTest {
 
     @Test
     public void testXMLResourceWriter() throws Exception {

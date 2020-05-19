@@ -1,6 +1,6 @@
 package org.xbib.content.xml.json;
 
-import org.xbib.content.resource.XmlNamespaceContext;
+import org.xbib.content.xml.XmlNamespaceContext;
 import org.xbib.content.xml.transform.StylesheetTransformer;
 import org.xml.sax.InputSource;
 
@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import javax.xml.namespace.QName;
@@ -24,7 +25,7 @@ public class JsonStylesheet {
 
     private QName root = new QName("root");
 
-    private XmlNamespaceContext context = XmlNamespaceContext.newDefaultInstance();
+    private XmlNamespaceContext context;
 
     private StylesheetTransformer transformer;
 
@@ -51,7 +52,7 @@ public class JsonStylesheet {
     }
 
     public JsonStylesheet transform(InputStream in, OutputStream out) throws IOException {
-        return transform(in, new OutputStreamWriter(out, "UTF-8"));
+        return transform(in, new OutputStreamWriter(out, StandardCharsets.UTF_8));
     }
 
     public JsonStylesheet transform(InputStream in, Writer out) throws IOException {
@@ -78,7 +79,7 @@ public class JsonStylesheet {
     }
 
     public JsonStylesheet toXML(InputStream in, OutputStream out) throws IOException {
-        return toXML(in, new OutputStreamWriter(out, "UTF-8"));
+        return toXML(in, new OutputStreamWriter(out, StandardCharsets.UTF_8));
     }
 
     public JsonStylesheet toXML(InputStream in, Writer out) throws IOException {

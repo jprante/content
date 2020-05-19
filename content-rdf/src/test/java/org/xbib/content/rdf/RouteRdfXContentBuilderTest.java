@@ -1,13 +1,14 @@
 package org.xbib.content.rdf;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.xbib.content.rdf.RdfXContentFactory.routeRdfXContentBuilder;
+import static org.xbib.content.rdf.StreamTester.assertStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.internal.DefaultLiteral;
 import org.xbib.content.rdf.internal.DefaultResource;
 import org.xbib.content.rdf.io.rdfxml.RdfXmlContentParser;
 import org.xbib.content.resource.IRI;
-import org.xbib.helper.StreamTester;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 /**
  *
  */
-public class RouteRdfXContentBuilderTest extends StreamTester {
+public class RouteRdfXContentBuilderTest {
 
     @Test
     public void testRoute() throws Exception {

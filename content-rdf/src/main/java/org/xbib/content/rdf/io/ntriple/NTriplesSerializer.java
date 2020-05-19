@@ -6,8 +6,6 @@ import org.xbib.content.rdf.io.sink.TripleSink;
 
 import java.io.IOException;
 import java.util.BitSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Implementation of {@link org.xbib.content.rdf.io.sink.TripleSink} which serializes triples to
@@ -17,7 +15,6 @@ public class NTriplesSerializer implements TripleSink, RDF {
 
     protected static final String DOT_EOL = ".\n";
     protected static final char SPACE = ' ';
-    private static final Logger logger = Logger.getLogger(NTriplesSerializer.class.getName());
     private static final char QUOTE = '"';
     private static final char URI_START = '<';
     private static final char URI_END = '>';
@@ -118,7 +115,7 @@ public class NTriplesSerializer implements TripleSink, RDF {
             return str;
         }
         StringBuilder result = new StringBuilder(limit);
-        result.append(str.substring(0, pos));
+        result.append(str, 0, pos);
         for (; pos < limit; pos++) {
             char ch = str.charAt(pos);
             if (ch < 0x80) {
@@ -151,41 +148,29 @@ public class NTriplesSerializer implements TripleSink, RDF {
     }
 
     @Override
-    public void addNonLiteral(String subj, String pred, String obj) {
-        try {
-            startTriple(subj, pred);
-            serializeBnodeOrUri(obj);
-            sink.process(DOT_EOL);
-        } catch (IOException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
-        }
+    public void addNonLiteral(String subj, String pred, String obj) throws IOException {
+        startTriple(subj, pred);
+        serializeBnodeOrUri(obj);
+        sink.process(DOT_EOL);
     }
 
     @Override
-    public void addPlainLiteral(String subj, String pred, String content, String lang) {
-        try {
-            startTriple(subj, pred);
-            addContent(content);
-            if (lang != null) {
-                sink.process('@').process(lang);
-            }
-            sink.process(SPACE).process(DOT_EOL);
-        } catch (IOException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
+    public void addPlainLiteral(String subj, String pred, String content, String lang) throws IOException {
+        startTriple(subj, pred);
+        addContent(content);
+        if (lang != null) {
+            sink.process('@').process(lang);
         }
+        sink.process(SPACE).process(DOT_EOL);
     }
 
     @Override
-    public void addTypedLiteral(String subj, String pred, String content, String type) {
-        try {
-            startTriple(subj, pred);
-            addContent(content);
-            sink.process("^^");
-            serializeUri(type);
-            sink.process(DOT_EOL);
-        } catch (IOException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
-        }
+    public void addTypedLiteral(String subj, String pred, String content, String type) throws IOException {
+        startTriple(subj, pred);
+        addContent(content);
+        sink.process("^^");
+        serializeUri(type);
+        sink.process(DOT_EOL);
     }
 
     @Override

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import org.xbib.content.resource.XmlNamespaceContext;
+import org.xbib.content.resource.NamespaceContext;
 import org.xbib.content.xml.util.ToQName;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -51,7 +51,7 @@ public class JsonSaxAdapter {
 
     private QName root = new QName("root");
 
-    private XmlNamespaceContext context = XmlNamespaceContext.newDefaultInstance();
+    private NamespaceContext context;
 
     public JsonSaxAdapter(Reader reader, ContentHandler contentHandler) throws IOException {
         this(factory.createParser(reader), contentHandler);
@@ -68,7 +68,7 @@ public class JsonSaxAdapter {
         return this;
     }
 
-    public JsonSaxAdapter context(XmlNamespaceContext context) {
+    public JsonSaxAdapter context(NamespaceContext context) {
         this.context = context;
         return this;
     }
@@ -163,7 +163,7 @@ public class JsonSaxAdapter {
                 qname.getLocalPart(), qname.getPrefix() + ":" + qname.getLocalPart());
     }
 
-    private void writeNamespaceDeclarations(XmlNamespaceContext context) throws SAXException {
+    private void writeNamespaceDeclarations(NamespaceContext context) throws SAXException {
         Set<String> keys = new TreeSet<>(context.getNamespaces().keySet());
         if (root != null && !keys.contains(root.getPrefix())) {
             contentHandler.startPrefixMapping(root.getPrefix(), root.getNamespaceURI());

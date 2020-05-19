@@ -16,8 +16,9 @@ import org.xbib.content.rdf.internal.DefaultLiteral;
 import org.xbib.content.rdf.internal.DefaultResource;
 import org.xbib.content.rdf.internal.DefaultTriple;
 import org.xbib.content.resource.IRI;
+import org.xbib.content.resource.NamespaceContext;
 import org.xbib.content.resource.Node;
-import org.xbib.content.resource.XmlNamespaceContext;
+import org.xbib.content.xml.XmlNamespaceContext;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -29,8 +30,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Turtle - Terse RDF Triple Parser.
@@ -40,8 +39,6 @@ import java.util.logging.Logger;
  * @param <R> RDF content type parameter
  */
 public class TurtleContentParser<R extends RdfContentParams> implements RdfContentParser<R> {
-
-    private static final Logger logger = Logger.getLogger(TurtleContentParser.class.getName());
 
     private final Resource resource = new DefaultAnonymousResource();
 
@@ -93,7 +90,7 @@ public class TurtleContentParser<R extends RdfContentParams> implements RdfConte
     /**
      * The namespace context.
      */
-    private XmlNamespaceContext context = XmlNamespaceContext.newDefaultInstance();
+    private NamespaceContext context;
 
     public TurtleContentParser(InputStream in) throws IOException {
         this(new InputStreamReader(in, StandardCharsets.UTF_8));
@@ -101,6 +98,7 @@ public class TurtleContentParser<R extends RdfContentParams> implements RdfConte
 
     public TurtleContentParser(Reader reader) {
         this.reader = new PushbackReader(reader, 2);
+        this.context = XmlNamespaceContext.newInstance();
     }
 
     public static String decode(String s, String encoding) throws UnsupportedEncodingException {
@@ -154,7 +152,7 @@ public class TurtleContentParser<R extends RdfContentParams> implements RdfConte
         return this;
     }
 
-    public TurtleContentParser<R> context(XmlNamespaceContext context) {
+    public TurtleContentParser<R> context(NamespaceContext context) {
         this.context = context;
         return this;
     }
@@ -781,7 +779,7 @@ public class TurtleContentParser<R extends RdfContentParams> implements RdfConte
         if ((char) ch != v) {
             String message = (subject != null ? subject : "") + " unexpected character: '" +
                     (char) ch + "' expected: '" + v + "'";
-            logger.log(Level.WARNING, message);
+            throw new IOException(message);
         }
     }
 

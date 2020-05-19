@@ -14,8 +14,6 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -29,8 +27,6 @@ import javax.xml.transform.sax.SAXSource;
  * URI resolver for Transformer.
  */
 public class TransformerURIResolver implements URIResolver, Closeable {
-
-    private static final Logger logger = Logger.getLogger(TransformerURIResolver.class.getName());
 
     private List<InputStream> inputStreams = new LinkedList<>();
 
@@ -78,7 +74,7 @@ public class TransformerURIResolver implements URIResolver, Closeable {
             try {
                 in = url.openStream();
             } catch (IOException e) {
-                logger.log(Level.WARNING, "error while opening stream", e);
+                // ignore
             }
         }
         if (in == null) {

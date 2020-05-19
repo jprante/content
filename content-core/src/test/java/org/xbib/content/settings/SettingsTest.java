@@ -1,7 +1,9 @@
 package org.xbib.content.settings;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.XContentHelper;
 import org.xbib.content.io.BytesArray;
 import org.xbib.content.io.BytesReference;
@@ -24,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 /**
  *
  */
-public class SettingsTest extends Assert {
+public class SettingsTest {
 
     @Test
     public void testEmpty() {

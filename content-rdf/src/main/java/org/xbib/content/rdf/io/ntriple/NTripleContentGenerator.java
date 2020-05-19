@@ -13,16 +13,12 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * NTriple content generator.
  */
 public class NTripleContentGenerator
         implements RdfContentGenerator<NTripleContentParams>, Flushable {
-
-    private static final Logger logger = Logger.getLogger(NTripleContentGenerator.class.getName());
 
     private static final char LF = '\n';
 
@@ -95,13 +91,9 @@ public class NTripleContentGenerator
 
     @Override
     public NTripleContentGenerator receive(Resource resource) throws IOException {
-        resource.triples().forEach(t -> {
-            try {
-                writer.write(writeStatement(t));
-            } catch (IOException e) {
-                logger.log(Level.FINE, e.getMessage(), e);
-            }
-        });
+        for (Triple t : resource.triples()) {
+            writer.write(writeStatement(t));
+        }
         return this;
     }
 

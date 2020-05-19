@@ -2,12 +2,10 @@ package org.xbib.content.rdf.io.rdfxml;
 
 import static org.xbib.content.rdf.RdfContentFactory.turtleBuilder;
 
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.xbib.content.rdf.io.IOTests;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.io.turtle.TurtleContentParams;
 import org.xbib.content.resource.IRINamespaceContext;
-import org.xbib.helper.StreamTester;
+import org.xbib.content.rdf.StreamTester;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +15,6 @@ import java.io.StringReader;
 /**
  *
  */
-@Category(IOTests.class)
 public class VIAFRdfXmlReaderTest extends StreamTester {
 
     @Test

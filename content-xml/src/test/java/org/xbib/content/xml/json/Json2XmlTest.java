@@ -1,7 +1,7 @@
 package org.xbib.content.xml.json;
 
-import org.junit.Test;
-import org.xbib.content.resource.XmlNamespaceContext;
+import org.junit.jupiter.api.Test;
+import org.xbib.content.xml.XmlNamespaceContext;
 import org.xml.sax.InputSource;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -70,7 +71,7 @@ public class Json2XmlTest {
 
     private Writer getOutput(String path) throws IOException {
         File file = File.createTempFile(path, ".dat");
-        return new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+        return new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
     }
 
     private QName root() {
@@ -78,12 +79,14 @@ public class Json2XmlTest {
     }
 
     private XmlNamespaceContext context() {
-        XmlNamespaceContext nsContext = XmlNamespaceContext.newDefaultInstance();
-        nsContext.addNamespace("bib", "info:srw/cql-context-set/1/bib-v1/");
-        nsContext.addNamespace("xbib", "http://xbib.org/");
-        nsContext.addNamespace("abc", "http://localhost/");
-        nsContext.addNamespace("lia", "http://xbib.org/namespaces/lia/");
-        return nsContext;
+        XmlNamespaceContext context =
+                XmlNamespaceContext.newInstance("org/xbib/content/resource/namespace",
+                        Locale.getDefault(), Json2XmlTest.class.getClassLoader());
+        context.addNamespace("bib", "info:srw/cql-context-set/1/bib-v1/");
+        context.addNamespace("xbib", "http://xbib.org/");
+        context.addNamespace("abc", "http://localhost/");
+        context.addNamespace("lia", "http://xbib.org/namespaces/lia/");
+        return context;
     }
 
 }

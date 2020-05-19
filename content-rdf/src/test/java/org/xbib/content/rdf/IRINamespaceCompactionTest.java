@@ -1,14 +1,14 @@
 package org.xbib.content.rdf;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.resource.IRI;
 import org.xbib.content.resource.IRINamespaceContext;
 
 /**
  *
  */
-public class IRINamespaceCompactionTest extends Assert {
+public class IRINamespaceCompactionTest {
 
     @Test
     public void testCompaction() throws Exception {

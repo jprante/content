@@ -3,17 +3,14 @@ package org.xbib.content.rdf.io.nquads;
 import org.xbib.content.rdf.io.sink.CharSink;
 import org.xbib.content.rdf.io.sink.QuadSink;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.BitSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Implementation of streaming NQuads parser.
  */
 public final class NQuadsParser implements CharSink {
-
-    private static final Logger logger = Logger.getLogger(NQuadsParser.class.getName());
 
     private static final short PARSING_OUTSIDE = 0;
     private static final short PARSING_URI = 1;
@@ -296,7 +293,7 @@ public final class NQuadsParser implements CharSink {
     @Override
     public void endStream() throws IOException {
         if (tokenStartPos != -1 || waitingForSentenceEnd) {
-            logger.log(Level.WARNING, "unexpected end of stream");
+            throw new EOFException();
         }
         sink.endStream();
     }

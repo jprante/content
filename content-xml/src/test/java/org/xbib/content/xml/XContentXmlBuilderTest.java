@@ -1,10 +1,9 @@
 package org.xbib.content.xml;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.XContentBuilder;
 import org.xbib.content.XContentHelper;
-import org.xbib.content.resource.XmlNamespaceContext;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +14,7 @@ import javax.xml.namespace.QName;
 /**
  *
  */
-public class XContentXmlBuilderTest extends Assert {
+public class XContentXmlBuilderTest {
 
     @Test
     public void testConstructorForServiceLoader() {
@@ -124,7 +123,7 @@ public class XContentXmlBuilderTest extends Assert {
 
     @Test
     public void testParseJson() throws Exception {
-        XmlNamespaceContext context = XmlNamespaceContext.newDefaultInstance();
+        XmlNamespaceContext context = XmlNamespaceContext.newInstance();
         context.addNamespace("bib", "info:srw/cql-context-set/1/bib-v1/");
         context.addNamespace("xbib", "http://xbib.org/");
         context.addNamespace("abc", "http://localhost/");

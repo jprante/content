@@ -2,27 +2,21 @@ package org.xbib.content.rdf.io.rdfxml;
 
 import static org.xbib.content.rdf.RdfContentFactory.turtleBuilder;
 
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.RdfContentFactory;
-import org.xbib.content.rdf.io.IOTests;
 import org.xbib.content.rdf.io.ntriple.NTripleContentParams;
 import org.xbib.content.rdf.io.turtle.TurtleContentParams;
 import org.xbib.content.resource.IRINamespaceContext;
-import org.xbib.helper.StreamTester;
+import org.xbib.content.rdf.StreamTester;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.util.logging.Logger;
 
 /**
  *
  */
-@Category(IOTests.class)
 public class GNDRdfXmlReaderTest extends StreamTester {
-
-    private static final Logger logger = Logger.getLogger(GNDRdfXmlReaderTest.class.getName());
 
     @Test
     public void testGNDfromRdfXmltoTurtle() throws Exception {

@@ -1,21 +1,21 @@
 package org.xbib.content.rdf.io.xml;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.xbib.content.rdf.RdfContentFactory.turtleBuilder;
 
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.RdfContentBuilder;
 import org.xbib.content.rdf.Resource;
 import org.xbib.content.rdf.Triple;
 import org.xbib.content.rdf.internal.DefaultAnonymousResource;
 import org.xbib.content.rdf.internal.DefaultResource;
-import org.xbib.content.rdf.io.IOTests;
 import org.xbib.content.rdf.io.ntriple.NTripleContent;
 import org.xbib.content.rdf.io.ntriple.NTripleContentParams;
 import org.xbib.content.rdf.io.turtle.TurtleContentParams;
 import org.xbib.content.resource.IRI;
 import org.xbib.content.resource.IRINamespaceContext;
-import org.xbib.helper.StreamTester;
+import org.xbib.content.resource.NamespaceContext;
+import org.xbib.content.rdf.StreamTester;
 import org.xbib.net.PercentEncoders;
 
 import java.io.IOException;
@@ -23,18 +23,13 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 
 /**
  *
  */
-@Category(IOTests.class)
 public class XmlReaderTest extends StreamTester {
-
-    private static final Logger logger = Logger.getLogger(XmlReaderTest.class.getName());
 
     @Test
     public void testOAIDC() throws Exception {
@@ -49,7 +44,7 @@ public class XmlReaderTest extends StreamTester {
         namespaceContext.addNamespace("dc", "http://purl.org/dc/elements/1.1/");
 
         XmlContentParams params = new XmlContentParams(namespaceContext);
-        XmlHandler<TurtleContentParams> xmlHandler = new AbstractXmlResourceHandler<TurtleContentParams>(params) {
+        XmlHandler<TurtleContentParams> xmlHandler = new AbstractXmlResourceHandler<>(params) {
 
             @Override
             public boolean isResourceDelimiter(QName name) {
@@ -64,7 +59,7 @@ public class XmlReaderTest extends StreamTester {
                         getResource().setId(IRI.create("id:" +
                                 PercentEncoders.getRegNameEncoder(StandardCharsets.UTF_8).encode(value)));
                     } catch (IOException e) {
-                        logger.log(Level.FINE, e.getMessage(), e);
+                        // swallow
                     }
                 }
             }
@@ -76,7 +71,7 @@ public class XmlReaderTest extends StreamTester {
             }
 
             @Override
-            public XmlHandler<TurtleContentParams> setNamespaceContext(IRINamespaceContext namespaceContext) {
+            public XmlHandler<TurtleContentParams> setNamespaceContext(NamespaceContext namespaceContext) {
                 return this;
             }
 
@@ -104,7 +99,7 @@ public class XmlReaderTest extends StreamTester {
         }
         IRINamespaceContext namespaceContext = IRINamespaceContext.newInstance();
         XmlContentParams params = new XmlContentParams(namespaceContext);
-        AbstractXmlHandler<NTripleContentParams> xmlHandler = new AbstractXmlResourceHandler<NTripleContentParams>(params) {
+        AbstractXmlHandler<NTripleContentParams> xmlHandler = new AbstractXmlResourceHandler<>(params) {
 
             @Override
             public boolean isResourceDelimiter(QName name) {
@@ -122,7 +117,7 @@ public class XmlReaderTest extends StreamTester {
             }
 
             @Override
-            public XmlHandler<NTripleContentParams> setNamespaceContext(IRINamespaceContext namespaceContext) {
+            public XmlHandler<NTripleContentParams> setNamespaceContext(NamespaceContext namespaceContext) {
                 return this;
             }
 
@@ -153,7 +148,7 @@ public class XmlReaderTest extends StreamTester {
         }
         IRINamespaceContext namespaceContext = IRINamespaceContext.newInstance();
         XmlContentParams params = new XmlContentParams(namespaceContext);
-        AbstractXmlHandler<NTripleContentParams> xmlHandler = new AbstractXmlResourceHandler<NTripleContentParams>(params) {
+        AbstractXmlHandler<NTripleContentParams> xmlHandler = new AbstractXmlResourceHandler<>(params) {
             @Override
             public boolean isResourceDelimiter(QName name) {
                 return false;
@@ -170,7 +165,7 @@ public class XmlReaderTest extends StreamTester {
             }
 
             @Override
-            public XmlHandler<NTripleContentParams> setNamespaceContext(IRINamespaceContext namespaceContext) {
+            public XmlHandler<NTripleContentParams> setNamespaceContext(NamespaceContext namespaceContext) {
                 return this;
             }
 
@@ -194,7 +189,7 @@ public class XmlReaderTest extends StreamTester {
         );
     }
 
-    private class MyBuilder extends RdfContentBuilder<NTripleContentParams> {
+    private static class MyBuilder extends RdfContentBuilder<NTripleContentParams> {
 
         final List<Triple> triples = new LinkedList<>();
 

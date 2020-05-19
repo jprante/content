@@ -1,7 +1,7 @@
 package org.xbib.content.rdf.internal;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.Resource;
 import org.xbib.content.resource.IRI;
 import org.xbib.content.resource.Node;
@@ -9,7 +9,7 @@ import org.xbib.content.resource.Node;
 /**
  *
  */
-public class TripleTest extends Assert {
+public class TripleTest {
 
     @Test
     public void testSimpleTriple() {

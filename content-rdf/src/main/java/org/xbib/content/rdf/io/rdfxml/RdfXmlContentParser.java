@@ -16,8 +16,8 @@ import org.xbib.content.rdf.internal.DefaultLiteral;
 import org.xbib.content.rdf.internal.DefaultTriple;
 import org.xbib.content.rdf.io.xml.XmlHandler;
 import org.xbib.content.resource.IRI;
-import org.xbib.content.resource.IRINamespaceContext;
 import org.xbib.content.resource.IRISyntaxException;
+import org.xbib.content.resource.NamespaceContext;
 import org.xbib.content.resource.Node;
 import org.xbib.content.xml.util.XMLUtil;
 import org.xml.sax.Attributes;
@@ -38,8 +38,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -55,8 +53,6 @@ import javax.xml.parsers.SAXParserFactory;
  * @param <R> parameter type
  */
 public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConstants, RdfContentParser<R> {
-
-    private static final Logger logger = Logger.getLogger(RdfXmlContentParser.class.getName());
 
     private final Reader reader;
 
@@ -245,7 +241,6 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
         try {
             uri = IRI.create(uriString);
         } catch (IRISyntaxException e) {
-            logger.log(Level.FINE, e.getMessage(), e);
             // illegal URI, try repair
             uri = IRI.create(uriString
                     .replace(" ", "%20")
@@ -418,18 +413,18 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
 
         private StringBuilder xmlLiteral = null;
 
-        private IRINamespaceContext namespaceContext;
+        private NamespaceContext namespaceContext;
 
         private int literalLevel = 0; // level in XMLLiteral
 
         @Override
-        public XmlHandler<R> setNamespaceContext(IRINamespaceContext namespaceContext) {
+        public XmlHandler<R> setNamespaceContext(NamespaceContext namespaceContext) {
             this.namespaceContext = namespaceContext;
             return this;
         }
 
         @Override
-        public IRINamespaceContext getNamespaceContext() {
+        public NamespaceContext getNamespaceContext() {
             return namespaceContext;
         }
 

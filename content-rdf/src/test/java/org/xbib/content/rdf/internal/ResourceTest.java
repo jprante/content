@@ -1,9 +1,11 @@
 package org.xbib.content.rdf.internal;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.xbib.content.rdf.RdfContentFactory.ntripleBuilder;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.Literal;
 import org.xbib.content.rdf.RdfContentBuilder;
 import org.xbib.content.rdf.Resource;
@@ -19,16 +21,16 @@ import java.util.Iterator;
 /**
  *
  */
-public class ResourceTest extends Assert {
+public class ResourceTest {
 
     @Test
     public void deleted() throws Exception {
         Resource r = new DefaultAnonymousResource();
-        assertEquals(r.isDeleted(), false);
+        assertFalse(r.isDeleted());
         r.setDeleted(true);
-        assertEquals(r.isDeleted(), true);
+        assertTrue(r.isDeleted());
         r.setDeleted(false);
-        assertEquals(r.isDeleted(), false);
+        assertFalse(r.isDeleted());
     }
 
     @Test
@@ -44,7 +46,7 @@ public class ResourceTest extends Assert {
     @Test
     public void testEmptyResources() throws Exception {
         Resource r = new DefaultResource(IRI.create("urn:root"));
-        assertEquals(r.isEmpty(), true);
+        assertTrue(r.isEmpty());
         assertEquals(r.toString(), "urn:root");
     }
 
@@ -52,14 +54,14 @@ public class ResourceTest extends Assert {
     public void testEmptyProperty() throws Exception {
         Resource r = new DefaultResource(IRI.create("urn:root"));
         r.add("urn:property", (String) null);
-        assertEquals(r.isEmpty(), true);
+        assertTrue(r.isEmpty());
     }
 
     @Test
     public void testStringLiteral() throws Exception {
         Resource r = new DefaultResource(IRI.create("urn:root"));
         r.add("urn:property", "Hello World");
-        assertEquals(r.isEmpty(), false);
+        assertFalse(r.isEmpty());
         assertEquals(r.triples().get(0).object().toString(), "Hello World");
     }
 
@@ -68,7 +70,7 @@ public class ResourceTest extends Assert {
         Resource r = new DefaultResource(IRI.create("urn:root"));
         DefaultLiteral literal = new DefaultLiteral(123).type(Literal.INT);
         r.add("urn:property", literal);
-        assertEquals(r.isEmpty(), false);
+        assertFalse(r.isEmpty());
         assertEquals(r.triples().get(0).object().toString(), "123^^xsd:int");
     }
 

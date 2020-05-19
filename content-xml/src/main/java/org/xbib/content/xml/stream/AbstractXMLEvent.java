@@ -1,8 +1,6 @@
 package org.xbib.content.xml.stream;
 
 import java.io.StringWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
@@ -16,8 +14,6 @@ import javax.xml.stream.events.XMLEvent;
  * Abstract base class for {@link XMLEvent} implementations.
  */
 public abstract class AbstractXMLEvent implements XMLEvent {
-
-    private static final Logger logger = Logger.getLogger(AbstractXMLEvent.class.getName());
 
     /**
      * The event location.
@@ -115,7 +111,7 @@ public abstract class AbstractXMLEvent implements XMLEvent {
         try {
             this.writeAsEncodedUnicode(writer);
         } catch (XMLStreamException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
+            // ignore
         }
         return writer.toString();
     }

@@ -1,27 +1,32 @@
 package org.xbib.content.rdf;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.resource.IRI;
 import org.xbib.content.resource.IRISyntaxException;
 
 /**
  *
  */
-public class IRITest extends Assert {
+public class IRITest {
 
     @Test
     public void testJsonLd() {
         IRI iri = IRI.create("@context");
-        assertEquals(null, iri.getScheme());
+        assertNull(iri.getScheme());
         assertEquals("@context", iri.getSchemeSpecificPart());
     }
 
-    @Test(expected = IRISyntaxException.class)
+    @Test
     public void testIllegalBlankNodeIRI() {
-        IRI iri = IRI.create("_:a1");
-        assertEquals("_", iri.getScheme());
-        assertEquals("a1", iri.getSchemeSpecificPart());
+        Assertions.assertThrows(IRISyntaxException.class, () -> {
+            IRI iri = IRI.create("_:a1");
+            assertEquals("_", iri.getScheme());
+            assertEquals("a1", iri.getSchemeSpecificPart());
+
+        });
     }
 
     @Test

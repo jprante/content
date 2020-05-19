@@ -2,10 +2,6 @@ package org.xbib.content.xml;
 
 import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
-import org.xbib.content.resource.XmlNamespaceContext;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
@@ -15,8 +11,6 @@ import javax.xml.stream.XMLOutputFactory;
  * XML parameters for XML content.
  */
 public class XmlXParams {
-
-    private static final Logger logger = Logger.getLogger(XmlXParams.class.getName());
 
     private static final XmlXParams DEFAULT_PARAMS =
             new XmlXParams(new QName("root"),
@@ -69,35 +63,23 @@ public class XmlXParams {
         // load from service factories in META-INF/services
         // default impl is "com.sun.xml.internal.stream.XMLInputFactoryImpl"
         XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-        try {
-            inputFactory.setProperty("javax.xml.stream.isNamespaceAware", Boolean.TRUE);
-            inputFactory.setProperty("javax.xml.stream.isValidating", Boolean.FALSE);
-            inputFactory.setProperty("javax.xml.stream.isCoalescing", Boolean.TRUE);
-            inputFactory.setProperty("javax.xml.stream.isReplacingEntityReferences", Boolean.FALSE);
-            inputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", Boolean.FALSE);
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
+        inputFactory.setProperty("javax.xml.stream.isNamespaceAware", Boolean.TRUE);
+        inputFactory.setProperty("javax.xml.stream.isValidating", Boolean.FALSE);
+        inputFactory.setProperty("javax.xml.stream.isCoalescing", Boolean.TRUE);
+        inputFactory.setProperty("javax.xml.stream.isReplacingEntityReferences", Boolean.FALSE);
+        inputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", Boolean.FALSE);
         return inputFactory;
     }
 
     protected static XMLOutputFactory createXMLOutputFactory() {
         XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
-        try {
-            outputFactory.setProperty("javax.xml.stream.isRepairingNamespaces", Boolean.FALSE);
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
+        outputFactory.setProperty("javax.xml.stream.isRepairingNamespaces", Boolean.FALSE);
         return outputFactory;
     }
 
     protected static XmlFactory createXmlFactory(XMLInputFactory inputFactory, XMLOutputFactory outputFactory) {
         XmlFactory xmlFactory = new XmlFactory(inputFactory, outputFactory);
-        try {
-            xmlFactory.configure(ToXmlGenerator.Feature.WRITE_XML_1_1, true);
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
+        xmlFactory.configure(ToXmlGenerator.Feature.WRITE_XML_1_1, true);
         return xmlFactory;
     }
 

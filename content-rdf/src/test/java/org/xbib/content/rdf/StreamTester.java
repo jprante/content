@@ -1,26 +1,26 @@
-package org.xbib.helper;
+package org.xbib.content.rdf;
 
-import org.junit.Assert;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import java.io.InputStream;
 import java.io.Reader;
 
 /**
  *
  */
-public class StreamTester extends Assert {
+public class StreamTester {
 
-    protected static void assertStream(InputStream expected, InputStream actual) {
+    public static void assertStream(InputStream expected, InputStream actual) {
         int offset = 0;
         try {
             while (true) {
                 final int exp = expected.read();
                 if (exp == -1) {
-                    assertEquals("Expecting end of actual stream at offset " + offset, -1, actual.read());
+                    assertEquals(-1, actual.read());
                     break;
                 } else {
                     final int act = actual.read();
-                    assertEquals("Expecting same data at offset " + offset, exp, act);
+                    assertEquals(exp, act);
                 }
                 offset++;
             }
@@ -37,11 +37,11 @@ public class StreamTester extends Assert {
             while (true) {
                 final int exp = expected.read();
                 if (exp == -1) {
-                    assertEquals("Expecting end of actual stream at offset " + offset, -1, actual.read());
+                    assertEquals(-1, actual.read(), "Expecting end of actual stream at offset " + offset);
                     break;
                 } else {
                     final int act = actual.read();
-                    assertEquals("Expecting same data at offset " + offset, exp, act);
+                    assertEquals(exp, act, "Expecting same data at offset " + offset);
                 }
                 offset++;
             }

@@ -4,7 +4,8 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import org.xbib.content.resource.XmlNamespaceContext;
+import org.xbib.content.resource.NamespaceContext;
+import org.xbib.content.xml.XmlNamespaceContext;
 import org.xbib.content.xml.util.ToQName;
 
 import java.io.IOException;
@@ -39,12 +40,12 @@ public class JsonXmlStreamer {
 
     private QName root;
 
-    private XmlNamespaceContext context;
+    private NamespaceContext context;
 
-    private Deque<QName> elements;
+    private final Deque<QName> elements;
 
     public JsonXmlStreamer() {
-        context = XmlNamespaceContext.newDefaultInstance();
+        context = XmlNamespaceContext.newInstance();
         root = new QName("root");
         eventFactory = XMLEventFactory.newInstance();
         outputFactory = XMLOutputFactory.newInstance();
@@ -58,7 +59,7 @@ public class JsonXmlStreamer {
         return this;
     }
 
-    public JsonXmlStreamer context(XmlNamespaceContext context) {
+    public JsonXmlStreamer context(NamespaceContext context) {
         this.context = context;
         return this;
     }

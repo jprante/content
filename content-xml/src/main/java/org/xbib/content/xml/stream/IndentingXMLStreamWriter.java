@@ -1,8 +1,5 @@
 package org.xbib.content.xml.stream;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -34,8 +31,6 @@ import javax.xml.stream.XMLStreamWriter;
  * root element.
  */
 public class IndentingXMLStreamWriter extends StreamWriterDelegate implements Indentation {
-
-    private static final Logger logger = Logger.getLogger(IndentingXMLStreamWriter.class.getName());
 
     private static final int WROTE_MARKUP = 1;
     private static final int WROTE_DATA = 2;
@@ -254,7 +249,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate implements In
             try {
                 writeNewLine(depth - 1);
             } catch (XMLStreamException e) {
-                logger.log(Level.FINE, e.getMessage(), e);
+                // swallow
             }
         }
     }
@@ -270,7 +265,7 @@ public class IndentingXMLStreamWriter extends StreamWriterDelegate implements In
             try {
                 writeNewLine(0);
             } catch (XMLStreamException e) {
-                logger.log(Level.FINE, e.getMessage(), e);
+                // swallow
             }
         }
         stack[depth] = 0; // start fresh

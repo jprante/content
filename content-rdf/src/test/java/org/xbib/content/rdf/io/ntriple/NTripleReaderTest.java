@@ -2,9 +2,9 @@ package org.xbib.content.rdf.io.ntriple;
 
 import static org.xbib.content.rdf.RdfContentFactory.ntripleBuilder;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.RdfContentBuilder;
-import org.xbib.helper.StreamTester;
+import org.xbib.content.rdf.StreamTester;
 
 import java.io.IOException;
 import java.io.InputStream;

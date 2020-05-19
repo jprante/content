@@ -1,7 +1,7 @@
 package org.xbib.content.rdf.internal;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.Resource;
 import org.xbib.content.rdf.Triple;
 import org.xbib.content.resource.IRI;
@@ -11,7 +11,7 @@ import java.util.Iterator;
 /**
  *
  */
-public class BlankNodeTest extends Assert {
+public class BlankNodeTest {
 
     @Test
     public void testBlankNodeRenumbering() throws Exception {

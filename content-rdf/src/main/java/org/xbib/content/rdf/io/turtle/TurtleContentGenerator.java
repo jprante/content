@@ -19,15 +19,11 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public class TurtleContentGenerator implements RdfContentGenerator<TurtleContentParams>, Flushable {
-
-    private static final Logger logger = Logger.getLogger(TurtleContentGenerator.class.getName());
 
     private static final char LF = '\n';
     private static final char TAB = '\t';
@@ -43,15 +39,15 @@ public class TurtleContentGenerator implements RdfContentGenerator<TurtleContent
 
     private Node lastObject;
 
-    private LinkedList<Resource> embedded;
+    private final LinkedList<Resource> embedded;
 
-    private LinkedList<Triple> triples;
+    private final LinkedList<Triple> triples;
 
     private Triple triple;
 
     private boolean nsWritten;
 
-    private StringBuilder sb;
+    private final StringBuilder sb;
 
     private Resource resource;
 
@@ -117,13 +113,9 @@ public class TurtleContentGenerator implements RdfContentGenerator<TurtleContent
 
     @Override
     public RdfContentGenerator<TurtleContentParams> receive(Resource resource) throws IOException {
-        resource.triples().forEach(t -> {
-            try {
+        for (Triple t : resource.triples()) {
                 writeTriple(t);
-            } catch (IOException e) {
-                logger.log(Level.FINE, e.getMessage(), e);
-            }
-        });
+        }
         while (!embedded.isEmpty()) {
             closeEmbeddedResource();
         }

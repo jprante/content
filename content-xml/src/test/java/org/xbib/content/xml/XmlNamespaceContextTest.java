@@ -1,10 +1,10 @@
 package org.xbib.content.xml;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.XContentBuilder;
-import org.xbib.content.resource.XmlNamespaceContext;
+import org.xbib.content.xml.transform.StylesheetTransformer;
+import java.util.Locale;
 import javax.xml.namespace.QName;
 
 /**
@@ -15,14 +15,14 @@ public class XmlNamespaceContextTest {
     @Test
     public void testDefaultNamespace() {
         XmlNamespaceContext context = XmlNamespaceContext.newInstance();
-        assertTrue(context.getNamespaces().size() == 0);
-        context = XmlNamespaceContext.newDefaultInstance();
-        assertTrue(context.getNamespaces().size() > 0);
+        assertEquals(0, context.getNamespaces().size());
     }
 
     @Test
     public void testDefaultNamespaces() throws Exception {
-        XmlNamespaceContext context = XmlNamespaceContext.newDefaultInstance();
+        XmlNamespaceContext context =
+                XmlNamespaceContext.newInstance("org/xbib/content/resource/namespace",
+                        Locale.getDefault(), StylesheetTransformer.class.getClassLoader());
         XmlXParams params = new XmlXParams(context);
         XContentBuilder builder = XmlXContent.contentBuilder(params);
         builder.startObject()

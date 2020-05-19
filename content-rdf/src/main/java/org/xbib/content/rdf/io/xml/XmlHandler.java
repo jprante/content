@@ -2,7 +2,7 @@ package org.xbib.content.rdf.io.xml;
 
 import org.xbib.content.rdf.RdfContentBuilder;
 import org.xbib.content.rdf.RdfContentParams;
-import org.xbib.content.resource.IRINamespaceContext;
+import org.xbib.content.resource.NamespaceContext;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.DTDHandler;
 import org.xml.sax.EntityResolver;
@@ -15,9 +15,9 @@ import org.xml.sax.ErrorHandler;
 public interface XmlHandler<P extends RdfContentParams>
         extends EntityResolver, DTDHandler, ContentHandler, ErrorHandler {
 
-    IRINamespaceContext getNamespaceContext();
+    NamespaceContext getNamespaceContext();
 
-    XmlHandler<P> setNamespaceContext(IRINamespaceContext namespaceContext);
+    XmlHandler<P> setNamespaceContext(NamespaceContext namespaceContext);
 
     XmlHandler<P> setDefaultNamespace(String prefix, String uri);
 

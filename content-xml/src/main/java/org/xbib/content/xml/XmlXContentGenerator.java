@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
@@ -28,8 +26,6 @@ import javax.xml.stream.XMLStreamException;
  * Content generator for XML formatted content.
  */
 public class XmlXContentGenerator extends AbstractXContentGenerator {
-
-    private static final Logger logger = Logger.getLogger(XmlXContentGenerator.class.getName());
 
     private final XmlXContentGeneratorDelegate delegate;
 
@@ -50,7 +46,7 @@ public class XmlXContentGenerator extends AbstractXContentGenerator {
         return params;
     }
 
-    public XmlXContentGenerator setParams(XmlXParams params) {
+    public XmlXContentGenerator setParams(XmlXParams params) throws IOException {
         delegate.setParams(params);
         return this;
     }
@@ -138,12 +134,12 @@ public class XmlXContentGenerator extends AbstractXContentGenerator {
             this.params = params;
         }
 
-        public void setParams(XmlXParams params) {
+        public void setParams(XmlXParams params) throws IOException {
             this.params = params;
             try {
                 generator.getStaxWriter().setPrefix(params.getRoot().getPrefix(), params.getRoot().getNamespaceURI());
             } catch (XMLStreamException e) {
-                logger.log(Level.SEVERE, e.getMessage(), e);
+                throw new IOException(e);
             }
         }
 
@@ -183,7 +179,7 @@ public class XmlXContentGenerator extends AbstractXContentGenerator {
                         generator.getStaxWriter().writeNamespace(prefix, uri);
                     }
                 } catch (XMLStreamException e) {
-                    logger.log(Level.SEVERE, e.getMessage(), e);
+                    throw new IOException(e);
                 }
                 rootUsed = true;
             }

@@ -1,9 +1,9 @@
 package org.xbib.content.rdf;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.xbib.content.rdf.RdfXContentFactory.rdfXContentBuilder;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.internal.DefaultLiteral;
 import org.xbib.content.rdf.internal.DefaultResource;
 import org.xbib.content.resource.IRI;
@@ -11,7 +11,7 @@ import org.xbib.content.resource.IRI;
 /**
  *
  */
-public class RdfXContentGeneratorTest extends Assert {
+public class RdfXContentGeneratorTest {
 
     @Test
     public void testContentBuilder() throws Exception {

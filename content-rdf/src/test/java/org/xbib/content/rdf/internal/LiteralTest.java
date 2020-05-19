@@ -1,13 +1,13 @@
 package org.xbib.content.rdf.internal;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.resource.IRI;
 
 /**
  *
  */
-public class LiteralTest extends Assert {
+public class LiteralTest {
 
     @Test
     public void testLiteral() {

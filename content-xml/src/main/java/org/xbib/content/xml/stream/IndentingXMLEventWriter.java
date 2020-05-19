@@ -3,8 +3,6 @@ package org.xbib.content.xml.stream;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLEventWriter;
@@ -41,8 +39,6 @@ import javax.xml.stream.events.XMLEvent;
  * root element.
  */
 public class IndentingXMLEventWriter extends EventWriterDelegate implements Indentation {
-
-    private static final Logger logger = Logger.getLogger(IndentingXMLEventWriter.class.getName());
 
     private static final int WROTE_MARKUP = 1;
     private static final int WROTE_DATA = 2;
@@ -153,7 +149,7 @@ public class IndentingXMLEventWriter extends EventWriterDelegate implements Inde
             try {
                 newLineEvent.write(out, depth - 1);
             } catch (Exception e) {
-                logger.log(Level.FINE, e.getMessage(), e);
+                // swallow
             }
         }
     }

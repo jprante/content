@@ -1,4 +1,4 @@
-package org.xbib.content.resource;
+package org.xbib.content.xml;
 
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -15,12 +15,7 @@ import javax.xml.namespace.NamespaceContext;
 /**
  * Contains a simple context for XML namespaces.
  */
-public class XmlNamespaceContext implements NamespaceContext {
-
-    private static final String DEFAULT_RESOURCE =
-            XmlNamespaceContext.class.getPackage().getName().replace('.', '/') + '/' + "namespace";
-
-    private static final XmlNamespaceContext DEFAULT_CONTEXT = newDefaultInstance();
+public class XmlNamespaceContext implements NamespaceContext, org.xbib.content.resource.NamespaceContext {
 
     // sort namespace by length in descending order, useful for compacting prefix
     private final SortedMap<String, String> namespaces;
@@ -45,10 +40,6 @@ public class XmlNamespaceContext implements NamespaceContext {
         }
     }
 
-    public static XmlNamespaceContext getInstance() {
-        return DEFAULT_CONTEXT;
-    }
-
     /**
      * Empty namespace context.
      *
@@ -58,22 +49,10 @@ public class XmlNamespaceContext implements NamespaceContext {
         return new XmlNamespaceContext();
     }
 
-    public static XmlNamespaceContext newDefaultInstance() {
-        return newInstance(DEFAULT_RESOURCE);
-    }
-
-    /**
-     * Use thread context class laoder to instantiate a namespace context.
-     * @param bundleName the resource bundle name
-     * @return XML namespace context
-     */
-    public static XmlNamespaceContext newInstance(String bundleName) {
-        return newInstance(bundleName, Locale.getDefault(), Thread.currentThread().getContextClassLoader());
-    }
-
     public static XmlNamespaceContext newInstance(String bundleName, Locale locale, ClassLoader classLoader) {
         try {
-            return new XmlNamespaceContext(ResourceBundle.getBundle(bundleName, locale, classLoader));
+            ResourceBundle bundle = ResourceBundle.getBundle(bundleName, locale, classLoader);
+            return new XmlNamespaceContext(bundle);
         } catch (MissingResourceException e) {
             return new XmlNamespaceContext();
         }

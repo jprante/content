@@ -1,17 +1,17 @@
 package org.xbib.content.rdf.io.turtle;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.xbib.content.rdf.RdfContentFactory.turtleBuilder;
 
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.RdfContentBuilder;
 import org.xbib.content.rdf.RdfContentFactory;
 import org.xbib.content.rdf.Resource;
 import org.xbib.content.rdf.internal.DefaultResource;
-import org.xbib.content.rdf.io.IOTests;
 import org.xbib.content.resource.IRI;
 import org.xbib.content.resource.IRINamespaceContext;
-import org.xbib.helper.StreamTester;
+import org.xbib.content.resource.NamespaceContext;
+import org.xbib.content.rdf.StreamTester;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -21,12 +21,11 @@ import java.nio.charset.StandardCharsets;
 /**
  *
  */
-@Category(IOTests.class)
 public class TurtleTest extends StreamTester {
 
     @Test
     public void testTurtleGND() throws Exception {
-        IRINamespaceContext context = IRINamespaceContext.newInstance();
+        NamespaceContext context = IRINamespaceContext.newInstance();
         context.addNamespace("gnd", "http://d-nb.info/gnd/");
         InputStream in = getClass().getResourceAsStream("GND.ttl");
         TurtleContentParser<TurtleContentParams> reader = new TurtleContentParser<TurtleContentParams>(in)

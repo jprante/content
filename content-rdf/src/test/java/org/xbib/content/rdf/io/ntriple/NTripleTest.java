@@ -1,9 +1,10 @@
 package org.xbib.content.rdf.io.ntriple;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.xbib.content.rdf.RdfContentFactory.ntripleBuilder;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.rdf.RdfContentBuilder;
 import org.xbib.content.rdf.Resource;
 import org.xbib.content.rdf.XSDResourceIdentifiers;
@@ -14,7 +15,7 @@ import org.xbib.content.resource.IRI;
 /**
  *
  */
-public class NTripleTest extends Assert {
+public class NTripleTest {
 
     @Test
     public void testNTripleBuilder() throws Exception {
