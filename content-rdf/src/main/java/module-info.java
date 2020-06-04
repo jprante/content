@@ -10,8 +10,7 @@ module org.xbib.content.rdf {
     exports org.xbib.content.rdf.io.turtle;
     exports org.xbib.content.rdf.io.xml;
     exports org.xbib.content.rdf.util;
-    requires org.xbib.content.core;
-    requires org.xbib.content.resource;
-    requires org.xbib.content.xml;
-    requires java.xml;
+    requires transitive org.xbib.content.core;
+    requires transitive org.xbib.content.resource;
+    requires transitive org.xbib.content.xml;
 }

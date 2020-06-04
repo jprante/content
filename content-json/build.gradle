@@ -1,8 +1,5 @@
 dependencies {
     api "com.fasterxml.jackson.core:jackson-databind:${project.property('jackson.version')}"
-    testImplementation("junit:junit:${project.property('junit4.version')}") {
-        exclude group: 'org.hamcrest'
-    }
     testImplementation("org.mockito:mockito-core:${project.property('mockito.version')}") {
         exclude group: 'org.hamcrest'
     }

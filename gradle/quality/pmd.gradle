@@ -1,0 +1,9 @@
+apply plugin: 'pmd'
+
+pmd {
+    ignoreFailures = true
+    consoleOutput = false
+    toolVersion = "6.24.0"
+    rulePriority = 5
+    ruleSets = ["category/java/errorprone.xml", "category/java/bestpractices.xml"]
+}

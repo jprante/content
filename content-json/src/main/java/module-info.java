@@ -4,5 +4,6 @@ module org.xbib.content.json {
     exports org.xbib.content.json.mergepatch;
     exports org.xbib.content.json.patch;
     exports org.xbib.content.json.pointer;
-    requires com.fasterxml.jackson.databind;
+    requires transitive com.fasterxml.jackson.core;
+    requires transitive com.fasterxml.jackson.databind;
 }

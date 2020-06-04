@@ -22,7 +22,7 @@ public class XmlXContent implements XContent {
 
     private static XmlXContent xmlXContent;
 
-    private XmlFactory xmlFactory;
+    private final XmlFactory xmlFactory;
 
     /**
      * Public constructor, used by {@link java.util.ServiceLoader}.

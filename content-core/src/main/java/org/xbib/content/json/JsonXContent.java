@@ -2,7 +2,6 @@ package org.xbib.content.json;
 
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import org.xbib.content.XContent;
 import org.xbib.content.XContentBuilder;
@@ -29,7 +28,6 @@ public class JsonXContent implements XContent {
     static {
         jsonFactory = new JsonFactory();
         jsonFactory.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-        jsonFactory.configure(JsonGenerator.Feature.QUOTE_FIELD_NAMES, true);
         jsonXContent = new JsonXContent();
     }
 
@@ -97,7 +95,7 @@ public class JsonXContent implements XContent {
 
     @Override
     public boolean isXContent(BytesReference bytes) {
-        int length = bytes.length() < 20 ? bytes.length() : 20;
+        int length = Math.min(bytes.length(), 20);
         if (length == 0) {
             return false;
         }

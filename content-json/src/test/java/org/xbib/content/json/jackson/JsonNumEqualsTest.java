@@ -1,12 +1,11 @@
 package org.xbib.content.json.jackson;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.junit.Assert;
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +14,7 @@ import java.util.List;
 /**
  *
  */
-public final class JsonNumEqualsTest extends Assert {
+public final class JsonNumEqualsTest {
 
     private static final JsonNodeFactory FACTORY = JsonNodeFactory.instance;
 

@@ -1,16 +1,19 @@
 package org.xbib.content.json.pointer;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import com.fasterxml.jackson.core.TreeNode;
-import org.junit.Assert;
-import org.junit.Test;
-
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,24 +22,24 @@ import java.util.List;
 /**
  *
  */
-public final class TreePointerTest extends Assert {
-    @Test(expected = NullPointerException.class)
-    public void attemptToBuildTokensFromNullRaisesAnError() throws JsonPointerException {
-        TreePointer.tokensFromInput(null);
-        fail("No exception thrown!!");
+public final class TreePointerTest {
+
+    @Test
+    public void attemptToBuildTokensFromNullRaisesAnError() {
+        Assertions.assertThrows(NullPointerException.class, () ->
+                TreePointer.tokensFromInput(null));
     }
 
-    @Test(expected = JsonPointerException.class)
-    public void buildingTokenListYellsIfIllegalPointer() throws JsonPointerException {
-        TreePointer.tokensFromInput("a/b");
-        fail("No exception thrown!!");
+    @Test
+    public void buildingTokenListYellsIfIllegalPointer() {
+        Assertions.assertThrows(JsonPointerException.class, () ->
+            TreePointer.tokensFromInput("a/b"));
     }
 
     @Test
     public void buildingTokenListIsUnfazedByAnEmptyInput()
             throws JsonPointerException {
-        assertEquals(TreePointer.tokensFromInput(""),
-                new ArrayList<>());
+        assertEquals(TreePointer.tokensFromInput(""), new ArrayList<>());
     }
 
     @Test

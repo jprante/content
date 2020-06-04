@@ -1,55 +1,39 @@
 package org.xbib.content.json.pointer;
 
-import org.junit.Assert;
-import org.junit.Test;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  *
  */
-public final class ReferenceTokenTest extends Assert {
+public final class ReferenceTokenTest {
 
     @Test
-    public void nullCookedRaisesError()
-            throws JsonPointerException {
-        try {
-            ReferenceToken.fromCooked(null);
-            fail("No exception thrown!!");
-        } catch (NullPointerException e) {
-            //assertEquals(e.getMessage(), BUNDLE.getMessage("nullInput"));
-        }
+    public void nullCookedRaisesError() {
+        Assertions.assertThrows(NullPointerException.class, () ->
+            ReferenceToken.fromCooked(null));
     }
 
     @Test
     public void nullRawRaisesError() {
-        try {
-            ReferenceToken.fromRaw(null);
-            fail("No exception thrown!!");
-        } catch (NullPointerException e) {
-            //assertEquals(e.getMessage(), BUNDLE.getMessage("nullInput"));
-        }
+        Assertions.assertThrows(NullPointerException.class, () ->
+            ReferenceToken.fromRaw(null));
     }
 
     @Test
     public void emptyEscapeRaisesTheAppropriateException() {
-        try {
-            ReferenceToken.fromCooked("whatever~");
-            fail("No exception thrown!!");
-        } catch (JsonPointerException e) {
-            //assertEquals(e.getMessage(), BUNDLE.getMessage("emptyEscape"));
-        }
+        Assertions.assertThrows(JsonPointerException.class, () ->
+            ReferenceToken.fromCooked("whatever~"));
     }
 
     @Test
     public void illegalEscapeRaisesTheAppropriateException() {
-        try {
-            ReferenceToken.fromCooked("~a");
-            fail("No exception thrown!!");
-        } catch (JsonPointerException e) {
-            //assertEquals(e.getMessage(), BUNDLE.getMessage("illegalEscape"));
-        }
+        Assertions.assertThrows(JsonPointerException.class, () ->
+            ReferenceToken.fromCooked("~a"));
     }
 
     @Test
@@ -68,8 +52,7 @@ public final class ReferenceTokenTest extends Assert {
             String raw = (String) o[1];
             final ReferenceToken token1 = ReferenceToken.fromCooked(cooked);
             final ReferenceToken token2 = ReferenceToken.fromRaw(raw);
-
-            assertTrue(token1.equals(token2));
+            assertEquals(token1, token2);
             assertEquals(token2.toString(), cooked);
         }
     }
@@ -88,9 +71,9 @@ public final class ReferenceTokenTest extends Assert {
             final ReferenceToken fromInt = ReferenceToken.fromInt(index);
             final ReferenceToken cooked = ReferenceToken.fromCooked(asString);
             final ReferenceToken raw = ReferenceToken.fromRaw(asString);
-            assertTrue(fromInt.equals(cooked));
-            assertTrue(cooked.equals(raw));
-            assertTrue(raw.equals(fromInt));
+            assertEquals(fromInt, cooked);
+            assertEquals(cooked, raw);
+            assertEquals(raw, fromInt);
             assertEquals(fromInt.toString(), asString);
         }
     }
@@ -100,7 +83,6 @@ public final class ReferenceTokenTest extends Assert {
             throws JsonPointerException {
         final ReferenceToken zero = ReferenceToken.fromCooked("0");
         final ReferenceToken zerozero = ReferenceToken.fromCooked("00");
-
-        assertFalse(zero.equals(zerozero));
+        assertNotEquals(zero, zerozero);
     }
 }

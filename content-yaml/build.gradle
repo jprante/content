@@ -1,4 +1,5 @@
 dependencies {
     api project(':content-core')
     api "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${project.property('jackson.version')}"
+    api "org.yaml:snakeyaml:${project.property('snakeyaml.version')}"
 }

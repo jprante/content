@@ -2,6 +2,9 @@ plugins {
     id "de.marcphilipp.nexus-publish" version "0.4.0"
     id "io.codearte.nexus-staging" version "0.21.1"
     id "org.xbib.gradle.plugin.asciidoctor" version "1.5.6.0.1"
+    id "com.github.spotbugs" version "4.2.4"
+    id "pmd"
+    id "checkstyle"
 }
 
 wrapper {
@@ -29,6 +32,9 @@ subprojects {
     apply from: rootProject.file('gradle/ide/idea.gradle')
     apply from: rootProject.file('gradle/compile/java.gradle')
     apply from: rootProject.file('gradle/test/junit5.gradle')
+    apply from: rootProject.file('gradle/quality/checkstyle.gradle')
+    apply from: rootProject.file('gradle/quality/pmd.gradle')
+    apply from: rootProject.file('gradle/quality/spotbugs.gradle')
     apply from: rootProject.file('gradle/publishing/publication.gradle')
 }
 apply from: rootProject.file('gradle/publishing/sonatype.gradle')

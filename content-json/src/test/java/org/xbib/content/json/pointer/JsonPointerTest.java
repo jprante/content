@@ -1,13 +1,13 @@
 package org.xbib.content.json.pointer;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.xbib.content.json.jackson.JacksonUtils;
 import org.xbib.content.json.jackson.JsonLoader;
 import org.xbib.content.json.jackson.NodeType;
 import org.xbib.content.json.jackson.SampleNodeProvider;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  *
  */
-public final class JsonPointerTest extends Assert {
+public final class JsonPointerTest {
 
     private static final String PACKAGE = JsonPointerTest.class.getPackage().getName().replace('.', '/');
     private final JsonNode testData;
@@ -33,11 +33,12 @@ public final class JsonPointerTest extends Assert {
         document = testData.get("document");
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void cannotAppendNullPointer() {
-        final JsonPointer foo = null;
-        JsonPointer.empty().append(foo);
-        fail("No exception thrown!!");
+        Assertions.assertThrows(NullPointerException.class, () -> {
+                    final JsonPointer foo = null;
+                    JsonPointer.empty().append(foo);
+                });
     }
 
     @Test

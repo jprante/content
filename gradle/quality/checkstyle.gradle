@@ -1,0 +1,27 @@
+apply plugin: 'checkstyle'
+
+checkstyle {
+    toolVersion '8.33'
+    showViolations = true
+    ignoreFailures = true
+    configFile rootProject.file("config/checkstyle/checkstyle.xml")
+}
+
+checkstyleMain {
+    exclude "**/module-info.java"
+    logging.setLevel(LogLevel.LIFECYCLE)
+    source ='src/main/java'
+}
+
+checkstyleTest {
+    exclude "**/module-info.java"
+    logging.setLevel(LogLevel.LIFECYCLE)
+    source ='src/test/java'
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
