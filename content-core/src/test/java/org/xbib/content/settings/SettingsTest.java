@@ -2,6 +2,7 @@ package org.xbib.content.settings;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.xbib.content.XContentHelper;
@@ -180,10 +181,12 @@ public class SettingsTest {
     @Test
     public void testRefresher() throws Exception {
         Settings settings = Settings.settingsBuilder()
-                .setRefresh(Paths.get("src/test/resources/settings.json"), 0L, 1L, TimeUnit.DAYS)
+                .put("name", "hello")
+                .setRefresh(Paths.get("src/test/resources/settings.json"), 1L, 1L, TimeUnit.SECONDS)
                 .build();
-        Thread.sleep(1000L);
-        assertEquals("Jörg Prante", settings.get("name"));
+        assertEquals("hello", settings.get("name"));
+        Thread.sleep(2000L);
+        assertEquals("world", settings.get("name"));
         settings.close();
     }
 }

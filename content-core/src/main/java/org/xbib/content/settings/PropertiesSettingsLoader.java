@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,7 +41,7 @@ public class PropertiesSettingsLoader implements SettingsLoader {
     @Override
     public Map<String, String> load(BytesReference ref) throws IOException {
         Properties props = new Properties();
-        try (Reader reader = new InputStreamReader(ref.streamInput())) {
+        try (Reader reader = new InputStreamReader(ref.streamInput(), StandardCharsets.UTF_8)) {
             props.load(reader);
             Map<String, String> result = new HashMap<>();
             for (Map.Entry<Object, Object> entry : props.entrySet()) {
