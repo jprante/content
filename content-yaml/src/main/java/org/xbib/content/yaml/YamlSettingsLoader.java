@@ -3,8 +3,6 @@ package org.xbib.content.yaml;
 import org.xbib.content.XContent;
 import org.xbib.content.settings.AbstractSettingsLoader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,7 +12,7 @@ import java.util.Set;
  */
 public class YamlSettingsLoader extends AbstractSettingsLoader {
 
-    private static final Set<String> YAML_SUFFIXES = new HashSet<>(Arrays.asList("yml", "yaml"));
+    private static final Set<String> YAML_SUFFIXES = Set.of("yml", "yaml");
 
     @Override
     public XContent content() {

@@ -1,3 +1,4 @@
+include 'content-config'
 include 'content-core'
 include 'content-resource'
 include 'content-language'

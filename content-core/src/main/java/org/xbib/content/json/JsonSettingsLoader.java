@@ -2,9 +2,6 @@ package org.xbib.content.json;
 
 import org.xbib.content.XContent;
 import org.xbib.content.settings.AbstractSettingsLoader;
-
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -13,7 +10,7 @@ import java.util.Set;
  */
 public class JsonSettingsLoader extends AbstractSettingsLoader {
 
-    private static final Set<String> JSON_SUFFIXES = new HashSet<>(Collections.singletonList("json"));
+    private static final Set<String> JSON_SUFFIXES = Set.of("json");
 
     @Override
     public XContent content() {
