@@ -55,13 +55,15 @@ public class ConfigLoader {
                 return settings;
             }
         }
-        throw new IllegalArgumentException("no config found for " + applicationName + " "+ Arrays.asList(fileNamesWithoutSuffix));
+        throw new IllegalArgumentException("no config found for " + applicationName + " " +
+                Arrays.asList(fileNamesWithoutSuffix));
     }
 
     private Settings.Builder createClasspathSettings(ClassLoader classLoader, String applicationName, String fileNameWithoutSuffix)
             throws IOException {
         for (String suffix : List.of(YML, YAML, JSON)) {
-            InputStream inputStream = classLoader.getResourceAsStream(applicationName + '-' + fileNameWithoutSuffix + suffix);
+            InputStream inputStream = classLoader.getResourceAsStream(applicationName + '-' +
+                    fileNameWithoutSuffix + suffix);
             if (inputStream != null) {
                 logger.info("found resource: " + applicationName + '-' + fileNameWithoutSuffix + suffix);
                 Settings.Builder settings = createSettingsFromStream(inputStream, suffix);

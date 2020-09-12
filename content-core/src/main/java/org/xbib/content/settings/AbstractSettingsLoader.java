@@ -6,16 +6,15 @@ import org.xbib.content.XContentGenerator;
 import org.xbib.content.XContentParser;
 import org.xbib.content.io.BytesReference;
 import org.xbib.content.io.BytesStreamOutput;
-
+import org.xbib.datastructures.tiny.TinyMap;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Settings loader that loads (parses) the settings in a XContent format by flattening them
- * into a map.
+ * Settings loader that loads (parses) the settings in a XContent format
+ * by flattening them into a map.
  */
 public abstract class AbstractSettingsLoader implements SettingsLoader {
 
@@ -43,14 +42,14 @@ public abstract class AbstractSettingsLoader implements SettingsLoader {
 
     public Map<String, String> load(XContentParser xContentParser) throws IOException {
         StringBuilder sb = new StringBuilder();
-        Map<String, String> map = new LinkedHashMap<>();
+        TinyMap.Builder<String, String> map = TinyMap.builder();
         List<String> path = new ArrayList<>();
         XContentParser.Token token = xContentParser.nextToken();
         if (token == null) {
-            return map;
+            return map.build();
         }
         parseObject(map, sb, path, xContentParser, null);
-        return map;
+        return map.build();
     }
 
     public String flatMapAsString(BytesReference bytesReference) throws IOException {

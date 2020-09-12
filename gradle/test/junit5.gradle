@@ -11,7 +11,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    failFast = true
+    failFast = false
     testLogging {
         events 'STARTED', 'PASSED', 'FAILED', 'SKIPPED'
     }

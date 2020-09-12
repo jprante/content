@@ -2,7 +2,6 @@ package org.xbib.content.settings;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.xbib.content.XContentHelper;
@@ -10,7 +9,6 @@ import org.xbib.content.io.BytesArray;
 import org.xbib.content.io.BytesReference;
 import org.xbib.content.json.JsonSettingsLoader;
 import org.xbib.content.json.JsonXContent;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
@@ -60,7 +58,7 @@ public class SettingsTest {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             list.add((Map<String, Object>) entry.getValue());
         }
-        assertEquals("[{name=Name 0, code=Code 0}, {name=Name 1, code=Code 1}]", list.toString());
+        assertEquals("[{code=Code 0, name=Name 0}, {code=Code 1, name=Name 1}]", list.toString());
     }
 
     @Test

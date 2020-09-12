@@ -1,3 +1,4 @@
 dependencies {
     api "com.fasterxml.jackson.core:jackson-core:${project.property('jackson.version')}"
+    api "org.xbib:datastructures-tiny:${project.property('xbib-datastructures-tiny.version')}"
 }

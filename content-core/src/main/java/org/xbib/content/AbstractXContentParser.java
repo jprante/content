@@ -1,9 +1,9 @@
 package org.xbib.content;
 
+import org.xbib.datastructures.tiny.TinyMap;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +13,11 @@ import java.util.Map;
 public abstract class AbstractXContentParser implements XContentParser {
 
     private static final MapFactory SIMPLE_MAP_FACTORY = HashMap::new;
-    private static final MapFactory ORDERED_MAP_FACTORY = LinkedHashMap::new;
+
+    private static final MapFactory TINY_MAP_FACTORY = TinyMap::builder;
+
     private boolean losslessDecimals;
+
     private boolean base16Checks;
 
     private static Map<String, Object> readMap(XContentParser parser) throws IOException {
@@ -22,7 +25,7 @@ public abstract class AbstractXContentParser implements XContentParser {
     }
 
     private static Map<String, Object> readOrderedMap(XContentParser parser) throws IOException {
-        return readMap(parser, ORDERED_MAP_FACTORY);
+        return readMap(parser, TINY_MAP_FACTORY);
     }
 
     private static Map<String, Object> readMap(XContentParser parser, MapFactory mapFactory) throws IOException {

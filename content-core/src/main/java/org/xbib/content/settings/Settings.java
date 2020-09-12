@@ -2,11 +2,10 @@ package org.xbib.content.settings;
 
 import static org.xbib.content.util.unit.ByteSizeValue.parseBytesSizeValue;
 import static org.xbib.content.util.unit.TimeValue.parseTimeValue;
-
 import org.xbib.content.json.JsonSettingsLoader;
+import org.xbib.datastructures.tiny.TinyMap;
 import org.xbib.content.util.unit.ByteSizeValue;
 import org.xbib.content.util.unit.TimeValue;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,9 +20,6 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -51,13 +47,15 @@ public class Settings implements AutoCloseable {
     }
 
     private Settings(Map<String, String> map, Path path, long initialDelay, long period, TimeUnit timeUnit) {
-        this.map = new LinkedHashMap<>(map);
+        TinyMap.Builder<String, String> builder = TinyMap.builder();
+        builder.putAll(map);
+        this.map = builder.build();
         if (path != null && initialDelay >= 0L && period > 0L) {
             this.refresher = new DefaultSettingsRefresher(path, initialDelay, period, timeUnit);
         }
     }
 
-    public static Settings readSettingsFromMap(Map<String, Object> map) throws IOException {
+    public static Settings readSettingsFromMap(Map<String, Object> map) {
         Builder builder = new Builder();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             builder.put(entry.getKey(), entry.getValue() != null ? entry.getValue().toString() : null);
@@ -65,7 +63,7 @@ public class Settings implements AutoCloseable {
         return builder.build();
     }
 
-    public static void writeSettingsToMap(Settings settings, Map<String, Object> map) throws IOException {
+    public static void writeSettingsToMap(Settings settings, Map<String, Object> map) {
         for (String key : settings.getAsMap().keySet()) {
             map.put(key, settings.get(key));
         }
@@ -145,7 +143,7 @@ public class Settings implements AutoCloseable {
     }
 
     public Map<String, Object> getAsStructuredMap() {
-        Map<String, Object> stringObjectMap = new HashMap<>(2);
+        TinyMap.Builder<String, Object> stringObjectMap = TinyMap.builder();
         for (Map.Entry<String, String> entry : this.map.entrySet()) {
             processSetting(stringObjectMap, "", entry.getKey(), entry.getValue());
         }
@@ -156,7 +154,7 @@ public class Settings implements AutoCloseable {
                 entry.setValue(convertMapsToArrays(valMap));
             }
         }
-        return stringObjectMap;
+        return stringObjectMap.build();
     }
 
     public Settings getByPrefix(String prefix) {
@@ -295,7 +293,7 @@ public class Settings implements AutoCloseable {
             settingPrefix = settingPrefix + ".";
         }
         // we don't really care that it might happen twice
-        Map<String, Map<String, String>> hashMap = new LinkedHashMap<>();
+        TinyMap.Builder<String, Map<String, String>> hashMap = TinyMap.builder();
         for (Object o : this.map.keySet()) {
             String setting = (String) o;
             if (setting.startsWith(settingPrefix)) {
@@ -308,15 +306,15 @@ public class Settings implements AutoCloseable {
                 }
                 String name = nameValue.substring(0, dotIndex);
                 String value = nameValue.substring(dotIndex + 1);
-                Map<String, String> groupSettings = hashMap.computeIfAbsent(name, k -> new LinkedHashMap<>());
+                Map<String, String> groupSettings = hashMap.computeIfAbsent(name, k -> TinyMap.builder());
                 groupSettings.put(value, get(setting));
             }
         }
-        Map<String, Settings> retVal = new LinkedHashMap<>();
+        TinyMap.Builder<String, Settings> retVal = TinyMap.builder();
         for (Map.Entry<String, Map<String, String>> entry : hashMap.entrySet()) {
-            retVal.put(entry.getKey(), new Settings(Collections.unmodifiableMap(entry.getValue())));
+            retVal.put(entry.getKey(), new Settings(entry.getValue()));
         }
-        return Collections.unmodifiableMap(retVal);
+        return retVal.build();
     }
 
     @Override
@@ -345,7 +343,7 @@ public class Settings implements AutoCloseable {
             String rest = setting.substring(prefixLength + 1);
             Object existingValue = map.get(prefix + key);
             if (existingValue == null) {
-                Map<String, Object> newMap = new HashMap<>(2);
+                Map<String, Object> newMap = TinyMap.builder();
                 processSetting(newMap, "", rest, value);
                 map.put(key, newMap);
             } else {
@@ -412,7 +410,7 @@ public class Settings implements AutoCloseable {
      */
     public static class Builder {
 
-        private final Map<String, String> map = new LinkedHashMap<>();
+        private final Map<String, String> map;
 
         private Path path;
 
@@ -423,10 +421,7 @@ public class Settings implements AutoCloseable {
         private TimeUnit timeUnit;
 
         private Builder() {
-        }
-
-        public Map<String, String> internalMap() {
-            return this.map;
+            map = TinyMap.builder();
         }
 
         public String remove(String key) {
