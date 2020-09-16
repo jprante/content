@@ -59,7 +59,9 @@ public class ConfigLoader {
                 Arrays.asList(fileNamesWithoutSuffix));
     }
 
-    private Settings.Builder createClasspathSettings(ClassLoader classLoader, String applicationName, String fileNameWithoutSuffix)
+    private Settings.Builder createClasspathSettings(ClassLoader classLoader,
+                                                     String applicationName,
+                                                     String fileNameWithoutSuffix)
             throws IOException {
         for (String suffix : List.of(YML, YAML, JSON)) {
             InputStream inputStream = classLoader.getResourceAsStream(applicationName + '-' +
@@ -83,6 +85,7 @@ public class ConfigLoader {
             logger.info("trying " + path.toString());
             if (Files.exists(path)) {
                 logger.info("found path: " + path);
+                System.setProperty("config.path", path.getParent().toString());
                 return createSettingsFromStream(Files.newInputStream(path), suffix);
             }
         }

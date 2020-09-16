@@ -370,24 +370,24 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
      * @param triple a triple
      * @throws IOException if yield does not work
      */
-    protected void yield(Triple triple) throws IOException {
+    protected void yieldTriple(Triple triple) throws IOException {
         if (builder != null) {
             builder.receive(triple);
         }
     }
 
-    private void yield(Object s, Object p, Object o) throws IOException {
-        yield(new DefaultTriple(resource.newSubject(s), resource.newPredicate(p), resource.newObject(o)));
+    private void yieldTriple(Object s, Object p, Object o) throws IOException {
+        yieldTriple(new DefaultTriple(resource.newSubject(s), resource.newPredicate(p), resource.newObject(o)));
     }
 
     // produce a (possibly) reified triple
-    private void yield(Object s, IRI p, Object o, IRI reified) throws IOException {
-        yield(s, p, o);
+    private void yieldTriple(Object s, IRI p, Object o, IRI reified) throws IOException {
+        yieldTriple(s, p, o);
         if (reified != null) {
-            yield(reified, RDF_TYPE, RDF_STATEMENT);
-            yield(reified, RDF_SUBJECT, s);
-            yield(reified, RDF_PREDICATE, p);
-            yield(reified, RDF_OBJECT, o);
+            yieldTriple(reified, RDF_TYPE, RDF_STATEMENT);
+            yieldTriple(reified, RDF_SUBJECT, s);
+            yieldTriple(reified, RDF_PREDICATE, p);
+            yieldTriple(reified, RDF_OBJECT, o);
         }
     }
 
@@ -473,7 +473,7 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
                             // we have the subject
                             if (!iri.equals(RDF_DESCRIPTION)) {
                                 // this is a typed node, so assert the type
-                                yield(frame.node, RDF_TYPE, iri);
+                                yieldTriple(frame.node, RDF_TYPE, iri);
                             }
                             // now process attribute-specified predicates
                             for (int i = 0; i < attrs.getLength(); i++) {
@@ -481,7 +481,7 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
                                 String aUri = attrs.getURI(i) + attrs.getLocalName(i);
                                 String aVal = attrs.getValue(i);
                                 if (!aUri.startsWith(RDF_STRING) && !aQn.startsWith("xml:")) {
-                                    yield(frame.node, IRI.create(aUri), aVal);
+                                    yieldTriple(frame.node, IRI.create(aUri), aVal);
                                 }
                             }
                             // is this node the value of some enclosing predicate?
@@ -492,7 +492,7 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
                                     ppFrame.collection.add(frame.node);
                                 } else { // not a collection
                                     // this subject is the value of its enclosing predicate
-                                    yield(ancestorSubject(stack), parentPredicate(stack), frame.node);
+                                    yieldTriple(ancestorSubject(stack), parentPredicate(stack), frame.node);
                                 }
                             }
                         }
@@ -515,7 +515,7 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
                         // parse attrs to see if the value of this pred is a uriref
                         IRI object = getObjectNode(stack, attrs);
                         if (object != null) {
-                            yield(ancestorSubject(stack), frame.node, object, frame.reification);
+                            yieldTriple(ancestorSubject(stack), frame.node, object, frame.reification);
                         } else {
                             // this predicate encloses pcdata, prepare to accumulate
                             pcdata = new StringBuilder();
@@ -526,7 +526,7 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
                             switch (parseType) {
                                 case "Resource":
                                     object = object == null ? blankNode().id() : object;
-                                    yield(ancestorSubject(stack), frame.node, object, frame.reification);
+                                    yieldTriple(ancestorSubject(stack), frame.node, object, frame.reification);
                                     // perform surgery on the current frame
                                     frame.node = object;
                                     frame.isSubject = true;
@@ -562,13 +562,13 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
                                     && !aQn.startsWith("xml:")) {
                                 if (object == null) {
                                     object = blankNode().id();
-                                    yield(ancestorSubject(stack), frame.node, object);
+                                    yieldTriple(ancestorSubject(stack), frame.node, object);
                                 }
                                 if (aUri.equals(RDF_TYPE)) {
-                                    yield(object, RDF_TYPE, aVal);
+                                    yieldTriple(object, RDF_TYPE, aVal);
                                 } else {
                                     Literal value = withLanguageTag(new DefaultLiteral(aVal), stack);
-                                    yield(object, aUri, value);
+                                    yieldTriple(object, aUri, value);
                                 }
                             }
                         }
@@ -601,35 +601,35 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
                         // this is a predicate closing
                         if (xmlLiteral != null) { // it was an XMLLiteral
                             Literal value = new DefaultLiteral(xmlLiteral.toString()).type(RDF_XMLLITERAL);
-                            yield(ancestorSubject(stack), parentPredicate(stack), value);
+                            yieldTriple(ancestorSubject(stack), parentPredicate(stack), value);
                             xmlLiteral = null;
                         } else if (pcdata != null) { // we have an RDF literal
                             IRI u = ppFrame.datatype == null ? null : IRI.create(ppFrame.datatype);
                             Literal value = withLanguageTag(new DefaultLiteral(pcdata.toString()).type(u), stack);
                             // deal with reification
                             IRI reification = ppFrame.reification;
-                            yield(ancestorSubject(stack), ppFrame.node, value, reification);
+                            yieldTriple(ancestorSubject(stack), ppFrame.node, value, reification);
                             // no longer collect pcdata
                             pcdata = null;
                         } else if (ppFrame.isCollection) { // deal with collections
                             if (ppFrame.collection.isEmpty()) {
                                 // in this case, the value of this property is rdf:nil
-                                yield(ppFrame.collectionHead.subject(),
+                                yieldTriple(ppFrame.collectionHead.subject(),
                                         ppFrame.collectionHead.predicate(),
                                         resource.newObject(RDF_NIL));
                             } else {
-                                yield(ppFrame.collectionHead);
+                                yieldTriple(ppFrame.collectionHead);
                                 Object prevNode = null;
                                 Object node = ppFrame.collectionHead.object();
                                 for (IRI item : ppFrame.collection) {
                                     if (prevNode != null) {
-                                        yield(prevNode, RDF_REST, node);
+                                        yieldTriple(prevNode, RDF_REST, node);
                                     }
-                                    yield(node, RDF_FIRST, item);
+                                    yieldTriple(node, RDF_FIRST, item);
                                     prevNode = node;
                                     node = blankNode().id();
                                 }
-                                yield(prevNode, RDF_REST, RDF_NIL);
+                                yieldTriple(prevNode, RDF_REST, RDF_NIL);
                             }
                         }
                     }
