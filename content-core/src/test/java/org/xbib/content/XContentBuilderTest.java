@@ -10,6 +10,9 @@ import org.xbib.content.json.JsonXContent;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -148,5 +151,14 @@ public class XContentBuilderTest {
             XContentBuilder builder = contentBuilder();
             builder.field((String) null);
         });
+    }
+
+    @Test
+    public void testInstantMap() throws IOException {
+        Instant instant = LocalDate.parse("2020-10-05").atStartOfDay().toInstant(ZoneOffset.UTC);
+        Map<Instant, Object> map = Map.of(instant, "Hello world");
+        XContentBuilder builder = contentBuilder();
+        builder.timeseriesMap(map);
+        assertEquals("{\"2020-10-05T00:00:00Z\":\"Hello world\"}", builder.string());
     }
 }

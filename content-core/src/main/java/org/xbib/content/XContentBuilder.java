@@ -762,6 +762,13 @@ public final class XContentBuilder implements ToXContent, Flushable, Closeable {
         return this;
     }
 
+    public XContentBuilder timeseriesMap(Map<Instant, Object> map) throws IOException {
+        if (map == null) {
+            return nullValue();
+        }
+        writeInstantMap(map);
+        return this;
+    }
 
     public XContentBuilder flatMap(Map<String, String> map) throws IOException {
         if (map == null) {
@@ -817,6 +824,22 @@ public final class XContentBuilder implements ToXContent, Flushable, Closeable {
         generator.writeStartObject();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             field(entry.getKey());
+            Object value = entry.getValue();
+            if (value == null) {
+                generator.writeNull();
+            } else {
+                writeValue(value);
+            }
+        }
+        generator.writeEndObject();
+    }
+
+    private void writeInstantMap(Map<Instant, Object> map) throws IOException {
+        generator.writeStartObject();
+        for (Map.Entry<Instant, Object> entry : map.entrySet()) {
+            Instant instant = entry.getKey();
+            ZonedDateTime zdt = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+            field(zdt.format(DateTimeFormatter.ISO_INSTANT));
             Object value = entry.getValue();
             if (value == null) {
                 generator.writeNull();
@@ -887,6 +910,10 @@ public final class XContentBuilder implements ToXContent, Flushable, Closeable {
             generator.writeEndArray();
         } else if (type == byte[].class) {
             generator.writeBinary((byte[]) value);
+        } else if (value instanceof Instant) {
+            Instant instant = (Instant) value;
+            ZonedDateTime zdt = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+            generator.writeString(zdt.format(DateTimeFormatter.ISO_INSTANT));
         } else if (value instanceof Date) {
             Date date = (Date) value;
             Instant instant = Instant.ofEpochMilli(date.getTime());
