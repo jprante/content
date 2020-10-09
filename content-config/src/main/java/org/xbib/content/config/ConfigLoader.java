@@ -42,9 +42,11 @@ public class ConfigLoader {
             if (settings != null) {
                 return settings;
             }
-            settings = createClasspathSettings(classLoader, applicationName, fileNameWithoutSuffix);
-            if (settings != null) {
-                return settings;
+            if (classLoader != null) {
+                settings = createClasspathSettings(classLoader, applicationName, fileNameWithoutSuffix);
+                if (settings != null) {
+                    return settings;
+                }
             }
             settings = createClasspathSettings(ConfigLoader.class.getClassLoader(), applicationName, fileNameWithoutSuffix);
             if (settings != null) {
