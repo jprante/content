@@ -424,6 +424,10 @@ public class Settings implements AutoCloseable {
             map = TinyMap.builder();
         }
 
+        public Map<String, String> map() {
+            return map;
+        }
+
         public String remove(String key) {
             return map.remove(key);
         }
