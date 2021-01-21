@@ -125,13 +125,17 @@ public class ConfigLoader {
     }
 
     private static List<String> createListOfLocations(String applicationName, String fileNameWithoutSuffix) {
+        String xdgConfigHome = System.getenv("XDG_CONFIG_HOME");
+        if (xdgConfigHome == null) {
+            xdgConfigHome = System.getProperty("user.home") + "/.config";
+        }
         return List.of(
                 applicationName + '-' + fileNameWithoutSuffix + YML,
                 applicationName + '-' + fileNameWithoutSuffix + YAML,
                 applicationName + '-' + fileNameWithoutSuffix + JSON,
-                System.getProperty("user.home") + "/." + applicationName + '/' + fileNameWithoutSuffix + YML,
-                System.getProperty("user.home") + "/." + applicationName + '/' + fileNameWithoutSuffix + YAML,
-                System.getProperty("user.home") + "/." + applicationName + '/' + fileNameWithoutSuffix + JSON,
+                xdgConfigHome + '/' + applicationName + '/' + fileNameWithoutSuffix + YML,
+                xdgConfigHome + '/' + applicationName + '/' + fileNameWithoutSuffix + YAML,
+                xdgConfigHome + '/' + applicationName + '/' + fileNameWithoutSuffix + JSON,
                 "/etc/" + applicationName + '/' + fileNameWithoutSuffix + YML,
                 "/etc/" + applicationName + '/' + fileNameWithoutSuffix + YAML,
                 "/etc/" + applicationName + '/' + fileNameWithoutSuffix + JSON);
