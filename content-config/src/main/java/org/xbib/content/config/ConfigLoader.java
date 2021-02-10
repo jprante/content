@@ -38,8 +38,12 @@ public class ConfigLoader {
     public Settings.Builder loadSettings(ClassLoader classLoader,
                                          String applicationName,
                                          String... fileNamesWithoutSuffix) throws IOException {
+        Settings.Builder settings = createSettingsFromStdin();
+        if (settings != null) {
+            return overrideFromProperties(applicationName, settings);
+        }
         for (String fileNameWithoutSuffix : fileNamesWithoutSuffix) {
-            Settings.Builder settings = createSettingsFromFile(createListOfLocations(applicationName, fileNameWithoutSuffix));
+            settings = createSettingsFromFile(createListOfLocations(applicationName, fileNameWithoutSuffix));
             if (settings != null) {
                 return overrideFromProperties(applicationName, settings);
             }
@@ -57,6 +61,17 @@ public class ConfigLoader {
         }
         throw new IllegalArgumentException("no config found for " + applicationName + " " +
                 Arrays.asList(fileNamesWithoutSuffix));
+    }
+
+    private Settings.Builder createSettingsFromStdin() throws IOException {
+        if (System.in != null) {
+            int numBytesWaiting = System.in.available();
+            if (numBytesWaiting > 0) {
+                String suffix = System.getProperty("config.format", "yaml");
+                return createSettingsFromStream(System.in, "." + suffix);
+            }
+        }
+        return null;
     }
 
     private Settings.Builder createSettingsFromFile(List<String> settingsFileNames) throws IOException {
@@ -112,12 +127,11 @@ public class ConfigLoader {
         return null;
     }
 
-    private Settings.Builder overrideFromProperties(String applicationName, Settings.Builder settings) {
+    private static Settings.Builder overrideFromProperties(String applicationName, Settings.Builder settings) {
         for (Map.Entry<String, String> entry : settings.map().entrySet()) {
             String key = entry.getKey();
             String value = System.getProperty(applicationName + '.' + key);
             if (value != null) {
-                logger.warn("overriding " + key + " with " + value);
                 settings.put(key, value);
             }
         }
