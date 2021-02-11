@@ -8,6 +8,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,6 +35,14 @@ public class ConfigLoader {
 
     public ConfigLoader(ConfigLogger logger) {
         this.logger = logger;
+    }
+
+    public Settings.Builder loadSettings(String[] args,
+                                         ClassLoader classLoader,
+                                         String applicationName,
+                                         String... fileNamesWithoutSuffix) throws IOException {
+        Settings.Builder settings = createSettingsFromArgs(args, applicationName, fileNamesWithoutSuffix);
+        return settings != null ? settings : loadSettings(classLoader, applicationName, fileNamesWithoutSuffix);
     }
 
     public Settings.Builder loadSettings(ClassLoader classLoader,
@@ -61,6 +71,22 @@ public class ConfigLoader {
         }
         throw new IllegalArgumentException("no config found for " + applicationName + " " +
                 Arrays.asList(fileNamesWithoutSuffix));
+    }
+
+    private Settings.Builder createSettingsFromArgs(String[] args,
+                                                    String applicationName,
+                                                    String... fileNamesWithoutSuffix) throws IOException {
+        for (String fileNameWithoutSuffix : fileNamesWithoutSuffix) {
+            for (String suffix : List.of(YML, YAML, JSON)) {
+                for (int i = 0; i < args.length - 1; i++) {
+                    String arg = args[i];
+                    if (arg.equals("--" + applicationName + "-" + fileNameWithoutSuffix + suffix)) {
+                        return createSettingsFromReader(new StringReader(args[i + 1]), suffix);
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private Settings.Builder createSettingsFromStdin() throws IOException {
@@ -112,12 +138,20 @@ public class ConfigLoader {
             logger.error("unable to open input stream");
             return null;
         }
+        return createSettingsFromReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8), suffix);
+    }
+
+    private Settings.Builder createSettingsFromReader(Reader reader, String suffix) throws IOException {
+        if (reader == null) {
+            logger.error("unable to open reader");
+            return null;
+        }
         SettingsLoader settingsLoader = isYaml(suffix) ? new YamlSettingsLoader() :
                 isJson(suffix) ? new JsonSettingsLoader() : null;
         if (settingsLoader != null) {
             Settings.Builder settings;
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-                String content = reader.lines().collect(Collectors.joining("\n"));
+            try (BufferedReader bufferedReader = new BufferedReader(reader)) {
+                String content = bufferedReader.lines().collect(Collectors.joining("\n"));
                 settings = Settings.settingsBuilder().put(settingsLoader.load(content));
             }
             return settings;
