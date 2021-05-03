@@ -4,16 +4,16 @@ public class SystemConfigLogger implements ConfigLogger {
 
     @Override
     public void info(String string) {
-        System.out.println("info: " + string);
+        System.err.println("info: " + string);
     }
 
     @Override
     public void warn(String message) {
-        System.out.println("warning: " + message);
+        System.err.println("warning: " + message);
     }
 
     @Override
     public void error(String message) {
-        System.out.println("error: " + message);
+        System.err.println("error: " + message);
     }
 }
