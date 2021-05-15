@@ -1,7 +1,7 @@
 dependencies {
-    implementation project(':content-core')
-    implementation project(':content-resource')
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${project.property('jackson.version')}"
+    api project(':content-core')
+    api project(':content-resource')
+    api "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${project.property('jackson.version')}"
     runtimeOnly "com.fasterxml.woodstox:woodstox-core:${project.property('woodstox.version')}"
     testImplementation project(':content-json') // for XContentHelper reading JSON
 }

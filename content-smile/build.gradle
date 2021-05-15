@@ -1,4 +1,4 @@
 dependencies {
     api project(':content-core')
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:${project.property('jackson.version')}"
+    api "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:${project.property('jackson.version')}"
 }
