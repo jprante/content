@@ -1,6 +1,7 @@
 package org.xbib.content.rdf;
 
 import org.xbib.content.XContentBuilder;
+import org.xbib.content.core.DefaultXContentBuilder;
 import org.xbib.content.json.JsonXContent;
 import org.xbib.content.rdf.internal.DefaultAnonymousResource;
 import org.xbib.content.rdf.internal.DefaultResource;
@@ -101,7 +102,8 @@ public class RdfXContentGenerator<P extends RdfXContentParams> implements RdfCon
             return;
         }
         flushed = true;
-        builder = XContentBuilder.builder(JsonXContent.jsonContent(), out);
+        // JSON output
+        builder = DefaultXContentBuilder.builder(JsonXContent.jsonContent(), out);
         builder.startObject();
         build(this.resource);
         builder.endObject();

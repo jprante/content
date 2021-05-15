@@ -1,9 +1,10 @@
 package org.xbib.content.xml;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.xbib.content.xml.XmlXContent.contentBuilder;
 import org.junit.jupiter.api.Test;
 import org.xbib.content.XContentBuilder;
-import org.xbib.content.XContentHelper;
+import org.xbib.content.core.XContentHelper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +26,7 @@ public class XContentXmlBuilderTest {
     @Test
     public void testEmpty() throws Exception {
         QName root = new QName("root");
-        XContentBuilder builder = XmlXContent.contentBuilder(new XmlXParams(root));
+        XContentBuilder builder = contentBuilder(new XmlXParams(root));
         builder.startObject().field("Hello", "World").endObject();
         assertEquals("<root><Hello>World</Hello></root>", builder.string());
     }
@@ -34,14 +35,14 @@ public class XContentXmlBuilderTest {
     public void testContextNamespace() throws Exception {
         QName root = new QName("root");
         XmlNamespaceContext context = XmlNamespaceContext.newInstance();
-        XContentBuilder builder = XmlXContent.contentBuilder(new XmlXParams(root, context));
+        XContentBuilder builder = contentBuilder(new XmlXParams(root, context));
         builder.startObject().field("Hello", "World").endObject();
         assertEquals("<root><Hello>World</Hello></root>", builder.string());
     }
 
     @Test
     public void testXml() throws Exception {
-        XContentBuilder builder = XmlXContent.contentBuilder();
+        XContentBuilder builder = contentBuilder();
         builder.startObject().field("Hello", "World").endObject();
         assertEquals("<root><Hello>World</Hello></root>", builder.string());
     }
@@ -49,7 +50,7 @@ public class XContentXmlBuilderTest {
     @Test
     public void testXmlParams() throws Exception {
         XmlXParams params = new XmlXParams();
-        XContentBuilder builder = XmlXContent.contentBuilder(params);
+        XContentBuilder builder = contentBuilder(params);
         builder.startObject().field("Hello", "World").endObject();
         assertEquals("<root><Hello>World</Hello></root>", builder.string());
     }
@@ -58,7 +59,7 @@ public class XContentXmlBuilderTest {
     public void testXmlObject() throws Exception {
         QName root = XmlXParams.getDefaultParams().getRoot();
         XmlXParams params = new XmlXParams(root);
-        XContentBuilder builder = XmlXContent.contentBuilder(params);
+        XContentBuilder builder = contentBuilder(params);
         builder.startObject()
                 .startObject("author")
                 .field("creator", "John Doe")
@@ -78,7 +79,7 @@ public class XContentXmlBuilderTest {
     public void testXmlAttributes() throws Exception {
         QName root = XmlXParams.getDefaultParams().getRoot();
         XmlXParams params = new XmlXParams(root);
-        XContentBuilder builder = XmlXContent.contentBuilder(params);
+        XContentBuilder builder = contentBuilder(params);
         builder.startObject()
                 .startObject("author")
                 .field("@name", "John Doe")
@@ -92,7 +93,7 @@ public class XContentXmlBuilderTest {
     public void testXmlArrayOfValues() throws Exception {
         QName root = XmlXParams.getDefaultParams().getRoot();
         XmlXParams params = new XmlXParams(root);
-        XContentBuilder builder = XmlXContent.contentBuilder(params);
+        XContentBuilder builder = contentBuilder(params);
         builder.startObject()
                 .array("author", "John Doe", "Joe Smith")
                 .endObject();
@@ -103,7 +104,7 @@ public class XContentXmlBuilderTest {
     public void testXmlArrayOfObjects() throws Exception {
         QName root = XmlXParams.getDefaultParams().getRoot();
         XmlXParams params = new XmlXParams(root);
-        XContentBuilder builder = XmlXContent.contentBuilder(params);
+        XContentBuilder builder = contentBuilder(params);
         builder.startObject()
                 .startArray("author")
                 .startObject()
@@ -132,7 +133,7 @@ public class XContentXmlBuilderTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         copy(in, out);
         byte[] buf = out.toByteArray();
-        Map<String, Object> map = XContentHelper.convertToMap(buf, false);
+        Map<String, ?> map = XContentHelper.convertToMap(buf, false);
         assertEquals("{dc:description={xbib:creatorDescription=Otis Gospodnetić ; Erik Hatcher, "
                 + "dcterms:extent=XXXIV, 421 S. : Ill.}, dc:language={xbib:languageISO6392b=eng, "
                 + "xbib:languageISO6391=en}, dc:subject={xbib:rswk={xbib:subjectTopic=Lucene, "
@@ -184,7 +185,7 @@ public class XContentXmlBuilderTest {
     @Test
     public void testInvalidWhiteSpaceCharacter() throws Exception {
         QName root = new QName("root");
-        XContentBuilder builder = XmlXContent.contentBuilder(new XmlXParams(root));
+        XContentBuilder builder = contentBuilder(new XmlXParams(root));
         builder.startObject().field("Hello", "World\u001b").endObject();
         assertEquals("<root><Hello>World</Hello></root>", builder.string());
     }
@@ -194,7 +195,7 @@ public class XContentXmlBuilderTest {
         XmlNamespaceContext context = XmlNamespaceContext.newInstance();
         context.addNamespace("", "");
         QName root = new QName("root");
-        XContentBuilder builder = XmlXContent.contentBuilder(new XmlXParams(root, context));
+        XContentBuilder builder = contentBuilder(new XmlXParams(root, context));
         builder.startObject().field("Hello", "World").endObject();
         assertEquals("<root><Hello>World</Hello></root>", builder.string());
     }

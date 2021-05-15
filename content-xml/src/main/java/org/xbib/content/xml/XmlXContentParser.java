@@ -2,7 +2,7 @@ package org.xbib.content.xml;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import org.xbib.content.AbstractXContentParser;
+import org.xbib.content.core.AbstractXContentParser;
 import org.xbib.content.XContent;
 import org.xbib.content.XContentParser;
 

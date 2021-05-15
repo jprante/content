@@ -1,6 +1,7 @@
 package org.xbib.content.xml;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.xbib.content.xml.XmlXContent.contentBuilder;
 import org.junit.jupiter.api.Test;
 import org.xbib.content.XContentBuilder;
 import org.xbib.content.xml.transform.StylesheetTransformer;
@@ -24,7 +25,7 @@ public class XmlNamespaceContextTest {
                 XmlNamespaceContext.newInstance("org/xbib/content/resource/namespace",
                         Locale.getDefault(), StylesheetTransformer.class.getClassLoader());
         XmlXParams params = new XmlXParams(context);
-        XContentBuilder builder = XmlXContent.contentBuilder(params);
+        XContentBuilder builder = contentBuilder(params);
         builder.startObject()
                 .field("dc:creator", "John Doe")
                 .endObject();
@@ -42,7 +43,7 @@ public class XmlNamespaceContextTest {
         XmlNamespaceContext context = XmlNamespaceContext.newInstance();
         context.addNamespace("abc", "http://localhost");
         XmlXParams params = new XmlXParams(root, context);
-        XContentBuilder builder = XmlXContent.contentBuilder(params);
+        XContentBuilder builder = contentBuilder(params);
         builder.startObject()
                 .field("abc:creator", "John Doe")
                 .endObject();
@@ -57,7 +58,7 @@ public class XmlNamespaceContextTest {
         context.addNamespace("", "http://localhost");
         context.addNamespace("abc", "http://content");
         XmlXParams params = new XmlXParams(root, context);
-        XContentBuilder builder = XmlXContent.contentBuilder(params);
+        XContentBuilder builder = contentBuilder(params);
         builder.startObject()
                 .field("creator", "John Doe")
                 .endObject();

@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import org.xbib.content.XContent;
 import org.xbib.content.XContentBuilder;
+import org.xbib.content.core.DefaultXContentBuilder;
 import org.xbib.content.XContentGenerator;
 import org.xbib.content.XContentParser;
-import org.xbib.content.io.BytesReference;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,33 +36,45 @@ public class XmlXContent implements XContent {
     }
 
     public static XContentBuilder contentBuilder() throws IOException {
-        XContentBuilder builder = XContentBuilder.builder(xmlXContent());
-        if (builder.generator() instanceof XmlXContentGenerator) {
-            ((XmlXContentGenerator) builder.generator()).setParams(XmlXParams.getDefaultParams());
+        XContentBuilder builder = DefaultXContentBuilder.builder(xmlXContent());
+        if (builder instanceof DefaultXContentBuilder) {
+            DefaultXContentBuilder xContentBuilder = (DefaultXContentBuilder) builder;
+            if (xContentBuilder.generator() instanceof XmlXContentGenerator) {
+                ((XmlXContentGenerator) xContentBuilder.generator()).setParams(XmlXParams.getDefaultParams());
+            }
         }
         return builder;
     }
 
     public static XContentBuilder contentBuilder(OutputStream outputStream) throws IOException {
-        XContentBuilder builder = XContentBuilder.builder(xmlXContent(), outputStream);
-        if (builder.generator() instanceof XmlXContentGenerator) {
-            ((XmlXContentGenerator) builder.generator()).setParams(XmlXParams.getDefaultParams());
+        XContentBuilder builder = DefaultXContentBuilder.builder(xmlXContent(), outputStream);
+        if (builder instanceof DefaultXContentBuilder) {
+            DefaultXContentBuilder xContentBuilder = (DefaultXContentBuilder) builder;
+            if (xContentBuilder.generator() instanceof XmlXContentGenerator) {
+                ((XmlXContentGenerator) xContentBuilder.generator()).setParams(XmlXParams.getDefaultParams());
+            }
         }
         return builder;
     }
 
     public static XContentBuilder contentBuilder(XmlXParams params) throws IOException {
-        XContentBuilder builder = XContentBuilder.builder(xmlXContent(params.getXmlFactory()));
-        if (builder.generator() instanceof XmlXContentGenerator) {
-            ((XmlXContentGenerator) builder.generator()).setParams(params);
+        XContentBuilder builder = DefaultXContentBuilder.builder(xmlXContent(params.getXmlFactory()));
+        if (builder instanceof DefaultXContentBuilder) {
+            DefaultXContentBuilder xContentBuilder = (DefaultXContentBuilder) builder;
+            if (xContentBuilder.generator() instanceof XmlXContentGenerator) {
+                ((XmlXContentGenerator) xContentBuilder.generator()).setParams(params);
+            }
         }
         return builder;
     }
 
     public static XContentBuilder contentBuilder(XmlXParams params, OutputStream outputStream) throws IOException {
-        XContentBuilder builder = XContentBuilder.builder(xmlXContent(params.getXmlFactory()), outputStream);
-        if (builder.generator() instanceof XmlXContentGenerator) {
-            ((XmlXContentGenerator) builder.generator()).setParams(params);
+        XContentBuilder builder = DefaultXContentBuilder.builder(xmlXContent(params.getXmlFactory()), outputStream);
+        if (builder instanceof DefaultXContentBuilder) {
+            DefaultXContentBuilder xContentBuilder = (DefaultXContentBuilder) builder;
+            if (xContentBuilder.generator() instanceof XmlXContentGenerator) {
+                ((XmlXContentGenerator) xContentBuilder.generator()).setParams(params);
+            }
         }
         return builder;
     }
@@ -123,17 +135,12 @@ public class XmlXContent implements XContent {
     }
 
     @Override
-    public XContentParser createParser(BytesReference bytes) throws IOException {
-        return createParser(bytes.streamInput());
-    }
-
-    @Override
-    public boolean isXContent(BytesReference bytes) {
-        int length = bytes.length() < 20 ? bytes.length() : 20;
+    public boolean isXContent(byte[] bytes, int offset, int len) {
+        int length = Math.min(len, 20);
         if (length == 0) {
             return false;
         }
-        byte first = bytes.get(0);
-        return length > 2 && first == '<' && bytes.get(1) == '?' && bytes.get(2) == 'x';
+        byte first = bytes[offset];
+        return length > 2 && first == '<' && bytes[offset + 1] == '?' && bytes[offset + 2] == 'x';
     }
 }

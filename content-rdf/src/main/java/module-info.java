@@ -13,4 +13,5 @@ module org.xbib.content.rdf {
     requires transitive org.xbib.content.core;
     requires transitive org.xbib.content.resource;
     requires transitive org.xbib.content.xml;
+    requires transitive org.xbib.content.json;
 }

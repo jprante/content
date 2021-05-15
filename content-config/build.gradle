@@ -1,3 +1,5 @@
 dependencies {
+    api project(':content-json')
     api project(':content-yaml')
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${project.property('jackson.version')}"
 }

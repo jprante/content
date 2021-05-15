@@ -2,7 +2,7 @@ package org.xbib.content.config;
 
 import org.xbib.content.json.JsonSettingsLoader;
 import org.xbib.content.settings.Settings;
-import org.xbib.content.settings.SettingsLoader;
+import org.xbib.content.SettingsLoader;
 import org.xbib.content.yaml.YamlSettingsLoader;
 import java.io.BufferedReader;
 import java.io.IOException;

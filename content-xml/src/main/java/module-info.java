@@ -1,3 +1,4 @@
+import org.xbib.content.XContent;
 module org.xbib.content.xml {
     exports org.xbib.content.xml;
     exports org.xbib.content.xml.json;
@@ -9,6 +10,5 @@ module org.xbib.content.xml {
     requires transitive org.xbib.content.core;
     requires transitive org.xbib.content.resource;
     requires transitive com.fasterxml.jackson.dataformat.xml;
-    provides org.xbib.content.XContent with
-            org.xbib.content.xml.XmlXContent;
+    provides XContent with org.xbib.content.xml.XmlXContent;
 }

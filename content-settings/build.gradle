@@ -1,0 +1,5 @@
+dependencies {
+    api project(':content-core')
+    implementation "com.fasterxml.jackson.core:jackson-core:${project.property('jackson.version')}"
+    testImplementation project(":content-json")
+}

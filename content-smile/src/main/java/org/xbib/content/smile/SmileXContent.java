@@ -6,10 +6,9 @@ import com.fasterxml.jackson.dataformat.smile.SmileFactory;
 import com.fasterxml.jackson.dataformat.smile.SmileGenerator;
 import org.xbib.content.XContent;
 import org.xbib.content.XContentBuilder;
+import org.xbib.content.core.DefaultXContentBuilder;
 import org.xbib.content.XContentGenerator;
 import org.xbib.content.XContentParser;
-import org.xbib.content.io.BytesReference;
-import org.xbib.content.json.JsonXContentParser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 public class SmileXContent implements XContent {
 
     private static final SmileXContent smileXContent;
+
     private static final SmileFactory smileFactory;
 
     static {
@@ -49,11 +49,11 @@ public class SmileXContent implements XContent {
     }
 
     public static XContentBuilder contentBuilder() throws IOException {
-        return XContentBuilder.builder(smileXContent);
+        return DefaultXContentBuilder.builder(smileXContent);
     }
 
     public static XContentBuilder contentBuilder(OutputStream outputStream) throws IOException {
-        return XContentBuilder.builder(smileXContent, outputStream);
+        return DefaultXContentBuilder.builder(smileXContent, outputStream);
     }
 
     @Override
@@ -66,10 +66,9 @@ public class SmileXContent implements XContent {
         return new SmileXContentGenerator(smileFactory.createGenerator(os, JsonEncoding.UTF8));
     }
 
-
     @Override
     public XContentGenerator createGenerator(Writer writer) throws IOException {
-        return new SmileXContentGenerator(smileFactory.createGenerator(writer));
+        throw new UnsupportedOperationException(); // SMILE is binary
     }
 
     @Override
@@ -94,23 +93,18 @@ public class SmileXContent implements XContent {
     }
 
     @Override
-    public XContentParser createParser(BytesReference bytes) throws IOException {
-        return createParser(bytes.streamInput());
-    }
-
-    @Override
     public XContentParser createParser(Reader reader) throws IOException {
-        return new JsonXContentParser(smileFactory.createParser(reader));
+        throw new UnsupportedOperationException(); // SMILE is binary
     }
 
     @Override
-    public boolean isXContent(BytesReference bytes) {
-        int length = bytes.length() < 20 ? bytes.length() : 20;
+    public boolean isXContent(byte[] bytes, int offset, int len) {
+        int length = Math.min(len, 20);
         if (length == 0) {
             return false;
         }
-        byte first = bytes.get(0);
-        return length > 2 && first == SmileConstants.HEADER_BYTE_1 && bytes.get(1) == SmileConstants.HEADER_BYTE_2
-                && bytes.get(2) == SmileConstants.HEADER_BYTE_3;
+        byte first = bytes[offset];
+        return length > 2 && first == SmileConstants.HEADER_BYTE_1 && bytes[offset + 1] == SmileConstants.HEADER_BYTE_2
+                && bytes[offset + 2] == SmileConstants.HEADER_BYTE_3;
     }
 }

@@ -3,15 +3,12 @@ package org.xbib.content.xml;
 import org.xbib.content.XContent;
 import org.xbib.content.XContentBuilder;
 import org.xbib.content.XContentParser;
-import org.xbib.content.XContentService;
+import org.xbib.content.core.XContentService;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Map;
 
-/**
- *
- */
 public class XmlXContentHelper {
 
     private XmlXContentHelper() {

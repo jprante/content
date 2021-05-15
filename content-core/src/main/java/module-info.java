@@ -1,15 +1,16 @@
+import org.xbib.content.SettingsLoader;
+import org.xbib.content.properties.PropertiesSettingsLoader;
+
 module org.xbib.content.core {
-    exports org.xbib.content;
+    uses org.xbib.content.XContent;
+    uses SettingsLoader;
     exports org.xbib.content.io;
-    exports org.xbib.content.json;
-    exports org.xbib.content.settings;
+    exports org.xbib.content.properties;
     exports org.xbib.content.util.geo;
     exports org.xbib.content.util.unit;
-    requires org.xbib.datastructures.tiny;
+    exports org.xbib.content.core;
+    requires transitive org.xbib.content;
+    requires transitive org.xbib.datastructures.tiny;
     requires transitive com.fasterxml.jackson.core;
-    provides org.xbib.content.XContent with
-            org.xbib.content.json.JsonXContent;
-    provides org.xbib.content.settings.SettingsLoader with
-            org.xbib.content.settings.PropertiesSettingsLoader,
-            org.xbib.content.json.JsonSettingsLoader;
+    provides SettingsLoader with PropertiesSettingsLoader;
 }

@@ -6,7 +6,7 @@ import org.xbib.content.XContent;
 import org.xbib.content.XContentBuilder;
 import org.xbib.content.XContentGenerator;
 import org.xbib.content.XContentParser;
-import org.xbib.content.io.BytesReference;
+import org.xbib.content.core.DefaultXContentBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -36,11 +36,11 @@ public class YamlXContent implements XContent {
     }
 
     public static XContentBuilder contentBuilder() throws IOException {
-        return XContentBuilder.builder(yamlXContent);
+        return DefaultXContentBuilder.builder(yamlXContent);
     }
 
     public static XContentBuilder contentBuilder(OutputStream outputStream) throws IOException {
-        return XContentBuilder.builder(yamlXContent, outputStream);
+        return DefaultXContentBuilder.builder(yamlXContent, outputStream);
     }
 
     @Override
@@ -84,25 +84,18 @@ public class YamlXContent implements XContent {
         return new YamlXContentParser(yamlFactory.createParser(data, offset, length));
     }
 
-
-    @Override
-    public XContentParser createParser(BytesReference bytes) throws IOException {
-        return createParser(bytes.streamInput());
-    }
-
-
     @Override
     public XContentParser createParser(Reader reader) throws IOException {
         return new YamlXContentParser(yamlFactory.createParser(reader));
     }
 
     @Override
-    public boolean isXContent(BytesReference bytes) {
-        int length = bytes.length() < 20 ? bytes.length() : 20;
+    public boolean isXContent(byte[] bytes, int offset, int len) {
+        int length = Math.min(len, 20);
         if (length == 0) {
             return false;
         }
-        byte first = bytes.get(0);
-        return length > 2 && first == '-' && bytes.get(1) == '-' && bytes.get(2) == '-';
+        byte first = bytes[offset];
+        return length > 2 && first == '-' && bytes[offset + 1] == '-' && bytes[offset + 2] == '-';
     }
 }

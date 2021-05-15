@@ -2,4 +2,6 @@ dependencies {
     implementation project(':content-core')
     implementation project(':content-resource')
     implementation project(':content-xml')
+    implementation project(':content-json')
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${project.property('jackson.version')}"
 }
