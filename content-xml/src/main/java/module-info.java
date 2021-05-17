@@ -10,5 +10,6 @@ module org.xbib.content.xml {
     requires transitive org.xbib.content.core;
     requires transitive org.xbib.content.resource;
     requires transitive com.fasterxml.jackson.dataformat.xml;
+    requires com.fasterxml.jackson.core;
     provides XContent with org.xbib.content.xml.XmlXContent;
 }

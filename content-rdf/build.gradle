@@ -1,5 +1,4 @@
 dependencies {
-    implementation project(':content-core')
     implementation project(':content-resource')
     implementation project(':content-xml')
     implementation project(':content-json')

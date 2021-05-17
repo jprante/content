@@ -1,8 +1,9 @@
+import org.xbib.content.XContent;
 import org.xbib.content.SettingsLoader;
 import org.xbib.content.properties.PropertiesSettingsLoader;
 
 module org.xbib.content.core {
-    uses org.xbib.content.XContent;
+    uses XContent;
     uses SettingsLoader;
     exports org.xbib.content.io;
     exports org.xbib.content.properties;
@@ -11,6 +12,6 @@ module org.xbib.content.core {
     exports org.xbib.content.core;
     requires transitive org.xbib.content;
     requires transitive org.xbib.datastructures.tiny;
-    requires transitive com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.core;
     provides SettingsLoader with PropertiesSettingsLoader;
 }
