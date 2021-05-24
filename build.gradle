@@ -38,3 +38,4 @@ subprojects {
     apply from: rootProject.file('gradle/publishing/publication.gradle')
 }
 apply from: rootProject.file('gradle/publishing/sonatype.gradle')
+apply from: rootProject.file('gradle/repositories/maven.gradle')
