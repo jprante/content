@@ -14,7 +14,7 @@ jobs:
           image_resource:
             type: docker-image
             source:
-              repository: fl.hbz-nrw.de
+              repository: fl.hbz-nrw.de/centos-gradle
               image: centos-gradle
           inputs:
             - name: content
