@@ -1,4 +1,4 @@
-package org.xbib.content.config;
+package org.xbib.content.settings.datastructures;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

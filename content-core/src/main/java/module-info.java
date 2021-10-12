@@ -11,7 +11,6 @@ module org.xbib.content.core {
     exports org.xbib.content.util.unit;
     exports org.xbib.content.core;
     requires transitive org.xbib.content;
-    requires transitive org.xbib.datastructures.tiny;
     requires com.fasterxml.jackson.core;
     provides SettingsLoader with PropertiesSettingsLoader;
 }

@@ -79,7 +79,6 @@ public abstract class AbstractSettingsLoader implements SettingsLoader {
         if (objFieldName != null) {
             path.add(objFieldName);
         }
-
         String currentFieldName = null;
         XContentParser.Token token;
         while ((token = parser.nextToken()) != XContentParser.Token.END_OBJECT) {

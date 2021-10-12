@@ -1,10 +1,8 @@
 package org.xbib.content.core;
 
 import org.xbib.content.XContentParser;
-import org.xbib.datastructures.tiny.TinyMap;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,83 +11,17 @@ import java.util.Map;
  */
 public abstract class AbstractXContentParser implements XContentParser {
 
-    private static final MapFactory SIMPLE_MAP_FACTORY = HashMap::new;
+    //private static final MapFactory SIMPLE_MAP_FACTORY = HashMap::new;
 
-    private static final MapFactory TINY_MAP_FACTORY = TinyMap::builder;
+    //private static final MapFactory TINY_MAP_FACTORY = TinyMap::builder;
 
     private boolean losslessDecimals;
 
     private boolean base16Checks;
 
-    private static Map<String, Object> readMap(XContentParser parser) throws IOException {
-        return readMap(parser, SIMPLE_MAP_FACTORY);
-    }
+    protected abstract MapFactory getMapFactory();
 
-    private static Map<String, Object> readOrderedMap(XContentParser parser) throws IOException {
-        return readMap(parser, TINY_MAP_FACTORY);
-    }
-
-    private static Map<String, Object> readMap(XContentParser parser, MapFactory mapFactory) throws IOException {
-        Map<String, Object> map = mapFactory.newMap();
-        XContentParser.Token t = parser.currentToken();
-        if (t == null) {
-            t = parser.nextToken();
-        }
-        if (t == XContentParser.Token.START_OBJECT) {
-            t = parser.nextToken();
-        }
-        for (; t == XContentParser.Token.FIELD_NAME; t = parser.nextToken()) {
-            String fieldName = parser.currentName();
-            t = parser.nextToken();
-            Object value = readValue(parser, mapFactory, t);
-            map.put(fieldName, value);
-        }
-        return map;
-    }
-
-    private static List<Object> readList(XContentParser parser, MapFactory mapFactory) throws IOException {
-        ArrayList<Object> list = new ArrayList<>();
-        Token t;
-        while ((t = parser.nextToken()) != XContentParser.Token.END_ARRAY) {
-            list.add(readValue(parser, mapFactory, t));
-        }
-        return list;
-    }
-
-    private static Object readValue(XContentParser parser, MapFactory mapFactory, XContentParser.Token t) throws IOException {
-        if (t == XContentParser.Token.VALUE_NULL) {
-            return null;
-        } else if (t == XContentParser.Token.VALUE_STRING) {
-            if (parser.isBase16Checks()) {
-                return XContentHelper.parseBase16(parser.text());
-            }
-            return parser.text();
-        } else if (t == XContentParser.Token.VALUE_NUMBER) {
-            XContentParser.NumberType numberType = parser.numberType();
-            if (numberType == XContentParser.NumberType.INT) {
-                return parser.isLosslessDecimals() ? parser.bigIntegerValue() : parser.intValue();
-            } else if (numberType == XContentParser.NumberType.LONG) {
-                return parser.isLosslessDecimals() ? parser.bigIntegerValue() : parser.longValue();
-            } else if (numberType == XContentParser.NumberType.FLOAT) {
-                return parser.isLosslessDecimals() ? parser.bigDecimalValue() : parser.floatValue();
-            } else if (numberType == XContentParser.NumberType.DOUBLE) {
-                return parser.isLosslessDecimals() ? parser.bigDecimalValue() : parser.doubleValue();
-            } else if (numberType == NumberType.BIG_INTEGER) {
-                return parser.bigIntegerValue();
-            } else if (numberType == NumberType.BIG_DECIMAL) {
-                return parser.bigDecimalValue();
-            }
-        } else if (t == XContentParser.Token.VALUE_BOOLEAN) {
-            return parser.booleanValue();
-        } else if (t == XContentParser.Token.START_OBJECT) {
-            return readMap(parser, mapFactory);
-        } else if (t == XContentParser.Token.START_ARRAY) {
-            return readList(parser, mapFactory);
-        } else if (t == XContentParser.Token.VALUE_EMBEDDED_OBJECT) {
-            return parser.binaryValue();
-        }
-        return null;
-    }
+    protected abstract MapFactory getOrderedMapFactory();
 
     @Override
     public boolean isBooleanValue() throws IOException {
@@ -233,11 +165,6 @@ public abstract class AbstractXContentParser implements XContentParser {
         }
     }
 
-    @FunctionalInterface
-    interface MapFactory {
-        Map<String, Object> newMap();
-    }
-
     /**
      * Returns true if the a sequence of chars is one of "true","false","on","off","yes","no","0","1".
      *
@@ -265,5 +192,75 @@ public abstract class AbstractXContentParser implements XContentParser {
         }
         return length == 5 && (text[offset] == 'f' && text[offset + 1] == 'a' && text[offset + 2] == 'l'
                 && text[offset + 3] == 's' && text[offset + 4] == 'e');
+    }
+
+    private Map<String, Object> readMap(XContentParser parser) throws IOException {
+        return readMap(parser, getMapFactory());
+    }
+
+    private Map<String, Object> readOrderedMap(XContentParser parser) throws IOException {
+        return readMap(parser, getOrderedMapFactory());
+    }
+
+    private static Map<String, Object> readMap(XContentParser parser, MapFactory mapFactory) throws IOException {
+        Map<String, Object> map = mapFactory.newMap();
+        XContentParser.Token t = parser.currentToken();
+        if (t == null) {
+            t = parser.nextToken();
+        }
+        if (t == XContentParser.Token.START_OBJECT) {
+            t = parser.nextToken();
+        }
+        for (; t == XContentParser.Token.FIELD_NAME; t = parser.nextToken()) {
+            String fieldName = parser.currentName();
+            t = parser.nextToken();
+            Object value = readValue(parser, mapFactory, t);
+            map.put(fieldName, value);
+        }
+        return map;
+    }
+
+    private static List<Object> readList(XContentParser parser, MapFactory mapFactory) throws IOException {
+        ArrayList<Object> list = new ArrayList<>();
+        Token t;
+        while ((t = parser.nextToken()) != XContentParser.Token.END_ARRAY) {
+            list.add(readValue(parser, mapFactory, t));
+        }
+        return list;
+    }
+
+    private static Object readValue(XContentParser parser, MapFactory mapFactory, XContentParser.Token t) throws IOException {
+        if (t == XContentParser.Token.VALUE_NULL) {
+            return null;
+        } else if (t == XContentParser.Token.VALUE_STRING) {
+            if (parser.isBase16Checks()) {
+                return XContentHelper.parseBase16(parser.text());
+            }
+            return parser.text();
+        } else if (t == XContentParser.Token.VALUE_NUMBER) {
+            XContentParser.NumberType numberType = parser.numberType();
+            if (numberType == XContentParser.NumberType.INT) {
+                return parser.isLosslessDecimals() ? parser.bigIntegerValue() : parser.intValue();
+            } else if (numberType == XContentParser.NumberType.LONG) {
+                return parser.isLosslessDecimals() ? parser.bigIntegerValue() : parser.longValue();
+            } else if (numberType == XContentParser.NumberType.FLOAT) {
+                return parser.isLosslessDecimals() ? parser.bigDecimalValue() : parser.floatValue();
+            } else if (numberType == XContentParser.NumberType.DOUBLE) {
+                return parser.isLosslessDecimals() ? parser.bigDecimalValue() : parser.doubleValue();
+            } else if (numberType == NumberType.BIG_INTEGER) {
+                return parser.bigIntegerValue();
+            } else if (numberType == NumberType.BIG_DECIMAL) {
+                return parser.bigDecimalValue();
+            }
+        } else if (t == XContentParser.Token.VALUE_BOOLEAN) {
+            return parser.booleanValue();
+        } else if (t == XContentParser.Token.START_OBJECT) {
+            return readMap(parser, mapFactory);
+        } else if (t == XContentParser.Token.START_ARRAY) {
+            return readList(parser, mapFactory);
+        } else if (t == XContentParser.Token.VALUE_EMBEDDED_OBJECT) {
+            return parser.binaryValue();
+        }
+        return null;
     }
 }

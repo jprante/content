@@ -10,8 +10,6 @@ import java.util.Set;
  */
 public class JsonSettingsLoader extends AbstractSettingsLoader {
 
-    private static final Set<String> JSON_SUFFIXES = Set.of("json");
-
     @Override
     public XContent content() {
         return JsonXContent.jsonContent();
@@ -19,7 +17,7 @@ public class JsonSettingsLoader extends AbstractSettingsLoader {
 
     @Override
     public Set<String> suffixes() {
-        return JSON_SUFFIXES;
+        return Set.of("json");
     }
 
     @Override

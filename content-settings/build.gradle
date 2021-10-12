@@ -1,4 +1,5 @@
 dependencies {
     api project(':content-core')
+    api "org.xbib:datastructures-tiny:${project.property('xbib-datastructures.version')}"
     testImplementation project(":content-json")
 }

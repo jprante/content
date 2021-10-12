@@ -53,12 +53,10 @@ public class YamlXContent implements XContent {
         return new YamlXContentGenerator(yamlFactory.createGenerator(os, JsonEncoding.UTF8));
     }
 
-
     @Override
     public XContentGenerator createGenerator(Writer writer) throws IOException {
         return new YamlXContentGenerator(yamlFactory.createGenerator(writer));
     }
-
 
     @Override
     public XContentParser createParser(String content) throws IOException {
@@ -66,18 +64,15 @@ public class YamlXContent implements XContent {
                 .createParser(content.getBytes(StandardCharsets.UTF_8)));
     }
 
-
     @Override
     public XContentParser createParser(InputStream is) throws IOException {
         return new YamlXContentParser(yamlFactory.createParser(is));
     }
 
-
     @Override
     public XContentParser createParser(byte[] data) throws IOException {
         return new YamlXContentParser(yamlFactory.createParser(data));
     }
-
 
     @Override
     public XContentParser createParser(byte[] data, int offset, int length) throws IOException {

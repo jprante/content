@@ -5,10 +5,13 @@ import com.fasterxml.jackson.core.JsonToken;
 import org.xbib.content.core.AbstractXContentParser;
 import org.xbib.content.XContent;
 import org.xbib.content.XContentParser;
+import org.xbib.content.core.MapFactory;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class JsonXContentParser extends AbstractXContentParser {
 
@@ -51,6 +54,16 @@ public class JsonXContentParser extends AbstractXContentParser {
     @Override
     public String currentName() throws IOException {
         return parser.getCurrentName();
+    }
+
+    @Override
+    protected MapFactory getMapFactory() {
+        return HashMap::new;
+    }
+
+    @Override
+    protected MapFactory getOrderedMapFactory() {
+        return LinkedHashMap::new;
     }
 
     @Override
