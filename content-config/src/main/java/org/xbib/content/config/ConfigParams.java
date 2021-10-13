@@ -1,7 +1,6 @@
 package org.xbib.content.config;
 
-import org.xbib.content.settings.datastructures.Settings;
-
+import org.xbib.content.settings.datastructures.DatastructureSettings;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class ConfigParams implements Comparable<ConfigParams> {
 
     final List<SuffixedReader> reader = new ArrayList<>();
 
-    final List<Settings> settings = new ArrayList<>();
+    final List<DatastructureSettings> settings = new ArrayList<>();
 
     List<String> args = null;
 
@@ -77,7 +76,7 @@ public class ConfigParams implements Comparable<ConfigParams> {
         return this;
     }
 
-    public ConfigParams withSettings(Settings settings) {
+    public ConfigParams withSettings(DatastructureSettings settings) {
         this.settings.add(settings);
         return this;
     }

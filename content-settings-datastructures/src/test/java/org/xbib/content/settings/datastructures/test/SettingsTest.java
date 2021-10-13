@@ -1,7 +1,7 @@
 package org.xbib.content.settings.datastructures.test;
 
 import org.junit.jupiter.api.Test;
-import org.xbib.content.settings.datastructures.Settings;
+import org.xbib.content.Settings;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
@@ -18,8 +18,8 @@ public class SettingsTest {
 
     @Test
     public void testEmpty() {
-        Settings settings = Settings.EMPTY_SETTINGS;
-        assertTrue(settings.getAsMap().isEmpty());
+        Settings settings = Settings.emptySettings();
+        assertTrue(settings.isEmpty());
     }
 
     @Test

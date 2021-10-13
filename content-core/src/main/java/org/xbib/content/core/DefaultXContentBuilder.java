@@ -8,7 +8,6 @@ import org.xbib.content.XContentParser;
 import org.xbib.content.io.BytesReference;
 import org.xbib.content.io.BytesStreamOutput;
 import org.xbib.content.util.geo.GeoPoint;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
@@ -136,6 +135,7 @@ public final class DefaultXContentBuilder implements XContentBuilder {
         return this;
     }
 
+    @Override
     public XContentBuilder field(String name, Integer value) throws IOException {
         field(name);
         if (value == null) {
@@ -146,6 +146,7 @@ public final class DefaultXContentBuilder implements XContentBuilder {
         return this;
     }
 
+    @Override
     public XContentBuilder field(String name, int value) throws IOException {
         field(name);
         generator.writeNumber(value);
@@ -289,6 +290,7 @@ public final class DefaultXContentBuilder implements XContentBuilder {
         return this;
     }
 
+    @Override
     public XContentBuilder field(String name, int... value) throws IOException {
         startArray(name);
         for (Object o : value) {
@@ -505,6 +507,7 @@ public final class DefaultXContentBuilder implements XContentBuilder {
         return this;
     }
 
+    @Override
     public XContentBuilder value(byte[] value) throws IOException {
         if (value == null) {
             return nullValue();

@@ -1,0 +1,3 @@
+dependencies {
+    api "org.xbib:datastructures-api:${project.property('xbib-datastructures.version')}"
+}

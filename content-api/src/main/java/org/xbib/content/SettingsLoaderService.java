@@ -1,8 +1,9 @@
-package org.xbib.content.settings;
+package org.xbib.content.settings.datastructures;
 
 import org.xbib.content.SettingsLoader;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -12,16 +13,20 @@ import java.util.Set;
  */
 public final class SettingsLoaderService {
 
+    private static final SettingsLoaderService INSTANCE = new SettingsLoaderService();
+
     private final Map<Set<String>, SettingsLoader> settingsLoaderMap;
 
-    public SettingsLoaderService() {
+    private SettingsLoaderService() {
         this.settingsLoaderMap = new HashMap<>();
         ServiceLoader<SettingsLoader> serviceLoader = ServiceLoader.load(SettingsLoader.class);
         for (SettingsLoader settingsLoader : serviceLoader) {
-            if (!settingsLoaderMap.containsKey(settingsLoader.suffixes())) {
-                settingsLoaderMap.put(settingsLoader.suffixes(), settingsLoader);
-            }
+            settingsLoaderMap.put(settingsLoader.suffixes(), settingsLoader);
         }
+    }
+
+    public static SettingsLoaderService getInstance() {
+        return INSTANCE;
     }
 
     /**
@@ -33,12 +38,12 @@ public final class SettingsLoaderService {
         for (Map.Entry<Set<String>, SettingsLoader> entry : settingsLoaderMap.entrySet()) {
             Set<String> suffixes = entry.getKey();
             for (String suffix : suffixes) {
-                if (resourceName.endsWith("." + suffix)) {
+                if (resourceName.endsWith(suffix)) {
                     return entry.getValue();
                 }
             }
         }
-        throw new UnsupportedOperationException();
+        throw new IllegalArgumentException("no settings loader for " + resourceName + " in " + settingsLoaderMap.keySet());
     }
 
     /**
@@ -52,6 +57,14 @@ public final class SettingsLoaderService {
                 return loader;
             }
         }
-        throw new UnsupportedOperationException();
+        throw new IllegalArgumentException("no settings loader");
+    }
+
+    public Set<String> getSuffixes() {
+        Set<String> suffixes = new HashSet<>();
+        for (Set<String> set : settingsLoaderMap.keySet()) {
+            suffixes.addAll(set);
+        }
+        return suffixes;
     }
 }

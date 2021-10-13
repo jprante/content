@@ -1,9 +1,9 @@
 package org.xbib.content.config;
 
-import org.xbib.content.settings.datastructures.SettingsLoader;
-import org.xbib.content.settings.datastructures.Settings;
+import org.xbib.content.Settings;
+import org.xbib.content.SettingsBuilder;
+import org.xbib.content.SettingsLoader;
 import org.xbib.content.settings.datastructures.SettingsLoaderService;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,11 +42,12 @@ public class ConfigLoader {
             Optional<ConfigLogger> optionalConfigLogger = serviceLoader.findFirst();
             return optionalConfigLogger.orElse(new SystemConfigLogger());
         }
-        static ConfigLoader LOADER = new ConfigLoader().withLogger(createConfigLogger());
+
+        private static final ConfigLoader configLoader = new ConfigLoader().withLogger(createConfigLogger());
     }
 
     public static ConfigLoader getInstance() {
-        return Holder.LOADER;
+        return Holder.configLoader;
     }
 
     public ConfigLoader withLogger(ConfigLogger logger) {
@@ -59,8 +60,8 @@ public class ConfigLoader {
         return map.get(configParams);
     }
 
-    private Settings.Builder internalLoad(ConfigParams params) throws ConfigException {
-        Settings.Builder settings = Settings.settingsBuilder();
+    private SettingsBuilder internalLoad(ConfigParams params) throws ConfigException {
+        SettingsBuilder settings = Settings.settingsBuilder();
         if (params.withSystemEnvironment) {
             settings.loadFromSystemEnvironment();
         }
@@ -74,7 +75,7 @@ public class ConfigLoader {
         }
         if (!params.reader.isEmpty()) {
             for (ConfigParams.SuffixedReader reader : params.reader) {
-                Settings.Builder readerSettings = createSettingsFromReader(reader.reader, reader.suffix);
+                SettingsBuilder readerSettings = createSettingsFromReader(reader.reader, reader.suffix);
                 if (readerSettings != null) {
                     settings.put(readerSettings.build());
                     if (!params.includeAll) {
@@ -84,7 +85,7 @@ public class ConfigLoader {
             }
         }
         if (params.args != null) {
-            Settings.Builder argsSettings = createSettingsFromArgs(params);
+            SettingsBuilder argsSettings = createSettingsFromArgs(params);
             if (argsSettings != null) {
                 settings.put(argsSettings.build());
                 if (!params.includeAll) {
@@ -93,7 +94,7 @@ public class ConfigLoader {
             }
         }
         if (params.withStdin) {
-            Settings.Builder stdinSettings = createSettingsFromStdin();
+            SettingsBuilder stdinSettings = createSettingsFromStdin();
             if (stdinSettings != null) {
                 settings.put(stdinSettings.build());
                 if (!params.includeAll) {
@@ -102,7 +103,7 @@ public class ConfigLoader {
             }
         }
         if (!params.fileLocations.isEmpty()) {
-            Settings.Builder fileSettings = createSettingsFromFile(params.fileLocations);
+            SettingsBuilder fileSettings = createSettingsFromFile(params.fileLocations);
             if (fileSettings != null) {
                 settings.put(fileSettings.build());
                 if (!params.includeAll) {
@@ -112,7 +113,7 @@ public class ConfigLoader {
         }
         if (!params.fileNamesWithoutSuffix.isEmpty()) {
             for (String fileNameWithoutSuffix : params.fileNamesWithoutSuffix) {
-                Settings.Builder fileSettings = createSettingsFromFile(createListOfLocations(params, fileNameWithoutSuffix));
+                SettingsBuilder fileSettings = createSettingsFromFile(createListOfLocations(params, fileNameWithoutSuffix));
                 if (fileSettings != null) {
                     settings.put(fileSettings.build());
                     if (!params.includeAll) {
@@ -124,7 +125,7 @@ public class ConfigLoader {
                 if (params.classLoaders != null) {
                     for (ClassLoader cl : params.classLoaders) {
                         if (cl != null) {
-                            Settings.Builder classpathSettings = createClasspathSettings(params, cl, fileNameWithoutSuffix);
+                            SettingsBuilder classpathSettings = createClasspathSettings(params, cl, fileNameWithoutSuffix);
                             if (classpathSettings != null) {
                                 settings.put(classpathSettings.build());
                                 if (!params.includeAll) {
@@ -142,14 +143,15 @@ public class ConfigLoader {
         throw new ConfigException("no config found");
     }
 
-    private Settings.Builder createSettingsFromArgs(ConfigParams params) throws ConfigException {
+    private SettingsBuilder createSettingsFromArgs(ConfigParams params) throws ConfigException {
         if (!params.fileNamesWithoutSuffix.isEmpty() && params.args != null) {
             for (String fileNameWithoutSuffix : params.fileNamesWithoutSuffix) {
                 for (String suffix : SettingsLoaderService.getInstance().getSuffixes()) {
                     for (int i = 0; i < params.args.size() - 1; i++) {
                         String arg = params.args.get(i);
                         String s = params.directoryName != null ?
-                          "--" + params.directoryName + "-" + fileNameWithoutSuffix + suffix : "--" + fileNameWithoutSuffix + suffix;
+                                "--" + params.directoryName + "-" + fileNameWithoutSuffix + suffix :
+                                "--" + fileNameWithoutSuffix + suffix;
                         if (arg.equals(s)) {
                             return createSettingsFromReader(new StringReader(params.args.get(i + 1)), suffix);
                         }
@@ -160,7 +162,7 @@ public class ConfigLoader {
         return null;
     }
 
-    private Settings.Builder createSettingsFromStdin() throws ConfigException {
+    private SettingsBuilder createSettingsFromStdin() throws ConfigException {
         if (System.in != null) {
             try {
                 int numBytesWaiting = System.in.available();
@@ -175,8 +177,8 @@ public class ConfigLoader {
         return null;
     }
 
-    private Settings.Builder createSettingsFromFile(List<String> settingsFileNames) throws ConfigException {
-        Settings.Builder settings = Settings.settingsBuilder();
+    private SettingsBuilder createSettingsFromFile(List<String> settingsFileNames) throws ConfigException {
+        SettingsBuilder settings = Settings.settingsBuilder();
         for (String settingsFileName: settingsFileNames) {
             int pos = settingsFileName.lastIndexOf('.');
             String suffix = (pos > 0 ? settingsFileName.substring(pos + 1) : "").toLowerCase(Locale.ROOT);
@@ -191,7 +193,7 @@ public class ConfigLoader {
                 System.setProperty("config.path", path.getParent().toString());
                 try {
                     InputStream inputStream = Files.newInputStream(path);
-                    Settings.Builder fileSettings = createSettingsFromStream(inputStream, suffix);
+                    SettingsBuilder fileSettings = createSettingsFromStream(inputStream, suffix);
                     if (fileSettings != null) {
                         settings.put(fileSettings.build());
                     }
@@ -203,10 +205,10 @@ public class ConfigLoader {
         return settings.isEmpty() ? null : settings;
     }
 
-    private Settings.Builder createClasspathSettings(ConfigParams params,
-                                                     ClassLoader classLoader,
-                                                     String fileNameWithoutSuffix) throws ConfigException {
-        Settings.Builder settings = Settings.settingsBuilder();
+    private SettingsBuilder createClasspathSettings(ConfigParams params,
+                                                    ClassLoader classLoader,
+                                                    String fileNameWithoutSuffix) throws ConfigException {
+        SettingsBuilder settings = Settings.settingsBuilder();
         for (String suffix : SettingsLoaderService.getInstance().getSuffixes()) {
             String path = params.directoryName != null ?
                     params.directoryName + '-' + fileNameWithoutSuffix + suffix :  fileNameWithoutSuffix + suffix;
@@ -215,7 +217,7 @@ public class ConfigLoader {
                 if (logger != null) {
                     logger.info("found resource: " + path);
                 }
-                Settings.Builder streamSettings = createSettingsFromStream(inputStream, suffix);
+                SettingsBuilder streamSettings = createSettingsFromStream(inputStream, suffix);
                 if (streamSettings != null) {
                     settings.put(streamSettings.build());
                 }
@@ -224,8 +226,8 @@ public class ConfigLoader {
         return settings.isEmpty() ? null : settings;
     }
 
-    private Settings.Builder createSettingsFromStream(InputStream inputStream,
-                                                      String suffix) throws ConfigException {
+    private SettingsBuilder createSettingsFromStream(InputStream inputStream,
+                                                     String suffix) throws ConfigException {
         if (inputStream == null) {
             if (logger != null) {
                 logger.error("unable to open input stream");
@@ -235,8 +237,8 @@ public class ConfigLoader {
         return createSettingsFromReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8), suffix);
     }
 
-    private Settings.Builder createSettingsFromReader(Reader reader,
-                                                      String suffix) throws ConfigException {
+    private SettingsBuilder createSettingsFromReader(Reader reader,
+                                                     String suffix) throws ConfigException {
         if (reader == null) {
             if (logger != null) {
                 logger.error("unable to open reader");
@@ -245,7 +247,7 @@ public class ConfigLoader {
         }
         SettingsLoader settingsLoader = SettingsLoaderService.getInstance().loaderFromResource(suffix);
         if (settingsLoader != null) {
-            Settings.Builder settings;
+            SettingsBuilder settings;
             try (BufferedReader bufferedReader = new BufferedReader(reader)) {
                 String content = bufferedReader.lines().collect(Collectors.joining("\n"));
                 settings = Settings.settingsBuilder().put(settingsLoader.load(content));
@@ -261,8 +263,8 @@ public class ConfigLoader {
         return null;
     }
 
-    private Settings.Builder overrideFromProperties(ConfigParams params,
-                                                    Settings.Builder settings) {
+    private SettingsBuilder overrideFromProperties(ConfigParams params,
+                                                   SettingsBuilder settings) {
         for (String key : settings.map().keySet()) {
             String value = System.getProperty(params.directoryName != null ? params.directoryName + '.' + key : key);
             if (value != null) {
@@ -282,7 +284,7 @@ public class ConfigLoader {
             }
             if (params.directoryName != null) {
                 list.add(params.directoryName + '-' + fileNameWithoutSuffix + "." + suffix);
-                list.add(xdgConfigHome + '/' + params.directoryName + '/' + fileNameWithoutSuffix + "." +suffix);
+                list.add(xdgConfigHome + '/' + params.directoryName + '/' + fileNameWithoutSuffix + "." + suffix);
                 list.add("/etc/" + params.directoryName + '/' + fileNameWithoutSuffix + "." + suffix);
             } else {
                 list.add(fileNameWithoutSuffix + "." + suffix);

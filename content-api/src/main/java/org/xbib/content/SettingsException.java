@@ -1,11 +1,10 @@
-package org.xbib.content.settings;
+package org.xbib.content;
 
 /**
  * A generic failure to handle settings.
  */
+@SuppressWarnings("serial")
 public class SettingsException extends RuntimeException {
-
-    private static final long serialVersionUID = -1833327708622505101L;
 
     public SettingsException(String message) {
         super(message);

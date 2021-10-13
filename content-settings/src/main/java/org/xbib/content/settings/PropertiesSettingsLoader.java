@@ -1,4 +1,4 @@
-package org.xbib.content.properties;
+package org.xbib.content.settings;
 
 import org.xbib.content.io.BytesReference;
 import org.xbib.content.SettingsLoader;
@@ -39,17 +39,6 @@ public class PropertiesSettingsLoader implements SettingsLoader {
         }
     }
 
-    public Map<String, String> load(BytesReference ref) throws IOException {
-        Properties props = new Properties();
-        try (Reader reader = new InputStreamReader(ref.streamInput(), StandardCharsets.UTF_8)) {
-            props.load(reader);
-            Map<String, String> result = new HashMap<>();
-            for (Map.Entry<Object, Object> entry : props.entrySet()) {
-                result.put((String) entry.getKey(), (String) entry.getValue());
-            }
-            return result;
-        }
-    }
 
     @Override
     public Map<String, String> load(Map<String, Object> source) throws IOException {
@@ -65,5 +54,17 @@ public class PropertiesSettingsLoader implements SettingsLoader {
     @Override
     public boolean canLoad(String source) {
         return true;
+    }
+
+    public Map<String, String> load(BytesReference ref) throws IOException {
+        Properties props = new Properties();
+        try (Reader reader = new InputStreamReader(ref.streamInput(), StandardCharsets.UTF_8)) {
+            props.load(reader);
+            Map<String, String> result = new HashMap<>();
+            for (Map.Entry<Object, Object> entry : props.entrySet()) {
+                result.put((String) entry.getKey(), (String) entry.getValue());
+            }
+            return result;
+        }
     }
 }

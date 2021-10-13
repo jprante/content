@@ -1,4 +1,4 @@
 dependencies {
-    api "org.xbib:datastructures-api:${project.property('xbib-datastructures.version')}"
+    api project(':content-api')
     api "org.xbib:datastructures-tiny:${project.property('xbib-datastructures.version')}"
 }

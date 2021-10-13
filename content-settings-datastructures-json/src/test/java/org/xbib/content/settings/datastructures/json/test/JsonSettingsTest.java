@@ -1,8 +1,8 @@
 package org.xbib.content.settings.datastructures.json.test;
 
 import org.junit.jupiter.api.Test;
-import org.xbib.content.settings.datastructures.Settings;
-import org.xbib.content.settings.datastructures.SettingsLoader;
+import org.xbib.content.Settings;
+import org.xbib.content.SettingsLoader;
 import org.xbib.content.settings.datastructures.json.JsonSettingsLoader;
 import java.io.IOException;
 import java.util.Arrays;

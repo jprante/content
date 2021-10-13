@@ -1,4 +1,4 @@
-package org.xbib.content.settings.datastructures;
+package org.xbib.content;
 
 import java.util.HashSet;
 import java.util.Set;

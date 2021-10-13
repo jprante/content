@@ -1,5 +1,6 @@
 package org.xbib.content.settings.datastructures;
 
+import org.xbib.content.SettingsLoader;
 import org.xbib.datastructures.api.Builder;
 import org.xbib.datastructures.api.DataStructure;
 import org.xbib.datastructures.api.ListNode;

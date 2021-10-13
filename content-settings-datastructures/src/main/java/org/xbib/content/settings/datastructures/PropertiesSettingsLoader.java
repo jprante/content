@@ -1,7 +1,7 @@
 package org.xbib.content.settings.datastructures;
 
+import org.xbib.content.SettingsLoader;
 import org.xbib.datastructures.tiny.TinyMap;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Map;

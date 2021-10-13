@@ -161,7 +161,8 @@ public class ConfigFinder {
             return Files.getLastModifiedTime(p);
         } catch (IOException e) {
             return null;
-        }});
+        }
+   });
 
     private static final Comparator<Path> PATH_NAME_COMPARATOR = Comparator.comparing(Path::toString);
 }

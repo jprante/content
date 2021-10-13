@@ -3,8 +3,8 @@ package org.xbib.content.settings.datastructures.yaml.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import org.xbib.content.settings.datastructures.Settings;
-import org.xbib.content.settings.datastructures.SettingsLoader;
+import org.xbib.content.Settings;
+import org.xbib.content.SettingsLoader;
 import org.xbib.content.settings.datastructures.yaml.YamlSettingsLoader;
 import java.io.IOException;
 import java.util.Arrays;

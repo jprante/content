@@ -10,7 +10,7 @@ import org.xbib.content.io.BytesArray;
 import org.xbib.content.io.BytesReference;
 import org.xbib.content.json.JsonSettingsLoader;
 import org.xbib.content.json.JsonXContent;
-import org.xbib.content.settings.Settings;
+import org.xbib.content.Settings;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
@@ -31,8 +31,8 @@ public class SettingsTest {
 
     @Test
     public void testEmpty() {
-        Settings settings = Settings.EMPTY_SETTINGS;
-        assertTrue(settings.getAsMap().isEmpty());
+        Settings settings = Settings.emptySettings();
+        assertTrue(settings.isEmpty());
     }
 
     @Test
@@ -134,7 +134,7 @@ public class SettingsTest {
     @Test
     public void testPropertiesLoader() {
         Settings settings = Settings.settingsBuilder()
-                .loadFromStream(".properties", new ByteArrayInputStream("a.b=c".getBytes(StandardCharsets.UTF_8)))
+                .loadFromResource(".properties", new ByteArrayInputStream("a.b=c".getBytes(StandardCharsets.UTF_8)))
                 .build();
         assertEquals("{a.b=c}", settings.getAsMap().toString());
     }

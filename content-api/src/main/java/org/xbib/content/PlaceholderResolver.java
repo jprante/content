@@ -1,4 +1,4 @@
-package org.xbib.content.settings;
+package org.xbib.content;
 
 /**
  * Strategy interface used to resolve replacement values for placeholders contained in Strings.

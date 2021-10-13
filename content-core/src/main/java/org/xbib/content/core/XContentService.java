@@ -3,7 +3,6 @@ package org.xbib.content.core;
 import org.xbib.content.XContent;
 import org.xbib.content.XContentBuilder;
 import org.xbib.content.io.BytesArray;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
