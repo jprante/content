@@ -5,6 +5,7 @@ import org.xbib.settings.Settings;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -85,7 +86,7 @@ public class SettingsTest {
                 .put("date", "${yyyy}")
                 .replacePropertyPlaceholders()
                 .build();
-        assertTrue(Integer.parseInt(settings.get("date")) > 2000);
+        assertEquals(LocalDate.now().getYear(), Integer.parseInt(settings.get("date")));
     }
 
     @Test

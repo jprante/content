@@ -1,21 +1,19 @@
 package org.xbib.settings.content.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
-import org.xbib.settings.SettingsLoader;
 import org.xbib.content.core.XContentHelper;
 import org.xbib.content.io.BytesArray;
 import org.xbib.content.io.BytesReference;
-import org.xbib.settings.content.json.JsonSettingsLoader;
 import org.xbib.content.json.JsonXContent;
 import org.xbib.settings.Settings;
+import org.xbib.settings.SettingsLoader;
+import org.xbib.settings.content.json.JsonSettingsLoader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +21,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -112,7 +113,7 @@ public class SettingsTest {
                 .put("date", "${yyyy}")
                 .replacePropertyPlaceholders()
                 .build();
-        assertTrue(Integer.parseInt(settings.get("date")) > 2000);
+        assertEquals(LocalDate.now().getYear(), Integer.parseInt(settings.get("date")));
     }
 
     @Test
