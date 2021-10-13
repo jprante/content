@@ -1,4 +1,0 @@
-dependencies {
-    api project(':content-settings-datastructures')
-    api "org.xbib:datastructures-json-tiny:${project.property('xbib-datastructures.version')}"
-}

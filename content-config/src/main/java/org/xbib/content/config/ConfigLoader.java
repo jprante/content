@@ -1,9 +1,9 @@
 package org.xbib.content.config;
 
-import org.xbib.content.Settings;
-import org.xbib.content.SettingsBuilder;
-import org.xbib.content.SettingsLoader;
-import org.xbib.content.settings.datastructures.SettingsLoaderService;
+import org.xbib.settings.Settings;
+import org.xbib.settings.SettingsBuilder;
+import org.xbib.settings.SettingsLoader;
+import org.xbib.settings.SettingsLoaderService;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -134,6 +135,15 @@ public class ConfigLoader {
                             }
                         }
                     }
+                }
+            }
+        }
+        if (!params.jdbcLookups.isEmpty()) {
+            for (ConfigParams.JdbcLookup jdbcLookup : params.jdbcLookups) {
+                try {
+                    settings.fromJdbc(jdbcLookup.connection, jdbcLookup.statement, jdbcLookup.params);
+                } catch (SQLException sqlException) {
+                    throw new ConfigException(sqlException);
                 }
             }
         }
@@ -263,15 +273,15 @@ public class ConfigLoader {
         return null;
     }
 
-    private SettingsBuilder overrideFromProperties(ConfigParams params,
-                                                   SettingsBuilder settings) {
-        for (String key : settings.map().keySet()) {
-            String value = System.getProperty(params.directoryName != null ? params.directoryName + '.' + key : key);
-            if (value != null) {
-                settings.put(key, value);
-            }
+    private SettingsBuilder overrideFromProperties(ConfigParams params, SettingsBuilder settingsBuilder) {
+        if (params.withSystemPropertiesOverride) {
+            settingsBuilder.map(e -> {
+                String key = e.getKey();
+                String value = System.getProperty(params.directoryName != null ? params.directoryName + '.' + key : key);
+                return value != null ? Map.entry(key, value) : Map.entry(key, e.getValue());
+            });
         }
-        return settings;
+        return settingsBuilder;
     }
 
     private List<String> createListOfLocations(ConfigParams params,

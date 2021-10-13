@@ -1,0 +1,6 @@
+dependencies {
+    api project(':settings-api')
+    api project(':content-core')
+    api "org.xbib:datastructures-tiny:${project.property('xbib-datastructures.version')}"
+    testImplementation project(":settings-content-json")
+}

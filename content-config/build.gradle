@@ -1,5 +1,5 @@
 dependencies {
-    api project(':content-settings-datastructures')
-    testImplementation project(':content-settings-datastructures-json')
-    testImplementation project(':content-settings-datastructures-yaml')
+    api project(':settings-datastructures')
+    testImplementation project(':settings-datastructures-json')
+    testImplementation project(':settings-datastructures-yaml')
 }

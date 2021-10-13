@@ -1,6 +1,5 @@
 dependencies {
     api project(':content-core')
-    api project(':content-settings')
     api "com.fasterxml.jackson.core:jackson-databind:${project.property('jackson.version')}"
     testImplementation("org.mockito:mockito-core:${project.property('mockito.version')}") {
         exclude group: 'org.hamcrest'

@@ -2,7 +2,7 @@ package org.xbib.content.config.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import org.xbib.content.Settings;
+import org.xbib.settings.Settings;
 import org.xbib.content.config.ConfigLoader;
 import org.xbib.content.config.ConfigParams;
 import java.io.IOException;
@@ -29,4 +29,17 @@ public class ConfigLoaderTest {
         assertEquals("world2", settings.get("hello2"));
     }
 
+    @Test
+    public void testOverride() throws IOException {
+        System.setProperty("hello", "override");
+        Settings settings = ConfigLoader.getInstance()
+                .load(new ConfigParams()
+                        .withPath(null, null, "src/test/resources", "config.*"));
+        assertEquals("world", settings.get("hello"));
+        settings = ConfigLoader.getInstance()
+                .load(new ConfigParams()
+                        .withSystemPropertiesOverride()
+                        .withPath(null, null, "src/test/resources", "config.*"));
+        assertEquals("override", settings.get("hello"));
+    }
 }

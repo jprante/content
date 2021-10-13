@@ -1,8 +1,9 @@
 package org.xbib.content.config;
 
-import org.xbib.content.settings.datastructures.DatastructureSettings;
+import org.xbib.settings.datastructures.DatastructureSettings;
 import java.io.IOException;
 import java.io.Reader;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -21,9 +22,13 @@ public class ConfigParams implements Comparable<ConfigParams> {
 
     boolean withStdin = false;
 
+    boolean withSystemPropertiesOverride = false;
+
     List<ClassLoader> classLoaders = null;
 
     final List<SuffixedReader> reader = new ArrayList<>();
+
+    final List<JdbcLookup> jdbcLookups = new ArrayList<>();
 
     final List<DatastructureSettings> settings = new ArrayList<>();
 
@@ -45,6 +50,11 @@ public class ConfigParams implements Comparable<ConfigParams> {
 
     public ConfigParams withSystemProperties() {
         this.withSystemProperties = true;
+        return this;
+    }
+
+    public ConfigParams withSystemPropertiesOverride() {
+        this.withSystemPropertiesOverride = true;
         return this;
     }
 
@@ -102,6 +112,15 @@ public class ConfigParams implements Comparable<ConfigParams> {
         return this;
     }
 
+    public ConfigParams withJdbc(Connection connection, String statement, String[] params) {
+        JdbcLookup jdbcLookup = new JdbcLookup();
+        jdbcLookup.connection = connection;
+        jdbcLookup.statement = statement;
+        jdbcLookup.params = params;
+        jdbcLookups.add(jdbcLookup);
+        return this;
+    }
+
     @Override
     public int compareTo(ConfigParams o) {
         return COMPARATOR.compare(this, o);
@@ -124,5 +143,11 @@ public class ConfigParams implements Comparable<ConfigParams> {
     public static class SuffixedReader {
         Reader reader;
         String suffix;
+    }
+
+    public static class JdbcLookup {
+        Connection connection;
+        String statement;
+        String[] params;
     }
 }
