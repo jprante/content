@@ -160,8 +160,8 @@ public class ConfigLoader {
                     for (int i = 0; i < params.args.size() - 1; i++) {
                         String arg = params.args.get(i);
                         String s = params.directoryName != null ?
-                                "--" + params.directoryName + "-" + fileNameWithoutSuffix + suffix :
-                                "--" + fileNameWithoutSuffix + suffix;
+                                "--" + params.directoryName + "-" + fileNameWithoutSuffix + "." + suffix :
+                                "--" + fileNameWithoutSuffix + "." + suffix;
                         if (arg.equals(s)) {
                             return createSettingsFromReader(new StringReader(params.args.get(i + 1)), suffix);
                         }
