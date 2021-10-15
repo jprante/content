@@ -5,5 +5,5 @@ pmd {
     consoleOutput = false
     toolVersion = "6.24.0"
     rulePriority = 5
-    ruleSets = ["category/java/bestpractices.xml"]
+    ruleSetFiles = rootProject.files('gradle/config/pmd/category/java/bestpractices.xml')
 }
