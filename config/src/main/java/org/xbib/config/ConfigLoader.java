@@ -29,12 +29,11 @@ import java.util.stream.Collectors;
  */
 public class ConfigLoader {
 
-    private final Map<ConfigParams, Settings> map;
+    private static final Map<ConfigParams, Settings> map = new HashMap<>();
 
     private ConfigLogger logger;
 
     private ConfigLoader() {
-        this.map = new HashMap<>();
     }
 
     private static class Holder {

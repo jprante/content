@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class ConfigParams implements Comparable<ConfigParams> {
 
@@ -127,6 +128,36 @@ public class ConfigParams implements Comparable<ConfigParams> {
         jdbcLookup.params = params;
         jdbcLookups.add(jdbcLookup);
         return this;
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ConfigParams that = (ConfigParams) o;
+        return withSystemEnvironment == that.withSystemEnvironment &&
+                withSystemProperties == that.withSystemProperties &&
+                failIfEmpty == that.failIfEmpty &&
+                includeAll == that.includeAll &&
+                withStdin == that.withStdin &&
+                withSystemPropertiesOverride == that.withSystemPropertiesOverride &&
+                Objects.equals(classLoaders, that.classLoaders) &&
+                Objects.equals(reader, that.reader) &&
+                Objects.equals(jdbcLookups, that.jdbcLookups) &&
+                Objects.equals(settings, that.settings) &&
+                Objects.equals(args, that.args) &&
+                Objects.equals(directoryName, that.directoryName) &&
+                Objects.equals(fileNamesWithoutSuffix, that.fileNamesWithoutSuffix) &&
+                Objects.equals(fileLocations, that.fileLocations);
     }
 
     @Override
