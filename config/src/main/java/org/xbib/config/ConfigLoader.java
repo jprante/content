@@ -40,7 +40,7 @@ public class ConfigLoader {
         private static ConfigLogger createConfigLogger() {
             ServiceLoader<ConfigLogger> serviceLoader = ServiceLoader.load(ConfigLogger.class);
             Optional<ConfigLogger> optionalConfigLogger = serviceLoader.findFirst();
-            return optionalConfigLogger.orElse(new SystemConfigLogger());
+            return optionalConfigLogger.orElse(new NullConfigLogger());
         }
 
         private static final ConfigLoader configLoader = new ConfigLoader().withLogger(createConfigLogger());

@@ -17,7 +17,7 @@ public class DatastructureSettings implements Settings {
 
     private final TinyMap<String, String> map;
 
-    protected DatastructureSettings(TinyMap<String, String> map) {
+    DatastructureSettings(TinyMap<String, String> map) {
         this.map = map;
     }
 
