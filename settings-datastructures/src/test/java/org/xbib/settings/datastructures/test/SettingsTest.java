@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SettingsTest {
@@ -87,6 +88,15 @@ public class SettingsTest {
                 .replacePropertyPlaceholders()
                 .build();
         assertEquals(LocalDate.now().getYear(), Integer.parseInt(settings.get("date")));
+    }
+
+    @Test
+    public void testPropertyReplaceNull() {
+        Settings settings = Settings.settingsBuilder()
+                .put("null", null)
+                .replacePropertyPlaceholders()
+                .build();
+        assertNull(settings.get("null"));
     }
 
     @Test

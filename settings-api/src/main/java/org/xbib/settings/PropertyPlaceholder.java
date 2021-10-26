@@ -46,6 +46,9 @@ public class PropertyPlaceholder {
     protected String parseStringValue(String value,
                                       PlaceholderResolver placeholderResolver,
                                       Set<String> visitedPlaceholders) {
+        if (value == null) {
+            return null;
+        }
         StringBuilder sb = new StringBuilder(value);
         int startIndex = value.indexOf(this.placeholderPrefix);
         while (startIndex != -1) {
@@ -53,8 +56,7 @@ public class PropertyPlaceholder {
             if (endIndex != -1) {
                 String placeholder = sb.substring(startIndex + this.placeholderPrefix.length(), endIndex);
                 if (!visitedPlaceholders.add(placeholder)) {
-                    throw new IllegalArgumentException(
-                            "Circular placeholder reference '" + placeholder + "' in property definitions");
+                    throw new IllegalArgumentException("Circular placeholder reference '" + placeholder + "' in property definitions");
                 }
                 placeholder = parseStringValue(placeholder, placeholderResolver, visitedPlaceholders);
                 int defaultValueIdx = placeholder.indexOf(':');
