@@ -3,7 +3,6 @@ apply plugin: 'pmd'
 pmd {
     ignoreFailures = true
     consoleOutput = false
-    toolVersion = "6.24.0"
-    rulePriority = 5
+    toolVersion = "6.41.0"
     ruleSetFiles = rootProject.files('gradle/config/pmd/category/java/bestpractices.xml')
 }

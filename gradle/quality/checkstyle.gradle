@@ -1,27 +1,17 @@
 apply plugin: 'checkstyle'
 
 checkstyle {
-    toolVersion '8.33'
+    toolVersion '9.2.1'
     showViolations = true
     ignoreFailures = true
     configFile rootProject.file("gradle/config/checkstyle/checkstyle.xml")
 }
 
-checkstyleMain {
-    exclude "**/module-info.java"
-    logging.setLevel(LogLevel.LIFECYCLE)
-    source ='src/main/java'
-}
-
-checkstyleTest {
-    exclude "**/module-info.java"
-    logging.setLevel(LogLevel.LIFECYCLE)
-    source ='src/test/java'
-}
-
 tasks.withType(Checkstyle) {
+    exclude "**/module-info.java"
+    logging.setLevel(LogLevel.LIFECYCLE)
     reports {
-        xml.enabled false
-        html.enabled true
+        xml.required = false
+        html.required = true
     }
 }
