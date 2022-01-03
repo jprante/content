@@ -9,7 +9,6 @@ checkstyle {
 
 tasks.withType(Checkstyle) {
     exclude "**/module-info.java"
-    logging.setLevel(LogLevel.LIFECYCLE)
     reports {
         xml.required = false
         html.required = true
