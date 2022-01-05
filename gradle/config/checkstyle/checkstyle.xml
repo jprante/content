@@ -56,10 +56,19 @@ page at http://checkstyle.sourceforge.net/config.html -->
             <!-- Checks for out of order import statements. -->
 
             <property name="severity" value="warning"/>
-            <property name="groups" value="com,junit,net,org,java,javax"/>
-            <!-- This ensures that static imports go first. -->
-            <property name="option" value="top"/>
-            <property name="tokens" value="STATIC_IMPORT, IMPORT"/>
+            <!-- <property name="tokens" value="IMPORT, STATIC_IMPORT"/> -->
+            <property name="separated" value="false"/>
+            <property name="groups" value="*"/>
+            <!-- <property name="option" value="above"/> -->
+            <property name="sortStaticImportsAlphabetically" value="true"/>
+        </module>
+
+        <module name="CustomImportOrder">
+            <!-- <property name="customImportOrderRules" value="THIRD_PARTY_PACKAGE###SPECIAL_IMPORTS###STANDARD_JAVA_PACKAGE###STATIC"/> -->
+            <!-- <property name="specialImportsRegExp" value="^javax\."/> -->
+            <!-- <property name="standardPackageRegExp" value="^java\."/> -->
+            <property name="sortImportsInGroupAlphabetically" value="true"/>
+            <property name="separateLineBetweenGroups" value="false"/>
         </module>
 
         <!--

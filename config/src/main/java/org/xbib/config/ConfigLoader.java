@@ -1,9 +1,5 @@
 package org.xbib.config;
 
-import org.xbib.settings.Settings;
-import org.xbib.settings.SettingsBuilder;
-import org.xbib.settings.SettingsLoader;
-import org.xbib.settings.SettingsLoaderService;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +19,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
+import org.xbib.settings.Settings;
+import org.xbib.settings.SettingsBuilder;
+import org.xbib.settings.SettingsLoader;
+import org.xbib.settings.SettingsLoaderService;
 
 /**
  * A configuration loader for configuration files.

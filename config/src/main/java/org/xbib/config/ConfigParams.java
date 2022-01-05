@@ -1,7 +1,5 @@
 package org.xbib.config;
 
-import org.xbib.settings.Settings;
-import org.xbib.settings.datastructures.DatastructureSettings;
 import java.io.IOException;
 import java.io.Reader;
 import java.sql.Connection;
@@ -10,6 +8,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import org.xbib.settings.Settings;
+import org.xbib.settings.datastructures.DatastructureSettings;
 
 public class ConfigParams implements Comparable<ConfigParams> {
 

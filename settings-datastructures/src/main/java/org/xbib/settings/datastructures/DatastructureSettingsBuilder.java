@@ -229,8 +229,7 @@ public class DatastructureSettingsBuilder implements SettingsBuilder {
     public DatastructureSettingsBuilder loadFromString(String source) {
         SettingsLoader settingsLoader = settingsLoaderService.loaderFromString(source);
         try {
-            Map<String, String> loadedSettings = settingsLoader.load(source);
-            put(loadedSettings);
+            put(settingsLoader.load(source));
         } catch (Exception e) {
             throw new SettingsException("failed to load settings from [" + source + "]", e);
         }

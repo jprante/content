@@ -1,15 +1,14 @@
 package org.xbib.config.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.Test;
-import org.xbib.settings.Settings;
-import org.xbib.config.ConfigLoader;
-import org.xbib.config.ConfigParams;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import org.junit.jupiter.api.Test;
+import org.xbib.config.ConfigLoader;
+import org.xbib.config.ConfigParams;
+import org.xbib.settings.Settings;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ConfigLoaderTest {
 
