@@ -1,6 +1,10 @@
 package org.xbib.settings.datastructures.json.test;
 
+import java.io.FileOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.jupiter.api.Test;
+import org.xbib.datastructures.json.tiny.JsonBuilder;
 import org.xbib.settings.Settings;
 import org.xbib.settings.SettingsLoader;
 import org.xbib.settings.datastructures.json.JsonSettingsLoader;

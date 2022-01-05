@@ -53,7 +53,7 @@ public class PropertiesSettingsLoader implements SettingsLoader {
 
     @Override
     public boolean canLoad(String source) {
-        return true;
+        return source != null && source.charAt(0) == '#';
     }
 
     public Map<String, String> load(BytesReference ref) throws IOException {

@@ -116,11 +116,18 @@ public class SettingsTest {
     }
 
     @Test
-    public void testPropertiesLoader() {
+    public void testPropertiesLoaderFromResource() {
         Settings settings = Settings.settingsBuilder()
-                .loadFromResource(".properties", new ByteArrayInputStream("a.b=c".getBytes(StandardCharsets.UTF_8)))
+                .loadFromResource("properties", new ByteArrayInputStream("a.b=c".getBytes(StandardCharsets.UTF_8)))
                 .build();
         assertEquals("{a.b=c}", settings.getAsMap().toString());
     }
 
+    @Test
+    public void testPropertiesLoaderFromString() {
+        Settings settings = Settings.settingsBuilder()
+                .loadFromString("#\na.b=c")
+                .build();
+        assertEquals("{a.b=c}", settings.getAsMap().toString());
+    }
 }
