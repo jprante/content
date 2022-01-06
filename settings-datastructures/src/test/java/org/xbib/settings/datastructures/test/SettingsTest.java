@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.xbib.settings.Settings;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -126,7 +127,7 @@ public class SettingsTest {
     @Test
     public void testPropertiesLoaderFromString() {
         Settings settings = Settings.settingsBuilder()
-                .loadFromString("#\na.b=c")
+                .loadFromString("properties", "#\na.b=c")
                 .build();
         assertEquals("{a.b=c}", settings.getAsMap().toString());
     }

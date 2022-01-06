@@ -153,7 +153,7 @@ public class SettingsTest {
     @Test
     public void testPropertiesLoaderFromString() {
         Settings settings = Settings.settingsBuilder()
-                .loadFromString("#\na.b=c")
+                .loadFromString("properties", "#\na.b=c")
                 .build();
         assertEquals("{a.b=c}", settings.getAsMap().toString());
     }

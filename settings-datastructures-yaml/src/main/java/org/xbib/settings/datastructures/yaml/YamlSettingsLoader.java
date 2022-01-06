@@ -21,11 +21,6 @@ public class YamlSettingsLoader extends AbstractSettingsLoader {
     }
 
     @Override
-    public boolean canLoad(String source) {
-        return source.indexOf(':') != -1;
-    }
-
-    @Override
     public Map<String, String> load(String source) throws IOException {
         // replace tabs with whitespace (yaml does not accept tabs, but many users might use it still...)
         return super.load(source.replace("\t", "  "));

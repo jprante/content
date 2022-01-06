@@ -1,10 +1,6 @@
 package org.xbib.settings.datastructures.json.test;
 
-import java.io.FileOutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.jupiter.api.Test;
-import org.xbib.datastructures.json.tiny.JsonBuilder;
 import org.xbib.settings.Settings;
 import org.xbib.settings.SettingsLoader;
 import org.xbib.settings.datastructures.json.JsonSettingsLoader;
@@ -53,7 +49,7 @@ public class JsonSettingsTest {
     @Test
     public void testLoadSettingsFromString() {
         String json = "{\"Hello\":\"World\"}";
-        Settings settings = Settings.settingsBuilder().loadFromString(json).build();
+        Settings settings = Settings.settingsBuilder().loadFromString("json", json).build();
         assertEquals("{Hello=World}", settings.getAsMap().toString());
     }
 

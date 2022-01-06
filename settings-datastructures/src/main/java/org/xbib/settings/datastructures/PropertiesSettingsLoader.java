@@ -41,9 +41,4 @@ public class PropertiesSettingsLoader implements SettingsLoader {
         }
         return result.build();
     }
-
-    @Override
-    public boolean canLoad(String source) {
-        return source != null && source.charAt(0) == '#';
-    }
 }

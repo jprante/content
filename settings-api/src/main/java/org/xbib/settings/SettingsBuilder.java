@@ -1,5 +1,6 @@
 package org.xbib.settings;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -36,9 +37,9 @@ public interface SettingsBuilder {
 
     SettingsBuilder put(Map<String, String> settings);
 
-    SettingsBuilder loadFromString(String source);
+    SettingsBuilder loadFromString(String resourceName, String content);
 
-    SettingsBuilder loadFromResource(String resourceName, InputStream inputStream) throws SettingsException;
+    SettingsBuilder loadFromResource(String resourceName, InputStream inputStream);
 
     default SettingsBuilder fromJdbc(Connection connection, String statement, String[] params) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(statement, params);

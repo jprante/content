@@ -44,20 +44,6 @@ public final class SettingsLoaderService {
         throw new IllegalArgumentException("no settings loader for " + resourceName + " in " + settingsLoaderMap.keySet());
     }
 
-    /**
-     * Returns a {@link SettingsLoader} based on the actual source.
-     * @param source the source
-     * @return the settings loader
-     */
-    public SettingsLoader loaderFromString(String source) {
-        for (SettingsLoader loader : settingsLoaderMap.values()) {
-            if (loader.canLoad(source)) {
-                return loader;
-            }
-        }
-        throw new IllegalArgumentException("no settings loader");
-    }
-
     public Set<String> getSuffixes() {
         Set<String> suffixes = new HashSet<>();
         for (Set<String> set : settingsLoaderMap.keySet()) {

@@ -20,11 +20,14 @@ public interface SettingsLoader {
      * Loads the settings from a source string.
      * @param source the source
      * @return a Map
-     * @throws IOException if load fails
      */
     Map<String, String> load(String source) throws IOException;
 
+    /**
+     * Loads the settings from a map.
+     * @param source the map with the source
+     * @return a Map
+     */
     Map<String, String> load(Map<String, Object> source) throws IOException;
 
-    boolean canLoad(String source);
 }

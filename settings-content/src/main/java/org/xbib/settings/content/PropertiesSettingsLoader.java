@@ -41,7 +41,7 @@ public class PropertiesSettingsLoader implements SettingsLoader {
 
 
     @Override
-    public Map<String, String> load(Map<String, Object> source) throws IOException {
+    public Map<String, String> load(Map<String, Object> source) {
         Properties props = new Properties();
         props.putAll(source);
         Map<String, String> result = new HashMap<>();
@@ -49,11 +49,6 @@ public class PropertiesSettingsLoader implements SettingsLoader {
             result.put((String) entry.getKey(), (String) entry.getValue());
         }
         return result;
-    }
-
-    @Override
-    public boolean canLoad(String source) {
-        return source != null && source.charAt(0) == '#';
     }
 
     public Map<String, String> load(BytesReference ref) throws IOException {

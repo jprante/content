@@ -28,7 +28,7 @@ import java.util.function.Function;
  */
 public class ContentSettingsBuilder implements SettingsBuilder {
 
-    private final SettingsLoaderService settingsLoaderService = SettingsLoaderService.getInstance();
+    private final SettingsLoaderService settingsLoaderService;
 
     private final Map<String, String> map;
 
@@ -41,7 +41,8 @@ public class ContentSettingsBuilder implements SettingsBuilder {
     private TimeUnit timeUnit;
 
     public ContentSettingsBuilder() {
-        map = TinyMap.builder();
+        this.settingsLoaderService = SettingsLoaderService.getInstance();
+        this.map = TinyMap.builder();
     }
 
     public String remove(String key) {
@@ -228,24 +229,6 @@ public class ContentSettingsBuilder implements SettingsBuilder {
     }
 
     /**
-     * Loads settings from the actual string content that represents them using the
-     * {@link SettingsLoaderService#loaderFromString(String)}.
-     *
-     * @param source source
-     * @return builder
-     */
-    public ContentSettingsBuilder loadFromString(String source) {
-        SettingsLoader settingsLoader = settingsLoaderService.loaderFromString(source);
-        try {
-            Map<String, String> loadedSettings = settingsLoader.load(source);
-            put(loadedSettings);
-        } catch (Exception e) {
-            throw new SettingsException("Failed to load settings from [" + source + "]", e);
-        }
-        return this;
-    }
-
-    /**
      * Loads settings from an URL.
      *
      * @param url url
@@ -267,16 +250,31 @@ public class ContentSettingsBuilder implements SettingsBuilder {
      * @return builder
      */
     @Override
-    public ContentSettingsBuilder loadFromResource(String resourceName, InputStream inputStream) throws SettingsException {
-        SettingsLoader settingsLoader = settingsLoaderService.loaderFromResource(resourceName);
+    public ContentSettingsBuilder loadFromResource(String resourceName, InputStream inputStream) {
         try {
-            Map<String, String> loadedSettings = settingsLoader
-                    .load(ContentSettings.copyToString(new InputStreamReader(inputStream, StandardCharsets.UTF_8)));
-            put(loadedSettings);
+            return loadFromString(resourceName, ContentSettings.copyToString(new InputStreamReader(inputStream, StandardCharsets.UTF_8)));
         } catch (Exception e) {
-            throw new SettingsException("Failed to load settings from [" + resourceName + "]", e);
+            throw new SettingsException("failed to load settings from [" + resourceName + "]", e);
         }
-        return this;
+    }
+
+    /**
+     * Loads settings from the actual string content that represents them using the
+     * {@link SettingsLoaderService#loaderFromResource(String)} (String)}.
+     *
+     * @param resourceName the resource name ("json", "yaml")
+     * @param content the content
+     * @return builder
+     */
+    @Override
+    public ContentSettingsBuilder loadFromString(String resourceName, String content) {
+        try {
+            SettingsLoader settingsLoader = settingsLoaderService.loaderFromResource(resourceName);
+            put(settingsLoader.load(content));
+            return this;
+        } catch (Exception e) {
+            throw new SettingsException("failed to load settings from [" + resourceName + "]", e);
+        }
     }
 
     /**

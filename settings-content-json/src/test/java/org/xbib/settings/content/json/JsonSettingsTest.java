@@ -47,9 +47,9 @@ public class JsonSettingsTest {
     }
 
     @Test
-    public void testLoadSettingsFromString() {
+    public void testLoadSettingsFromString() throws IOException {
         String json = "{\"Hello\":\"World\"}";
-        Settings settings = Settings.settingsBuilder().loadFromString(json).build();
+        Settings settings = Settings.settingsBuilder().loadFromString("json", json).build();
         assertEquals("{Hello=World}", settings.getAsMap().toString());
     }
 

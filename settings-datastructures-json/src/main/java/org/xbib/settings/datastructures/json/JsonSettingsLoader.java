@@ -16,9 +16,4 @@ public class JsonSettingsLoader extends AbstractSettingsLoader {
     public Set<String> suffixes() {
         return Set.of("json");
     }
-
-    @Override
-    public boolean canLoad(String source) {
-        return source.indexOf('{') != -1 && source.indexOf('}') != -1;
-    }
 }

@@ -28,12 +28,13 @@ import java.util.stream.Collectors;
  */
 public class DatastructureSettingsBuilder implements SettingsBuilder {
 
-    private final SettingsLoaderService settingsLoaderService = SettingsLoaderService.getInstance();
+    private final SettingsLoaderService settingsLoaderService;
 
     private final TinyMap.Builder<String, String> map;
 
     public DatastructureSettingsBuilder() {
-        map = TinyMap.builder();
+        this.settingsLoaderService = SettingsLoaderService.getInstance();
+        this.map = TinyMap.builder();
     }
 
     public String remove(String key) {
@@ -219,24 +220,6 @@ public class DatastructureSettingsBuilder implements SettingsBuilder {
     }
 
     /**
-     * Loads settings from the actual string content that represents them using the
-     * {@link SettingsLoaderService#loaderFromString(String)}.
-     *
-     * @param source source
-     * @return builder
-     */
-    @Override
-    public DatastructureSettingsBuilder loadFromString(String source) {
-        SettingsLoader settingsLoader = settingsLoaderService.loaderFromString(source);
-        try {
-            put(settingsLoader.load(source));
-        } catch (Exception e) {
-            throw new SettingsException("failed to load settings from [" + source + "]", e);
-        }
-        return this;
-    }
-
-    /**
      * Loads settings from a resource.
      *
      * @param resourceName resource name
@@ -244,13 +227,32 @@ public class DatastructureSettingsBuilder implements SettingsBuilder {
      * @return builder
      */
     @Override
-    public DatastructureSettingsBuilder loadFromResource(String resourceName, InputStream inputStream) throws SettingsException {
+    public DatastructureSettingsBuilder loadFromResource(String resourceName, InputStream inputStream) {
         SettingsLoader settingsLoader = settingsLoaderService.loaderFromResource(resourceName);
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             Map<String, String> loadedSettings = settingsLoader.load(bufferedReader.lines().collect(Collectors.joining()));
             put(loadedSettings);
         } catch (Exception e) {
             throw new SettingsException("failed to load settings from [" + resourceName + "]", e);
+        }
+        return this;
+    }
+
+    /**
+     * Loads settings from the actual string content that represents them using the
+     * {@link SettingsLoaderService#loaderFromResource(String)} (String)}.
+     *
+     * @param resourceName the resource name
+     * @param  source the source
+     * @return builder
+     */
+    @Override
+    public DatastructureSettingsBuilder loadFromString(String resourceName, String source) {
+        SettingsLoader settingsLoader = settingsLoaderService.loaderFromResource(resourceName);
+        try {
+            put(settingsLoader.load(source));
+        } catch (Exception e) {
+            throw new SettingsException("failed to load settings from [" + source + "]", e);
         }
         return this;
     }

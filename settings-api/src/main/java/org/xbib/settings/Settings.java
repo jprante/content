@@ -13,8 +13,8 @@ public interface Settings extends AutoCloseable {
 
         private static SettingsBuilder createBuilder() {
             ServiceLoader<SettingsBuilder> serviceLoader = ServiceLoader.load(SettingsBuilder.class);
-            Optional<SettingsBuilder> optionalConfigLogger = serviceLoader.findFirst();
-            return optionalConfigLogger.orElse(null);
+            Optional<SettingsBuilder> optionalSettingsBuilder = serviceLoader.findFirst();
+            return optionalSettingsBuilder.orElse(null);
         }
 
         private static final Settings emptySettings = createBuilder().build();
