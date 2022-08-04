@@ -8,6 +8,9 @@ import javax.xml.transform.TransformerException;
  */
 public class DefaultStylesheetErrorListener implements ErrorListener {
 
+    public DefaultStylesheetErrorListener() {
+    }
+
     @Override
     public void warning(TransformerException e) throws TransformerException {
         //logger.log(Level.WARNING, "warning (recoverable): " + e.getMessage(), e);

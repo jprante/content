@@ -2,6 +2,9 @@ package org.xbib.config;
 
 public class NullConfigLogger implements ConfigLogger {
 
+    public NullConfigLogger() {
+    }
+
     @Override
     public void info(String string) {
     }

@@ -4,10 +4,10 @@ import java.util.Iterator;
 
 import javax.xml.namespace.NamespaceContext;
 
-/**
- *
- */
 public class JsonNamespaceContext implements NamespaceContext {
+
+    public JsonNamespaceContext() {
+    }
 
     @Override
     public String getNamespaceURI(String prefix) {

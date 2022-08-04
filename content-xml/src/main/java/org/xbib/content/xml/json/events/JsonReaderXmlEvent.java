@@ -8,9 +8,6 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLStreamException;
 
-/**
- *
- */
 public abstract class JsonReaderXmlEvent {
 
     private Location location;
@@ -20,6 +17,9 @@ public abstract class JsonReaderXmlEvent {
     private String text;
 
     private List<Attribute> attributes;
+
+    public JsonReaderXmlEvent() {
+    }
 
     protected void setQName(QName name) {
         this.name = name;

@@ -179,12 +179,12 @@ public class ConfigParams implements Comparable<ConfigParams> {
                 fileLocations;
     }
 
-    public static class SuffixedReader {
+    static class SuffixedReader {
         Reader reader;
         String suffix;
     }
 
-    public static class JdbcLookup {
+    static class JdbcLookup {
         Connection connection;
         String statement;
         String[] params;

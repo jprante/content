@@ -13,6 +13,9 @@ public class XMLFilterImplEx extends XMLFilterImpl implements LexicalHandler {
 
     protected boolean namespacePrefixes;
 
+    public XMLFilterImplEx() {
+    }
+
     public boolean getNamespacePrefixes() {
         return namespacePrefixes;
     }

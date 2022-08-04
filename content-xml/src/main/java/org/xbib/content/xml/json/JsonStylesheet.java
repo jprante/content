@@ -23,13 +23,17 @@ import javax.xml.transform.sax.SAXSource;
  */
 public class JsonStylesheet {
 
-    private QName root = new QName("root");
+    private QName root;
 
     private XmlNamespaceContext context;
 
     private StylesheetTransformer transformer;
 
     private String[] stylesheets;
+
+    public JsonStylesheet() {
+        this.root = new QName("root");
+    }
 
     public JsonStylesheet root(QName root) {
         this.root = root;

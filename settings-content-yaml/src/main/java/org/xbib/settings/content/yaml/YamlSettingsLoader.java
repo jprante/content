@@ -15,6 +15,9 @@ public class YamlSettingsLoader extends AbstractSettingsLoader {
 
     private static final Set<String> YAML_SUFFIXES = Set.of("yml", "yaml");
 
+    public YamlSettingsLoader() {
+    }
+
     @Override
     public XContent content() {
         return YamlXContent.yamlContent();

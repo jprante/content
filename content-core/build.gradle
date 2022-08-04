@@ -1,4 +1,4 @@
 dependencies {
     api project(':content-api')
-    api "com.fasterxml.jackson.core:jackson-core:${project.property('jackson.version')}"
+    api libs.jackson.core
 }

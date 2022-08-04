@@ -47,6 +47,9 @@ public class StylesheetTransformer implements Closeable {
 
     private Result result;
 
+    public StylesheetTransformer() {
+    }
+
     public StylesheetTransformer setPath(String... path) {
         if (transformerFactory == null) {
             transformerFactory = (SAXTransformerFactory) TransformerFactory.newInstance();

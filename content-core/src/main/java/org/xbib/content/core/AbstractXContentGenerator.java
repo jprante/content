@@ -12,6 +12,9 @@ public abstract class AbstractXContentGenerator implements XContentGenerator {
 
     protected XContentGenerator generator;
 
+    public AbstractXContentGenerator() {
+    }
+
     public AbstractXContentGenerator setGenerator(XContentGenerator generator) {
         this.generator = generator;
         return this;

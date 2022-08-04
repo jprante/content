@@ -1,3 +1,32 @@
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            version('gradle', '7.5')
+            version('junit', '5.8.2')
+            version('jackson', '2.13.3')
+            version('datastructures', '1.0.0')
+            library('junit-jupiter-api', 'org.junit.jupiter', 'junit-jupiter-api').versionRef('junit')
+            library('junit-jupiter-params', 'org.junit.jupiter', 'junit-jupiter-params').versionRef('junit')
+            library('junit-jupiter-engine', 'org.junit.jupiter', 'junit-jupiter-engine').versionRef('junit')
+            library('junit4', 'junit', 'junit').version('4.13.2')
+            library('hamcrest', 'org.hamcrest:hamcrest-library:2.2')
+            library('jackson-core', 'com.fasterxml.jackson.core', 'jackson-core').versionRef('jackson')
+            library('jackson-databind', 'com.fasterxml.jackson.core', 'jackson-databind').versionRef('jackson')
+            library('jackson-dataformat-smile', 'com.fasterxml.jackson.dataformat', 'jackson-dataformat-smile').versionRef('jackson')
+            library('jackson-dataformat-xml', 'com.fasterxml.jackson.dataformat', 'jackson-dataformat-xml').versionRef('jackson')
+            library('jackson-dataformat-yaml', 'com.fasterxml.jackson.dataformat', 'jackson-dataformat-yaml').versionRef('jackson')
+            library('datastructures-api', 'org.xbib', 'datastructures-api').versionRef('datastructures')
+            library('datastructures-tiny', 'org.xbib', 'datastructures-tiny').versionRef('datastructures')
+            library('datastructures-json-tiny', 'org.xbib', 'datastructures-json-tiny').versionRef('datastructures')
+            library('datastructures-yaml-tiny', 'org.xbib', 'datastructures-yaml-tiny').versionRef('datastructures')
+            library('mockito-core', 'org.mockito', 'mockito-core').version('4.6.1')
+            library('mockito-inline', 'org.mockito', 'mockito-inline').version('4.6.1')
+            library('net', 'org.xbib', 'net-url').version('2.1.1')
+            library('woodstox', 'com.fasterxml.woodstox', 'woodstox-core').version('6.3.0')
+            library('snakeyaml', 'org.yaml', 'snakeyaml').version('1.30')
+        }
+    }
+}
 include 'content-api'
 include 'content-core'
 include 'content-csv'
@@ -16,3 +45,14 @@ include 'settings-datastructures'
 include 'settings-datastructures-json'
 include 'settings-datastructures-yaml'
 include 'config'
+
+/*
+gradle.wrapper.version = 7.4.2
+xbib.net.version = 2.1.1
+xbib-datastructures.version = 1.0.0
+jackson.version = 2.12.3
+woodstox.version = 6.2.6
+snakeyaml.version = 1.28
+mockito.version = 3.10.0
+asciidoclet.version = 1.5.6
+ */

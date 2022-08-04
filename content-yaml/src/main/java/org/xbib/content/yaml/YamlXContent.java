@@ -20,11 +20,15 @@ import java.nio.charset.StandardCharsets;
 public class YamlXContent implements XContent {
 
     private static final YamlXContent yamlXContent;
+
     private static final YAMLFactory yamlFactory;
 
     static {
         yamlFactory = new YAMLFactory();
         yamlXContent = new YamlXContent();
+    }
+
+    public YamlXContent() {
     }
 
     public static YamlXContent yamlContent() {

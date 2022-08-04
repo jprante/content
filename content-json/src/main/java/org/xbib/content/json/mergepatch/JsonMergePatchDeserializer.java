@@ -17,6 +17,9 @@ import java.io.IOException;
  * write our own here.
  */
 public final class JsonMergePatchDeserializer extends JsonDeserializer<JsonMergePatch> {
+
+    public JsonMergePatchDeserializer() {}
+
     @Override
     public JsonMergePatch deserialize(final JsonParser jp, final DeserializationContext ctxt)
             throws IOException {

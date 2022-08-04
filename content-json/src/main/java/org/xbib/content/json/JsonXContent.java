@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 public class JsonXContent implements XContent {
 
     private static final JsonXContent jsonXContent;
+
     private static final JsonFactory jsonFactory;
 
     static {

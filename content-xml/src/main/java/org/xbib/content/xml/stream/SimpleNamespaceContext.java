@@ -17,11 +17,14 @@ import javax.xml.namespace.NamespaceContext;
  */
 public class SimpleNamespaceContext implements NamespaceContext {
 
-    private Map<String, String> prefixToNamespaceUri = new HashMap<>();
+    private final Map<String, String> prefixToNamespaceUri = new HashMap<>();
 
-    private Map<String, List<String>> namespaceUriToPrefixes = new HashMap<>();
+    private final Map<String, List<String>> namespaceUriToPrefixes = new HashMap<>();
 
     private String defaultNamespaceUri = "";
+
+    public SimpleNamespaceContext() {
+    }
 
     @Override
     public String getNamespaceURI(String prefix) {

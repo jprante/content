@@ -7,6 +7,9 @@ import java.util.Set;
 
 public class JsonSettingsLoader extends AbstractSettingsLoader {
 
+    public JsonSettingsLoader() {
+    }
+
     @Override
     public DataStructure dataStructure() {
         return new Json();

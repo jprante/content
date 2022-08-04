@@ -8,7 +8,7 @@ plugins {
 }
 
 wrapper {
-    gradleVersion = "${rootProject.property('gradle.wrapper.version')}"
+    gradleVersion = libs.versions.gradle.get()
     distributionType = Wrapper.DistributionType.ALL
 }
 

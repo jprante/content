@@ -11,6 +11,9 @@ import java.util.Set;
  */
 public class JsonSettingsLoader extends AbstractSettingsLoader {
 
+    public JsonSettingsLoader() {
+    }
+
     @Override
     public XContent content() {
         return JsonXContent.jsonContent();

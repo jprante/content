@@ -9,6 +9,9 @@ import javax.xml.transform.TransformerException;
  */
 public final class TransformerErrorListener implements ErrorListener {
 
+    public TransformerErrorListener() {
+    }
+
     /**
      * We store the exception internally as a workaround to xalan, which reports
      * {@link javax.xml.transform.TransformerException} as {@link RuntimeException} (wrapped).

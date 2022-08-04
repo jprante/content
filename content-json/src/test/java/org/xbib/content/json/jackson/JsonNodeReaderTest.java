@@ -15,27 +15,24 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 
-/**
- *
- */
 public final class JsonNodeReaderTest {
 
     @Test
-    public void streamIsClosedOnRead()
-            throws IOException {
-        final InputStream in = spy(new ByteArrayInputStream("[]".getBytes(StandardCharsets.UTF_8)));
+    public void streamIsClosedOnRead() throws IOException {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream("[]".getBytes(StandardCharsets.UTF_8));
+        final InputStream in = spy(byteArrayInputStream);
         final JsonNode node = new JsonNodeReader().fromInputStream(in);
         verify(in).close();
-        assertEquals(node, new ObjectMapper().readTree(new ByteArrayInputStream("[]".getBytes("UTF-8"))));
+        assertEquals(node, new ObjectMapper().readTree(new ByteArrayInputStream("[]".getBytes(StandardCharsets.UTF_8))));
     }
 
     @Test
-    public void readerIsClosedOnRead()
-            throws IOException {
-        final Reader reader = spy(new StringReader("[]"));
+    public void readerIsClosedOnRead() throws IOException {
+        StringReader stringReader = new StringReader("[]");
+        final Reader reader = spy(stringReader);
         final JsonNode node = new JsonNodeReader().fromReader(reader);
-        assertEquals(node, new ObjectMapper().readTree(new StringReader("[]")));
         verify(reader).close();
+        assertEquals(node, new ObjectMapper().readTree(new StringReader("[]")));
     }
 
     @Test

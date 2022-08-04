@@ -6,18 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- */
 public abstract class AbstractXContentParser implements XContentParser {
-
-    //private static final MapFactory SIMPLE_MAP_FACTORY = HashMap::new;
-
-    //private static final MapFactory TINY_MAP_FACTORY = TinyMap::builder;
 
     private boolean losslessDecimals;
 
     private boolean base16Checks;
+
+    public AbstractXContentParser() {
+    }
 
     protected abstract MapFactory getMapFactory();
 

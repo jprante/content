@@ -1,6 +1,5 @@
 package org.xbib.content.xml.transform;
 
-import java.text.MessageFormat;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,6 +19,9 @@ public final class StylesheetPool {
      * A map of precompiled stylesheets ({@link javax.xml.transform.Templates} objects).
      */
     private final Map<String, Templates> stylesheets = new ConcurrentHashMap<>();
+
+    public StylesheetPool() {
+    }
 
     /**
      * @param transformerFactory transformer factory

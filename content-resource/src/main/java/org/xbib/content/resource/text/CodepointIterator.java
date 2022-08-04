@@ -9,7 +9,11 @@ import java.util.NoSuchElementException;
 public abstract class CodepointIterator implements Iterator<Codepoint> {
 
     protected int position = -1;
+
     protected int limit = -1;
+
+    public CodepointIterator() {
+    }
 
     /**
      * Get a CodepointIterator for the specified char array.

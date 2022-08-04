@@ -1,4 +1,4 @@
 dependencies {
-    api "org.xbib:net-url:${project.property('xbib.net.version')}"
-    testImplementation "com.fasterxml.jackson.core:jackson-databind:${project.property('jackson.version')}"
+    api libs.net
+    testImplementation libs.jackson.databind
 }

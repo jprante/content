@@ -2,6 +2,9 @@ package org.xbib.config;
 
 public class SystemConfigLogger implements ConfigLogger {
 
+    public SystemConfigLogger() {
+    }
+
     @Override
     public void info(String string) {
         System.err.println("info: " + string);

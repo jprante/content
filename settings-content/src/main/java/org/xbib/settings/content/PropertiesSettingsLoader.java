@@ -21,6 +21,9 @@ public class PropertiesSettingsLoader implements SettingsLoader {
 
     private static final Set<String> PROPERTIES_SUFFIXES = new HashSet<>(Collections.singletonList("properties"));
 
+    public PropertiesSettingsLoader() {
+    }
+
     @Override
     public Set<String> suffixes() {
         return PROPERTIES_SUFFIXES;

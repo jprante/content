@@ -3,6 +3,7 @@ package org.xbib.content.json.jackson;
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.io.ContentReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,20 +70,8 @@ public final class JsonNodeReader {
      *                             from the stream
      */
     public JsonNode fromInputStream(final InputStream in) throws IOException {
-        JsonParser parser = null;
-        MappingIterator<JsonNode> iterator = null;
-
-        try {
-            parser = reader.getFactory().createParser(in);
-            iterator = reader.readValues(parser);
+        try (JsonParser parser = reader.getFactory().createParser(in); MappingIterator<JsonNode> iterator = reader.readValues(parser)) {
             return readNode(iterator);
-        } finally {
-            if (parser != null) {
-                parser.close();
-            }
-            if (iterator != null) {
-                iterator.close();
-            }
         }
     }
 
@@ -94,35 +83,21 @@ public final class JsonNodeReader {
      * @throws java.io.IOException malformed input, or problem encountered when reading
      *                             from the reader
      */
-    public JsonNode fromReader(final Reader r)
-            throws IOException {
-        JsonParser parser = null;
-        MappingIterator<JsonNode> iterator = null;
-
-        try {
-            parser = reader.getFactory().createParser(r);
-            iterator = reader.readValues(parser);
+    public JsonNode fromReader(final Reader r) throws IOException {
+        try (JsonParser parser = reader.getFactory().createParser(r); MappingIterator<JsonNode> iterator = reader.readValues(parser)) {
             return readNode(iterator);
-        } finally {
-            if (parser != null) {
-                parser.close();
-            }
-            if (iterator != null) {
-                iterator.close();
-            }
         }
     }
 
-    /**
-     *
-     */
     private static final class JsonParseExceptionBuilder {
-        private JsonParser jsonParser;
+
+        private final JsonParser jsonParser;
+
         private JsonLocation location;
 
         private JsonParseExceptionBuilder(final JsonParser jsonParser, final Object source) {
             this.jsonParser = jsonParser;
-            location = new JsonLocation(source, 0L, 1, 1);
+            location = new JsonLocation(ContentReference.construct(false, source), 0L, 1, 1);
         }
 
         private JsonParseExceptionBuilder setLocation(final JsonLocation location) {

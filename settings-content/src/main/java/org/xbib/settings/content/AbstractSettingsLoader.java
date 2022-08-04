@@ -20,6 +20,9 @@ import java.util.Map;
  */
 public abstract class AbstractSettingsLoader implements SettingsLoader {
 
+    public AbstractSettingsLoader() {
+    }
+
     public abstract XContent content();
 
     @Override

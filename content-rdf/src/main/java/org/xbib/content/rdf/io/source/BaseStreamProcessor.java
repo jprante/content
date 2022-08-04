@@ -10,6 +10,9 @@ import java.net.URLConnection;
  */
 public abstract class BaseStreamProcessor {
 
+    public BaseStreamProcessor() {
+    }
+
     protected abstract void startStream() throws IOException;
 
     protected abstract void endStream() throws IOException;

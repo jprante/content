@@ -22,6 +22,9 @@ public class XContentService {
         }
     }
 
+    private XContentService() {
+    }
+
     public static XContentBuilder builder(String name) throws IOException {
         return xcontents.containsKey(name) ? DefaultXContentBuilder.builder(xcontents.get(name)) : null;
     }

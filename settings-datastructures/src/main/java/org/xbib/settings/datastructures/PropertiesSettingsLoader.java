@@ -13,6 +13,9 @@ import java.util.Set;
  */
 public class PropertiesSettingsLoader implements SettingsLoader {
 
+    public PropertiesSettingsLoader() {
+    }
+
     @Override
     public Set<String> suffixes() {
         return Set.of("properties");

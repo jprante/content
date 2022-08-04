@@ -36,7 +36,7 @@ public class XML11Char {
     /**
      * Character flags for XML 1.1.
      */
-    private static final byte XML11CHARS[] = new byte[1 << 16];
+    private static final byte[] XML11CHARS = new byte[1 << 16];
 
     static {
         Arrays.fill(XML11CHARS, 1, 9, (byte) 17); // Fill 8 of value (byte) 17
@@ -95,6 +95,9 @@ public class XML11Char {
         Arrays.fill(XML11CHARS, 63744, 64976, (byte) -19); // Fill 1232 of value (byte) -19
         Arrays.fill(XML11CHARS, 64976, 65008, (byte) 33); // Fill 32 of value (byte) 33
         Arrays.fill(XML11CHARS, 65008, 65534, (byte) -19); // Fill 526 of value (byte) -19
+    }
+
+    public XML11Char() {
     }
 
     /**

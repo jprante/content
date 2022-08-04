@@ -11,6 +11,9 @@ public interface Settings extends AutoCloseable {
 
     class Holder {
 
+        private Holder() {
+        }
+
         private static SettingsBuilder createBuilder() {
             ServiceLoader<SettingsBuilder> serviceLoader = ServiceLoader.load(SettingsBuilder.class);
             Optional<SettingsBuilder> optionalSettingsBuilder = serviceLoader.findFirst();

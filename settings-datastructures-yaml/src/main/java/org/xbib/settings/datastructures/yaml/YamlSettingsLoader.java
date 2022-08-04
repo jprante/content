@@ -10,6 +10,9 @@ import java.util.Set;
 
 public class YamlSettingsLoader extends AbstractSettingsLoader {
 
+    public YamlSettingsLoader() {
+    }
+
     @Override
     public DataStructure dataStructure() {
         return new Yaml();

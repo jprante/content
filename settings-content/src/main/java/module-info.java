@@ -9,8 +9,7 @@ module org.xbib.settings.content {
     uses SettingsBuilder;
     provides SettingsBuilder with ContentSettingsBuilder;
     exports org.xbib.settings.content;
-    requires org.xbib.settings.api;
-    requires org.xbib.content.core;
-    requires org.xbib.datastructures.api;
+    requires transitive org.xbib.settings.api;
+    requires transitive org.xbib.content.core;
     requires transitive org.xbib.datastructures.tiny;
 }

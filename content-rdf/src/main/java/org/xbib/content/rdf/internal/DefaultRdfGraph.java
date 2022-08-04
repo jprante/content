@@ -23,6 +23,9 @@ public class DefaultRdfGraph implements RdfGraph<RdfGraphParams> {
 
     private final Map<IRI, Resource> resources = new LinkedHashMap<>();
 
+    public DefaultRdfGraph() {
+    }
+
     @Override
     public Iterator<Resource> getResources() {
         return resources.values().stream().iterator();
