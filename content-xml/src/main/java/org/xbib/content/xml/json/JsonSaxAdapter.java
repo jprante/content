@@ -177,7 +177,7 @@ public class JsonSaxAdapter {
 
         @Override
         public String getPublicId() {
-            Object sourceRef = jsonParser.getCurrentLocation().getSourceRef();
+            Object sourceRef = jsonParser.getCurrentLocation().contentReference().getRawContent();
             if (sourceRef != null) {
                 return sourceRef.toString();
             } else {
