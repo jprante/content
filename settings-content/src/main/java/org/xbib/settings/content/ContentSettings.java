@@ -193,7 +193,7 @@ public class ContentSettings implements Settings, AutoCloseable {
     }
 
     @Override
-    public Float getAsFloat(String setting, Float defaultValue) {
+    public float getAsFloat(String setting, float defaultValue) {
         String sValue = get(setting);
         if (sValue == null) {
             return defaultValue;
@@ -206,7 +206,7 @@ public class ContentSettings implements Settings, AutoCloseable {
     }
 
     @Override
-    public Double getAsDouble(String setting, Double defaultValue) {
+    public double getAsDouble(String setting, double defaultValue) {
         String sValue = get(setting);
         if (sValue == null) {
             return defaultValue;
@@ -219,7 +219,7 @@ public class ContentSettings implements Settings, AutoCloseable {
     }
 
     @Override
-    public Integer getAsInt(String setting, Integer defaultValue) {
+    public int getAsInt(String setting, int defaultValue) {
         String sValue = get(setting);
         if (sValue == null) {
             return defaultValue;
@@ -232,7 +232,7 @@ public class ContentSettings implements Settings, AutoCloseable {
     }
 
     @Override
-    public Long getAsLong(String setting, Long defaultValue) {
+    public long getAsLong(String setting, long defaultValue) {
         String sValue = get(setting);
         if (sValue == null) {
             return defaultValue;
@@ -245,7 +245,7 @@ public class ContentSettings implements Settings, AutoCloseable {
     }
 
     @Override
-    public Boolean getAsBoolean(String setting, Boolean defaultValue) {
+    public boolean getAsBoolean(String setting, boolean defaultValue) {
         String value = get(setting);
         if (value == null) {
             return defaultValue;
@@ -290,7 +290,7 @@ public class ContentSettings implements Settings, AutoCloseable {
         if (result.isEmpty()) {
             return defaultArray;
         }
-        return result.toArray(new String[result.size()]);
+        return result.toArray(new String[0]);
     }
 
     @Override
@@ -301,20 +301,19 @@ public class ContentSettings implements Settings, AutoCloseable {
         }
         // we don't really care that it might happen twice
         TinyMap.Builder<String, Map<String, String>> hashMap = TinyMap.builder();
-        for (Object o : this.map.keySet()) {
-            String setting = (String) o;
-            if (setting.startsWith(settingPrefix)) {
-                String nameValue = setting.substring(settingPrefix.length());
+        for (String o : this.map.keySet()) {
+            if (o.startsWith(settingPrefix)) {
+                String nameValue = o.substring(settingPrefix.length());
                 int dotIndex = nameValue.indexOf('.');
                 if (dotIndex == -1) {
                     throw new SettingsException("Failed to get setting group for ["
                             + settingPrefix
-                            + "] setting prefix and setting [" + setting + "] because of a missing '.'");
+                            + "] setting prefix and setting [" + o + "] because of a missing '.'");
                 }
                 String name = nameValue.substring(0, dotIndex);
                 String value = nameValue.substring(dotIndex + 1);
                 Map<String, String> groupSettings = hashMap.computeIfAbsent(name, k -> TinyMap.builder());
-                groupSettings.put(value, get(setting));
+                groupSettings.put(value, get(o));
             }
         }
         TinyMap.Builder<String, Settings> retVal = TinyMap.builder();

@@ -99,7 +99,6 @@ public class DefaultLiteral implements Literal, Comparable<Literal> {
                 case "xsd:long":
                     return Long.parseLong(s);
                 case "xsd:int":
-                    return Integer.parseInt(s);
                 case "xsd:gYear":
                     return Integer.parseInt(s);
                 case "xsd:boolean":

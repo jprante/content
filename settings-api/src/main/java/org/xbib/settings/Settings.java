@@ -37,15 +37,15 @@ public interface Settings extends AutoCloseable {
 
     String get(String setting, String defaultValue);
 
-    Float getAsFloat(String setting, Float defaultValue);
+    float getAsFloat(String setting, float defaultValue);
 
-    Double getAsDouble(String setting, Double defaultValue);
+    double getAsDouble(String setting, double defaultValue);
 
-    Integer getAsInt(String setting, Integer defaultValue);
+    int getAsInt(String setting, int defaultValue);
 
-    Long getAsLong(String setting, Long defaultValue);
+    long getAsLong(String setting, long defaultValue);
 
-    Boolean getAsBoolean(String setting, Boolean defaultValue);
+    boolean getAsBoolean(String setting, boolean defaultValue);
 
     TimeValue getAsTime(String setting, TimeValue defaultValue);
 

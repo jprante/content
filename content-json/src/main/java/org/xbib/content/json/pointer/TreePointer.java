@@ -24,8 +24,7 @@ import java.util.List;
  *
  * @param <T> the type of the tree
  */
-public abstract class TreePointer<T extends TreeNode>
-        implements Iterable<TokenResolver<T>> {
+public abstract class TreePointer<T extends TreeNode> implements Iterable<TokenResolver<T>> {
     /**
      * The reference token separator.
      */
@@ -150,12 +149,12 @@ public abstract class TreePointer<T extends TreeNode>
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return tokenResolvers.hashCode();
     }
 
     @Override
-    public final boolean equals(final Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }
@@ -165,12 +164,12 @@ public abstract class TreePointer<T extends TreeNode>
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final TreePointer<?> other = (TreePointer<?>) obj;
+        TreePointer<?> other = (TreePointer<?>) obj;
         return tokenResolvers.equals(other.tokenResolvers);
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         final StringBuilder sb = new StringBuilder();
         for (final TokenResolver<T> tokenResolver : tokenResolvers) {
             sb.append('/').append(tokenResolver);

@@ -53,6 +53,7 @@ public abstract class AbstractXmlResourceHandler<P extends RdfContentParams>
 
     @Override
     public void addToPredicate(QName parent, String content) {
+        // do nothing
     }
 
     @Override

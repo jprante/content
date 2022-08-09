@@ -44,12 +44,12 @@ public final class JsonNodeReader {
     }
 
     private static JsonNode readNode(final MappingIterator<JsonNode> iterator) throws IOException {
-        final Object source = iterator.getParser().getInputSource();
-        final JsonParseExceptionBuilder builder = new JsonParseExceptionBuilder(null, source);
+        Object source = iterator.getParser().getInputSource();
+        JsonParseExceptionBuilder builder = new JsonParseExceptionBuilder(null, source);
         if (!iterator.hasNextValue()) {
             throw builder.build();
         }
-        final JsonNode ret = iterator.nextValue();
+        JsonNode ret = iterator.nextValue();
         builder.setLocation(iterator.getCurrentLocation());
         try {
             if (iterator.hasNextValue()) {
@@ -89,7 +89,7 @@ public final class JsonNodeReader {
         }
     }
 
-    private static final class JsonParseExceptionBuilder {
+    private static class JsonParseExceptionBuilder {
 
         private final JsonParser jsonParser;
 
@@ -100,7 +100,7 @@ public final class JsonNodeReader {
             location = new JsonLocation(ContentReference.construct(false, source), 0L, 1, 1);
         }
 
-        private JsonParseExceptionBuilder setLocation(final JsonLocation location) {
+        JsonParseExceptionBuilder setLocation(final JsonLocation location) {
             this.location = location;
             return this;
         }

@@ -6,10 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-/**
- *
- */
-abstract class SubtagSet implements Cloneable, Iterable<Subtag>, Comparable<SubtagSet> {
+abstract class SubtagSet implements Iterable<Subtag>, Comparable<SubtagSet> {
 
     protected final Subtag primary;
 
@@ -104,7 +101,7 @@ abstract class SubtagSet implements Cloneable, Iterable<Subtag>, Comparable<Subt
         for (Subtag tag : this) {
             tags.add(tag);
         }
-        return tags.toArray(new Subtag[tags.size()]);
+        return tags.toArray(new Subtag[0]);
     }
 
     public List<Subtag> asList() {
@@ -123,10 +120,10 @@ abstract class SubtagSet implements Cloneable, Iterable<Subtag>, Comparable<Subt
                 return c;
             }
         }
-        if (e.hasNext() && !i.hasNext()) {
+        if (e.hasNext()) {
             return -1;
         }
-        if (i.hasNext() && !e.hasNext()) {
+        if (i.hasNext()) {
             return 1;
         }
         return 0;

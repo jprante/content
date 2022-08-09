@@ -139,4 +139,24 @@ public final class JsonPointer extends TreePointer<JsonNode> {
         return size <= 1 ? EMPTY
                 : new JsonPointer(tokenResolvers.subList(0, size - 1));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        TreePointer<?> other = (TreePointer<?>) obj;
+        return tokenResolvers.equals(other.tokenResolvers);
+    }
+
+    @Override
+    public int hashCode() {
+        return tokenResolvers.hashCode();
+    }
 }

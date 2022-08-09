@@ -445,7 +445,7 @@ public class Range extends SubtagSet {
                 langs.add(l);
             }
         }
-        return langs.toArray(new Lang[langs.size()]);
+        return langs.toArray(new Lang[0]);
     }
 
     /**
@@ -460,7 +460,7 @@ public class Range extends SubtagSet {
                 langs.add(l);
             }
         }
-        return langs.toArray(new String[langs.size()]);
+        return langs.toArray(new String[0]);
     }
 
     @Override

@@ -20,11 +20,11 @@ public class LinkedHashMultiMap<K, V> implements MultiMap<K, V> {
         this.map = new LinkedHashMap<>();
     }
 
-    public LinkedHashMultiMap(MultiMap<K, V> map) {
-        Objects.requireNonNull(map);
+    public LinkedHashMultiMap(MultiMap<K, V> multiMap) {
+        Objects.requireNonNull(multiMap);
         this.map = new LinkedHashMap<>();
-        for (K k : map.keySet()) {
-            putAll(k, map.get(k));
+        for (K k : multiMap.keySet()) {
+            putAll(k, multiMap.get(k));
         }
     }
 

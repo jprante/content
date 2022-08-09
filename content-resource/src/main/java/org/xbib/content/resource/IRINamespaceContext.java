@@ -30,7 +30,7 @@ public final class IRINamespaceContext implements NamespaceContext {
 
     private final SortedMap<String, Set<String>> prefixes;
 
-    protected final Object lock;
+    private final Object lock;
 
     private List<String> sortedNamespacesByPrefixLength;
 

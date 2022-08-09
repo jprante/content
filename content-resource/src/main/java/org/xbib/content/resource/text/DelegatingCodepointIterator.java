@@ -1,11 +1,15 @@
 package org.xbib.content.resource.text;
 
+import java.util.NoSuchElementException;
+
 /**
  * Base implementation of a CodepointIterator that filters the output of another CodpointIterator.
  */
 public abstract class DelegatingCodepointIterator extends CodepointIterator {
 
-    private CodepointIterator internal;
+    private final CodepointIterator internal;
+
+    private boolean hasNext;
 
     protected DelegatingCodepointIterator(CodepointIterator internal) {
         this.internal = internal;
@@ -23,7 +27,8 @@ public abstract class DelegatingCodepointIterator extends CodepointIterator {
 
     @Override
     public boolean hasNext() {
-        return internal.hasNext();
+        hasNext = internal.hasNext();
+        return hasNext;
     }
 
     @Override
@@ -43,6 +48,9 @@ public abstract class DelegatingCodepointIterator extends CodepointIterator {
 
     @Override
     public Codepoint next() {
+        if (!hasNext) {
+            throw new NoSuchElementException();
+        }
         return internal.next();
     }
 

@@ -2,6 +2,7 @@ package org.xbib.content.rdf.internal;
 
 import org.xbib.content.resource.IRI;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -22,6 +23,16 @@ public class DefaultAnonymousResource extends DefaultResource {
 
     public DefaultAnonymousResource(IRI id) {
         super(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof DefaultAnonymousResource && id().equals(((DefaultAnonymousResource) obj).id());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id());
     }
 
     // for test

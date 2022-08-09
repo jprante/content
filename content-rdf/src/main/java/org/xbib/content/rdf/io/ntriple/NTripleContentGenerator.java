@@ -175,30 +175,4 @@ public class NTripleContentGenerator
         }
         return sb.toString();
     }
-
-
-    /**
-     * Translate a literal according to given sort language (e.g. mechanical word order, sort area).
-     * see http://www.w3.org/International/articles/language-tags/
-     *
-     * @param literal the literal
-     * @return the process literal
-     */
-    private Literal translateLanguage(Literal literal, String langTag) {
-        if (literal == null) {
-            return null;
-        }
-        // we assume we have only one sort language. Search for '@' symbol.
-        String value = literal.object().toString();
-        // ignore if on position 0
-        int pos = value.indexOf(" @");
-        if (pos == 0) {
-            literal.object(value.substring(1));
-        } else if (pos > 0) {
-            literal.object('\u0098' + value.substring(0, pos + 1) + '\u009c' + value.substring(pos + 2))
-                    .lang(langTag);
-        }
-        return literal;
-    }
-
 }

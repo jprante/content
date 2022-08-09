@@ -39,11 +39,11 @@ public class DatastructureSettings implements Settings {
         }
     }
 
-    public static String[] splitStringByCommaToArray(final String s) {
+    public static String[] splitStringByCommaToArray(String s) {
         return splitStringToArray(s, ',');
     }
 
-    public static String[] splitStringToArray(final String s, final char c) {
+    public static String[] splitStringToArray(String s, char c) {
         if (s.length() == 0) {
             return EMPTY_ARRAY;
         }
@@ -88,12 +88,14 @@ public class DatastructureSettings implements Settings {
     @Override
     public Map<String, Object> getAsStructuredMap() {
         TinyMap.Builder<String, Object> stringObjectMap = TinyMap.builder();
-        for (String key : map.keySet()) {
-            String value = map.get(key);
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
             processSetting(stringObjectMap, "", key, value);
         }
-        for (String key : stringObjectMap.keySet()) {
-            Object object = stringObjectMap.get(key);
+        for (Map.Entry<String, Object> entry : stringObjectMap.entrySet()) {
+            String key = entry.getKey();
+            Object object = entry.getValue();
             if (object instanceof Map) {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> valMap = (Map<String, Object>) object;
@@ -106,8 +108,9 @@ public class DatastructureSettings implements Settings {
     @Override
     public Settings getByPrefix(String prefix) {
         DatastructureSettingsBuilder builder = new DatastructureSettingsBuilder();
-        for (String key : map.keySet()) {
-            String value = map.get(key);
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
             if (key.startsWith(prefix)) {
                 if (key.length() < prefix.length()) {
                     continue;
@@ -148,7 +151,7 @@ public class DatastructureSettings implements Settings {
     }
 
     @Override
-    public Float getAsFloat(String setting, Float defaultValue) {
+    public float getAsFloat(String setting, float defaultValue) {
         String s = get(setting);
         try {
             return s == null ? defaultValue : Float.parseFloat(s);
@@ -158,7 +161,7 @@ public class DatastructureSettings implements Settings {
     }
 
     @Override
-    public Double getAsDouble(String setting, Double defaultValue) {
+    public double getAsDouble(String setting, double defaultValue) {
         String s = get(setting);
         try {
             return s == null ? defaultValue : Double.parseDouble(s);
@@ -168,7 +171,7 @@ public class DatastructureSettings implements Settings {
     }
 
     @Override
-    public Integer getAsInt(String setting, Integer defaultValue) {
+    public int getAsInt(String setting, int defaultValue) {
         String s = get(setting);
         try {
             return s == null ? defaultValue : Integer.parseInt(s);
@@ -178,7 +181,7 @@ public class DatastructureSettings implements Settings {
     }
 
     @Override
-    public Long getAsLong(String setting, Long defaultValue) {
+    public long getAsLong(String setting, long defaultValue) {
         String s = get(setting);
         try {
             return s == null ? defaultValue : Long.parseLong(s);
@@ -188,7 +191,7 @@ public class DatastructureSettings implements Settings {
     }
 
     @Override
-    public Boolean getAsBoolean(String setting, Boolean defaultValue) {
+    public boolean getAsBoolean(String setting, boolean defaultValue) {
         String value = get(setting);
         if (value == null) {
             return defaultValue;
@@ -283,8 +286,9 @@ public class DatastructureSettings implements Settings {
             @SuppressWarnings("unchecked")
             Map<String, Object> innerMap = (Map<String, Object>) map.get(prefix + setting);
             if (innerMap != null) {
-                for (String k : innerMap.keySet()) {
-                    Object v = innerMap.get(k);
+                for (Map.Entry<String, Object> e : innerMap.entrySet()) {
+                    String k = e.getKey();
+                    Object v = e.getValue();
                     map.put(prefix + setting + "." + k, v);
                 }
             }
@@ -316,8 +320,9 @@ public class DatastructureSettings implements Settings {
         }
         boolean isArray = true;
         int maxIndex = -1;
-        for (String key : map.keySet()) {
-            Object value = map.get(key);
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
             if (isArray) {
                 try {
                     int index = Integer.parseInt(key);
@@ -356,6 +361,6 @@ public class DatastructureSettings implements Settings {
 
     @Override
     public void close() throws IOException {
+        // do nothing
     }
-
 }

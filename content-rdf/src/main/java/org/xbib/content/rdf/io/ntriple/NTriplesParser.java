@@ -22,8 +22,6 @@ public final class NTriplesParser implements CharSink {
     private static final char SENTENCE_END = '.';
 
     private static final BitSet WHITESPACE = new BitSet() {
-        private static final long serialVersionUID = 2369480497714252078L;
-
         {
             set('\t');
             set(' ');
