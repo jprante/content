@@ -7,23 +7,40 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-/**
- *
- */
 public final class IRINamespaceContext implements NamespaceContext {
 
-    private static final String DEFAULT_RESOURCE =
-            IRINamespaceContext.class.getPackage().getName().replace('.', '/') + '/' + "namespace";
+    private static final IRINamespaceContext DEFAULT_INSTANCE;
 
-    private static IRINamespaceContext instance;
+    static {
+        DEFAULT_INSTANCE = new IRINamespaceContext();
+        try {
+            String bundleName = IRINamespaceContext.class.getPackage().getName().replace('.', '/') + '/' + "namespace";
+            Locale locale = Locale.getDefault();
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleName, locale, classLoader);
+            Enumeration<String> en = resourceBundle.getKeys();
+            while (en.hasMoreElements()) {
+                String prefix = en.nextElement();
+                String namespace = resourceBundle.getString(prefix);
+                DEFAULT_INSTANCE.addNamespace(prefix, namespace);
+            }
+        } catch (Exception e) {
+            //
+        }
+    }
 
-    private static final IRINamespaceContext DEFAULT_CONTEXT = newInstance(DEFAULT_RESOURCE);
+    public static IRINamespaceContext getInstance() {
+        return DEFAULT_INSTANCE;
+    }
+
+    public static IRINamespaceContext newInstance() {
+        return new IRINamespaceContext();
+    }
 
     // sort namespace by length in descending order, useful for compacting prefix
     private final SortedMap<String, String> namespaces;
@@ -34,44 +51,10 @@ public final class IRINamespaceContext implements NamespaceContext {
 
     private List<String> sortedNamespacesByPrefixLength;
 
-
-    public static IRINamespaceContext getInstance() {
-        return DEFAULT_CONTEXT;
-    }
-
-    public static IRINamespaceContext newInstance(String bundleName) {
-        return newInstance(bundleName, Locale.getDefault(), Thread.currentThread().getContextClassLoader());
-    }
-
-    public static IRINamespaceContext newInstance(String bundleName, Locale locale, ClassLoader classLoader) {
-        if (instance == null) {
-            try {
-                instance = new IRINamespaceContext(ResourceBundle.getBundle(bundleName, locale, classLoader));
-            } catch (MissingResourceException e) {
-                instance = new IRINamespaceContext();
-            }
-        }
-        return instance;
-    }
-
-    public static IRINamespaceContext newInstance() {
-        return new IRINamespaceContext();
-    }
-
-    protected IRINamespaceContext() {
+    private IRINamespaceContext() {
         this.namespaces = new TreeMap<>();
         this.prefixes = new TreeMap<>();
         this.lock = new Object();
-    }
-
-    private IRINamespaceContext(ResourceBundle bundle) {
-        this();
-        Enumeration<String> en = bundle.getKeys();
-        while (en.hasMoreElements()) {
-            String prefix = en.nextElement();
-            String namespace = bundle.getString(prefix);
-            addNamespace(prefix, namespace);
-        }
     }
 
     @Override

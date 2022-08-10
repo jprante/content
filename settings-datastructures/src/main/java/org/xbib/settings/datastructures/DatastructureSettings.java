@@ -263,8 +263,9 @@ public class DatastructureSettings implements Settings {
             }
         }
         TinyMap.Builder<String, Settings> retVal = TinyMap.builder();
-        for (String key : hashMap.keySet()) {
-            TinyMap.Builder<String, String> value = hashMap.get(key);
+        for (Map.Entry<String, TinyMap.Builder<String, String>> entry : hashMap.entrySet()) {
+            String key = entry.getKey();
+            TinyMap.Builder<String, String> value = entry.getValue();
             retVal.put(key, new DatastructureSettings(value.build()));
         }
         return retVal.build();
