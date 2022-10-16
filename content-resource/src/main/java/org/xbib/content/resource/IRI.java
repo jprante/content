@@ -17,16 +17,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- *
- */
 public class IRI implements Comparable<IRI>, Node {
 
     private static final SchemeRegistry registry = SchemeRegistry.getInstance();
     private static final Pattern IRIPATTERN =
             Pattern.compile("^(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)(?:\\?([^#]*))?(?:#(.*))?");
-    private static final Pattern AUTHORITYPATTERN =
-            Pattern.compile("^(?:(.*)?@)?((?:\\[.*\\])|(?:[^:]*))?(?::(\\d+))?");
     private Scheme schemeClass;
     private String scheme;
     private String schemeSpecificPart;
@@ -552,16 +547,13 @@ public class IRI implements Comparable<IRI>, Node {
 
     private void parseAuthority() {
         if (authority != null) {
-            Matcher auth = AUTHORITYPATTERN.matcher(authority);
-            if (auth.find()) {
-                userinfo = auth.group(1);
-                host = auth.group(2);
-                if (auth.group(3) != null) {
-                    port = Integer.parseInt(auth.group(3));
-                } else {
-                    port = -1;
-                }
-            }
+            // [ <userinfo> '@' ] <host> [ ':' <port> ]
+            int pos = authority.lastIndexOf('@');
+            userinfo = pos >= 0 ? authority.substring(0, pos) : null;
+            String s = pos >= 0 ? authority.substring(pos + 1) : authority;
+            pos = s.indexOf(':');
+            host = pos >= 0 ? s.substring(0, pos) : s;
+            port = pos >= 0 ? Integer.parseInt(s.substring(pos + 1)) : -1;
             try {
                 CharUtils.verify(userinfo, Profile.IUSERINFO);
                 CharUtils.verify(host, Profile.IHOST);

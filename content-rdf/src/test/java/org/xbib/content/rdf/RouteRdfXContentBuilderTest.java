@@ -12,13 +12,7 @@ import org.xbib.content.resource.IRI;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
 
-/**
- *
- */
 public class RouteRdfXContentBuilderTest {
 
     @Test
@@ -57,7 +51,7 @@ public class RouteRdfXContentBuilderTest {
                     sb.append(builder.string());
                 })
                 .parse();
-        assertStream(new InputStreamReader(getClass().getResourceAsStream("viaf.json"), StandardCharsets.UTF_8),
-                new StringReader(sb.toString()));
+        assertStream("viaf.json", getClass().getResourceAsStream("viaf.json"),
+                sb.toString());
     }
 }

@@ -1,5 +1,6 @@
 package org.xbib.content.xml.util;
 
+import javax.xml.XMLConstants;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
@@ -18,7 +19,7 @@ import javax.xml.parsers.SAXParserFactory;
  */
 public class XMLFilterReader extends XMLFilterImpl {
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
     public XMLFilterReader() {
         try {
@@ -30,6 +31,9 @@ public class XMLFilterReader extends XMLFilterImpl {
             parserFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
             parserFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
             parserFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            parserFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            parserFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            parserFactory.setXIncludeAware(false);
             parser = parserFactory.newSAXParser();
         } catch (ParserConfigurationException | SAXException e) {
             throw new IllegalArgumentException(e);

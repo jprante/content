@@ -10,12 +10,7 @@ import org.xbib.content.resource.IRINamespaceContext;
 import org.xbib.content.rdf.StreamTester;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
 
-/**
- *
- */
 public class GNDRdfXmlReaderTest extends StreamTester {
 
     @Test
@@ -28,8 +23,7 @@ public class GNDRdfXmlReaderTest extends StreamTester {
         reader.setRdfContentBuilderProvider(() -> turtleBuilder(params));
         reader.setRdfContentBuilderHandler(builder -> sb.append(builder.string()));
         reader.parse();
-        assertStream(new InputStreamReader(getClass().getResourceAsStream("gnd.ttl")),
-                new StringReader(sb.toString()));
+        assertStream("gnd.ttl", getClass().getResourceAsStream("gnd.ttl"), sb.toString());
     }
 
     @Test
@@ -42,8 +36,7 @@ public class GNDRdfXmlReaderTest extends StreamTester {
         reader.setRdfContentBuilderProvider(() -> turtleBuilder(params));
         reader.setRdfContentBuilderHandler(builder -> sb.append(builder.string()));
         reader.parse();
-        assertStream(new InputStreamReader(getClass().getResourceAsStream("gnd.ttl")),
-                new StringReader(sb.toString()));
+        assertStream("gnd.ttl", getClass().getResourceAsStream("gnd.ttl"), sb.toString());
     }
 
     @Test
@@ -55,8 +48,7 @@ public class GNDRdfXmlReaderTest extends StreamTester {
         reader.setRdfContentBuilderProvider(RdfContentFactory::ntripleBuilder);
         reader.setRdfContentBuilderHandler(builder -> sb.append(builder.string()));
         reader.parse();
-        assertStream(new InputStreamReader(getClass().getResourceAsStream("GND.nt")),
-                new StringReader(sb.toString()));
+        assertStream("GND.nt", getClass().getResourceAsStream("GND.nt"), sb.toString());
     }
 
 }

@@ -3,14 +3,13 @@ package org.xbib.content.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- *
- */
 public class BytesStreamInput extends InputStream {
 
-    private byte[] buf;
-    private int pos;
-    private int count;
+    private final byte[] buf;
+
+    private final int count;
+
+    private long pos;
 
     public BytesStreamInput(byte[] buf) {
         this(buf, 0, buf.length);
@@ -37,7 +36,8 @@ public class BytesStreamInput extends InputStream {
 
     @Override
     public int read() throws IOException {
-        return pos < count ? buf[pos++] & 0xff : -1;
+        int i = (int) pos++;
+        return pos < count ? buf[i] & 0xff : -1;
     }
 
     @Override
@@ -48,21 +48,21 @@ public class BytesStreamInput extends InputStream {
         if (pos >= count) {
             return -1;
         }
-        int l = len;
+        long l = len;
         if (pos + l > count) {
             l = count - pos;
         }
         if (l <= 0) {
             return 0;
         }
-        System.arraycopy(buf, pos, b, off, l);
+        System.arraycopy(buf, (int) pos, b, off, (int) l);
         pos += l;
-        return l;
+        return (int) l;
     }
 
     @Override
     public void reset() throws IOException {
-        pos = 0;
+        pos = 0L;
     }
 
     @Override

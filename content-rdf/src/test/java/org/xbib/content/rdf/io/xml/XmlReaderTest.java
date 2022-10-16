@@ -86,7 +86,7 @@ public class XmlReaderTest extends StreamTester {
         new XmlContentParser<TurtleContentParams>(in)
                 .setHandler(xmlHandler)
                 .parse();
-        assertStream(getClass().getResource("dc.ttl").openStream(),
+        assertStream("dc.ttl", getClass().getResource("dc.ttl").openStream(),
                 builder.streamInput());
     }
 

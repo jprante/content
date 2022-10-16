@@ -13,13 +13,18 @@ import java.nio.charset.Charset;
 public final class CharOutputSink implements CharSink {
 
     private static final short BATCH_SIZE = 256;
+
     private final Charset charset;
+
     private Writer writer;
+
     private OutputStream outputStream;
+
     private boolean closeOnEndStream;
+
     private StringBuilder buffer;
 
-    private short bufferSize;
+    private long bufferSize;
 
     /**
      * Creates class instance with default charset encoding.

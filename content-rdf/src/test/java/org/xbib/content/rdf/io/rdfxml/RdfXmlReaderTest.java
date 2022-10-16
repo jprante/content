@@ -9,13 +9,7 @@ import org.xbib.content.resource.IRINamespaceContext;
 import org.xbib.content.rdf.StreamTester;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
 
-/**
- *
- */
 public class RdfXmlReaderTest extends StreamTester {
 
     @Test
@@ -29,8 +23,6 @@ public class RdfXmlReaderTest extends StreamTester {
         reader.setRdfContentBuilderProvider(() -> turtleBuilder(params));
         reader.setRdfContentBuilderHandler(builder -> sb.append(builder.string()));
         reader.parse();
-        assertStream(new InputStreamReader(getClass().getResourceAsStream("118540238.ttl"), StandardCharsets.UTF_8),
-                new StringReader(sb.toString()));
+        assertStream("118540238.ttl", getClass().getResourceAsStream("118540238.ttl"), sb.toString());
     }
-
 }

@@ -7,10 +7,27 @@ import org.junit.jupiter.api.Test;
 import org.xbib.content.resource.IRI;
 import org.xbib.content.resource.IRISyntaxException;
 
-/**
- *
- */
 public class IRITest {
+
+    @Test
+    public void testUserInfo() {
+        IRI iri = IRI.create("http://localhost");
+        assertNull(iri.getUserInfo());
+        assertEquals("localhost", iri.getHost());
+        assertEquals(-1, iri.getPort());
+        iri = IRI.create("http://user@localhost");
+        assertEquals("user", iri.getUserInfo());
+        assertEquals("localhost", iri.getHost());
+        assertEquals(-1, iri.getPort());
+        iri = IRI.create("http://user:password@localhost");
+        assertEquals("user:password", iri.getUserInfo());
+        assertEquals("localhost", iri.getHost());
+        assertEquals(-1, iri.getPort());
+        iri = IRI.create("http://user:password@localhost:1234");
+        assertEquals("user:password", iri.getUserInfo());
+        assertEquals("localhost", iri.getHost());
+        assertEquals(1234, iri.getPort());
+    }
 
     @Test
     public void testJsonLd() {

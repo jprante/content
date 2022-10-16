@@ -75,6 +75,6 @@ public class OAITest extends StreamTester {
         XmlContentParser<TurtleContentParams> parser = new XmlContentParser<>(in);
         parser.builder(builder);
         parser.setHandler(xmlHandler).parse();
-        assertStream(getClass().getResourceAsStream("oai.ttl"), builder.streamInput());
+        assertStream("oai.ttl", getClass().getResourceAsStream("oai.ttl"), builder.streamInput());
     }
 }

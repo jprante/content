@@ -110,7 +110,7 @@ public class TurtleTest extends StreamTester {
         TurtleContentParams params = new TurtleContentParams(context, false);
         RdfContentBuilder<TurtleContentParams> builder = turtleBuilder(params);
         builder.receive(resource);
-        assertStream(getClass().getResource("turtle-test.ttl").openStream(), builder.streamInput());
+        assertStream("turtle-test.ttl", getClass().getResource("turtle-test.ttl").openStream(), builder.streamInput());
     }
 
     private Resource createResource2() {
@@ -142,7 +142,7 @@ public class TurtleTest extends StreamTester {
         TurtleContentParams params = new TurtleContentParams(IRINamespaceContext.getInstance(), false);
         RdfContentBuilder<TurtleContentParams> builder = turtleBuilder(params);
         builder.receive(resource);
-        assertStream(getClass().getResourceAsStream("turtle-indent.ttl"),
+        assertStream("turtle-indent.ttl", getClass().getResourceAsStream("turtle-indent.ttl"),
                 builder.streamInput());
     }
 
@@ -180,7 +180,7 @@ public class TurtleTest extends StreamTester {
         TurtleContentParams params = new TurtleContentParams(IRINamespaceContext.getInstance(), false);
         RdfContentBuilder<TurtleContentParams> builder = turtleBuilder(params);
         builder.receive(resource);
-        assertStream(getClass().getResourceAsStream("deep-nested.ttl"),
+        assertStream("deep-nested.ttl", getClass().getResourceAsStream("deep-nested.ttl"),
                 builder.streamInput());
     }
 

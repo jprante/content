@@ -9,12 +9,7 @@ import org.xbib.content.rdf.StreamTester;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
 
-/**
- *
- */
 public class VIAFRdfXmlReaderTest extends StreamTester {
 
     @Test
@@ -29,7 +24,6 @@ public class VIAFRdfXmlReaderTest extends StreamTester {
                 .setRdfContentBuilderProvider(() -> turtleBuilder(params))
                 .setRdfContentBuilderHandler(builder -> sb.append(builder.string()))
                 .parse();
-        assertStream(new InputStreamReader(getClass().getResource("viaf.ttl").openStream()),
-                new StringReader(sb.toString()));
+        assertStream("viaf.ttl", getClass().getResource("viaf.ttl").openStream(), sb.toString());
     }
 }

@@ -20,9 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 
-/**
- *
- */
 public class EuropeanaEDMReaderTest extends StreamTester {
 
     private static final IRI GEO_LAT = IRI.create("http://www.w3.org/2003/01/geo/wgs84_pos#lat");
@@ -47,8 +44,7 @@ public class EuropeanaEDMReaderTest extends StreamTester {
             Resource resource = resourceIterator.next();
             builder.receive(resource);
         }
-        //System.err.println(builder.string());
-        assertStream(getClass().getResource("edm.nt").openStream(),
+        assertStream("edm.nt", getClass().getResource("edm.nt").openStream(),
                 builder.streamInput());
     }
 
