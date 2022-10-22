@@ -4,7 +4,7 @@ package org.xbib.content.resource.text;
  * Filters are used in a variety of ways to filter or verify unicode codepoints.
  */
 @FunctionalInterface
-public interface Filter {
+public interface CodepointFilter {
 
-    boolean accept(int c);
+    boolean accept(int ch);
 }

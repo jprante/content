@@ -6,12 +6,12 @@ package org.xbib.content.resource.text;
 public final class CharUtils {
 
     public static final char LRE = 0x202A;
-    private static final char RLE = 0x202B;
-    private static final char LRO = 0x202D;
-    private static final char RLO = 0x202E;
-    private static final char LRM = 0x200E;
-    private static final char RLM = 0x200F;
-    private static final char PDF = 0x202C;
+    public static final char RLE = 0x202B;
+    public static final char LRO = 0x202D;
+    public static final char RLO = 0x202E;
+    public static final char LRM = 0x200E;
+    public static final char RLM = 0x200F;
+    public static final char PDF = 0x202C;
 
     private CharUtils() {
     }
@@ -592,58 +592,6 @@ public final class CharUtils {
             return;
         }
         verify(CodepointIterator.forCharSequence(s), profile);
-    }
-
-    /**
-     *
-     */
-    public enum Profile {
-        NONE(codepoint -> true),
-        ALPHA(codepoint -> !isAlpha(codepoint)),
-        ALPHANUM(codepoint -> !isAlphaDigit(codepoint)),
-        FRAGMENT(codepoint -> !isFragment(codepoint)),
-        IFRAGMENT(codepoint -> !isIfragment(codepoint)),
-        PATH(codepoint -> !isPath(codepoint)),
-        IPATH(codepoint -> !isIpath(codepoint)),
-        IUSERINFO(codepoint -> !isIuserinfo(codepoint)),
-        USERINFO(codepoint -> !isUserInfo(codepoint)),
-        QUERY(codepoint -> !isQuery(codepoint)),
-        IQUERY(codepoint -> !isIquery(codepoint)),
-        SCHEME(codepoint -> !isScheme(codepoint)),
-        PATHNODELIMS(codepoint -> !isPathNoDelims(codepoint)),
-        IPATHNODELIMS(codepoint -> !isIpathnodelims(codepoint)),
-        IPATHNODELIMS_SEG(codepoint -> !isIpathnodelims(codepoint) && codepoint != '@' && codepoint != ':'),
-        IREGNAME(codepoint -> !isIregname(codepoint)),
-        IHOST(codepoint -> !isIhost(codepoint)),
-        IPRIVATE(codepoint -> !isIprivate(codepoint)),
-        RESERVED(codepoint -> !isReserved(codepoint)),
-        IUNRESERVED(codepoint -> !isIunreserved(codepoint)),
-        UNRESERVED(codepoint -> !isUnreserved(codepoint)),
-        SCHEMESPECIFICPART(codepoint -> !isIunreserved(codepoint) && !isReserved(codepoint)
-                && !isIprivate(codepoint)
-                && !isPctEnc(codepoint)
-                && codepoint != '#'),
-        AUTHORITY(codepoint -> !isRegname(codepoint) && !isUserInfo(codepoint) && !isGenDelim(codepoint)),
-        ASCIISANSCRLF(codepoint -> !inRange(codepoint, 1, 9) && !inRange(codepoint, 14, 127)),
-        PCT(codepoint -> !isPctEnc(codepoint)),
-        STD3ASCIIRULES(codepoint -> !inRange(codepoint, 0x0000, 0x002C) &&
-                !inRange(codepoint, 0x002E, 0x002F) &&
-                !inRange(codepoint, 0x003A, 0x0040) &&
-                !inRange(codepoint, 0x005B, 0x0060) &&
-                !inRange(codepoint, 0x007B, 0x007F));
-        private final Filter filter;
-
-        Profile(Filter filter) {
-            this.filter = filter;
-        }
-
-        public Filter filter() {
-            return filter;
-        }
-
-        public boolean check(int codepoint) {
-            return filter.accept(codepoint);
-        }
     }
 
 }

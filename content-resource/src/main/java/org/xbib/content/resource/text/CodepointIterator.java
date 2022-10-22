@@ -33,28 +33,27 @@ public abstract class CodepointIterator implements Iterator<Codepoint> {
         return new CharSequenceCodepointIterator(seq);
     }
 
-
-    public static CodepointIterator restrict(CodepointIterator ci, Filter filter) {
+    public static CodepointIterator restrict(CodepointIterator ci, CodepointFilter filter) {
         return new RestrictedCodepointIterator(ci, filter, false);
     }
 
-    public static CodepointIterator restrict(CodepointIterator ci, Filter filter, boolean scanning) {
+    public static CodepointIterator restrict(CodepointIterator ci, CodepointFilter filter, boolean scanning) {
         return new RestrictedCodepointIterator(ci, filter, scanning);
     }
 
-    public static CodepointIterator restrict(CodepointIterator ci, Filter filter, boolean scanning, boolean invert) {
+    public static CodepointIterator restrict(CodepointIterator ci, CodepointFilter filter, boolean scanning, boolean invert) {
         return new RestrictedCodepointIterator(ci, filter, scanning, invert);
     }
 
-    public CodepointIterator restrict(Filter filter) {
+    public CodepointIterator restrict(CodepointFilter filter) {
         return restrict(this, filter);
     }
 
-    public CodepointIterator restrict(Filter filter, boolean scanning) {
+    public CodepointIterator restrict(CodepointFilter filter, boolean scanning) {
         return restrict(this, filter, scanning);
     }
 
-    public CodepointIterator restrict(Filter filter, boolean scanning, boolean invert) {
+    public CodepointIterator restrict(CodepointFilter filter, boolean scanning, boolean invert) {
         return restrict(this, filter, scanning, invert);
     }
 
@@ -266,136 +265,4 @@ public abstract class CodepointIterator implements Iterator<Codepoint> {
         throw new UnsupportedOperationException();
     }
 
-    private static class CharArrayCodepointIterator extends CodepointIterator {
-        protected char[] buffer;
-
-        CharArrayCodepointIterator(char[] buffer) {
-            this(buffer, 0, buffer.length);
-        }
-
-        CharArrayCodepointIterator(char[] buffer, int n, int e) {
-            this.buffer = buffer;
-            this.position = n;
-            this.limit = Math.min(buffer.length - n, e);
-        }
-
-        @Override
-        protected char get() {
-            return (position < limit) ? buffer[position++] : (char) -1;
-        }
-
-        @Override
-        protected char get(int index) {
-            if (index < 0 || index >= limit) {
-                throw new ArrayIndexOutOfBoundsException(index);
-            }
-            return buffer[index];
-        }
-    }
-
-    private static class CharSequenceCodepointIterator extends CodepointIterator {
-        private CharSequence buffer;
-
-        CharSequenceCodepointIterator(CharSequence buffer) {
-            this(buffer, 0, buffer.length());
-        }
-
-        CharSequenceCodepointIterator(CharSequence buffer, int n, int e) {
-            this.buffer = buffer;
-            this.position = n;
-            this.limit = Math.min(buffer.length() - n, e);
-        }
-
-        @Override
-        protected char get() {
-            return buffer.charAt(position++);
-        }
-
-        @Override
-        protected char get(int index) {
-            return buffer.charAt(index);
-        }
-    }
-
-    private static class RestrictedCodepointIterator extends DelegatingCodepointIterator {
-
-        private final Filter filter;
-        private final boolean scanningOnly;
-        private final boolean notset;
-
-        RestrictedCodepointIterator(CodepointIterator internal, Filter filter, boolean scanningOnly) {
-            this(internal, filter, scanningOnly, false);
-        }
-
-        RestrictedCodepointIterator(CodepointIterator internal,
-                                    Filter filter,
-                                    boolean scanningOnly,
-                                    boolean notset) {
-            super(internal);
-            this.filter = filter;
-            this.scanningOnly = scanningOnly;
-            this.notset = notset;
-        }
-
-        @Override
-        public boolean hasNext() {
-            boolean b = super.hasNext();
-            if (scanningOnly) {
-                try {
-                    int cp = super.peek(super.position()).getValue();
-                    if (b && cp != -1 && check(cp)) {
-                        return false;
-                    }
-                } catch (InvalidCharacterException e) {
-                    return false;
-                }
-            }
-            return b;
-        }
-
-        @Override
-        public Codepoint next() {
-            Codepoint cp = super.next();
-            int v = cp.getValue();
-            if (v != -1 && check(v)) {
-                if (scanningOnly) {
-                    super.position(super.position() - 1);
-                    return null;
-                } else {
-                    throw new InvalidCharacterException(v);
-                }
-            }
-            return cp;
-        }
-
-        private boolean check(int cp) {
-            return notset == !filter.accept(cp);
-        }
-
-        @Override
-        public char[] nextChars() {
-            char[] chars = super.nextChars();
-            if (chars != null && chars.length > 0) {
-                if (chars.length == 1 && check(chars[0])) {
-                    if (scanningOnly) {
-                        super.position(super.position() - 1);
-                        return null;
-                    } else {
-                        throw new InvalidCharacterException(chars[0]);
-                    }
-                } else if (chars.length == 2) {
-                    int cp = CharUtils.toSupplementary(chars[0], chars[1]).getValue();
-                    if (check(cp)) {
-                        if (scanningOnly) {
-                            super.position(super.position() - 2);
-                            return null;
-                        } else {
-                            throw new InvalidCharacterException(cp);
-                        }
-                    }
-                }
-            }
-            return chars;
-        }
-    }
 }

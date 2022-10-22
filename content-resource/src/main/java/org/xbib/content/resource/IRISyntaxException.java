@@ -3,9 +3,8 @@ package org.xbib.content.resource;
 /**
  *
  */
+@SuppressWarnings("serial")
 public class IRISyntaxException extends RuntimeException {
-
-    private static final long serialVersionUID = 1813084470937980392L;
 
     IRISyntaxException(String message) {
         super(message);

@@ -1,7 +1,7 @@
 package org.xbib.content.resource;
 
 import org.xbib.content.resource.text.CharUtils;
-import org.xbib.content.resource.text.CharUtils.Profile;
+import org.xbib.content.resource.text.Profile;
 import org.xbib.content.resource.text.InvalidCharacterException;
 import org.xbib.net.PercentDecoder;
 import org.xbib.net.PercentEncoders;
