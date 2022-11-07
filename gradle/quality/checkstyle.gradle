@@ -4,7 +4,7 @@ checkstyle {
     toolVersion '9.2.1'
     showViolations = true
     ignoreFailures = true
-    configFile rootProject.file("gradle/config/checkstyle/checkstyle.xml")
+    configFile rootProject.file("gradle/quality/checkstyle.xml")
 }
 
 tasks.withType(Checkstyle) {
