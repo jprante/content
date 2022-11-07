@@ -1,3 +1,17 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral {
+            metadataSources {
+                mavenPom()
+                artifact()
+                ignoreGradleMetadataRedirection()
+            }
+        }
+        gradlePluginPortal()
+    }
+}
+
 dependencyResolutionManagement {
     versionCatalogs {
         libs {
@@ -21,7 +35,7 @@ dependencyResolutionManagement {
             library('datastructures-yaml-tiny', 'org.xbib', 'datastructures-yaml-tiny').versionRef('datastructures')
             library('mockito-core', 'org.mockito', 'mockito-core').version('4.6.1')
             library('mockito-inline', 'org.mockito', 'mockito-inline').version('4.6.1')
-            library('net', 'org.xbib', 'net').version('3.0.0')
+            library('net', 'org.xbib', 'net').version('3.0.1')
             library('woodstox', 'com.fasterxml.woodstox', 'woodstox-core').version('6.3.0')
             library('snakeyaml', 'org.yaml', 'snakeyaml').version('1.30')
         }
