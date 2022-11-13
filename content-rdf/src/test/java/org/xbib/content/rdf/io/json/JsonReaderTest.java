@@ -27,14 +27,12 @@ public class JsonReaderTest extends StreamTester {
         if (in == null) {
             throw new IOException("file " + filename + " not found");
         }
-
         IRINamespaceContext namespaceContext = IRINamespaceContext.newInstance();
         namespaceContext.addNamespace("dc", "http://purl.org/dc/elements/1.1/");
         namespaceContext.addNamespace("dcterms", "http://purl.org/dc/terms/");
         namespaceContext.addNamespace("bib", "info:srw/cql-context-set/1/bib-v1/");
         namespaceContext.addNamespace("xbib", "http://xbib.org/");
         namespaceContext.addNamespace("lia", "http://xbib.org/lia/");
-
         JsonContentParams params = new JsonContentParams(namespaceContext);
         JsonResourceHandler jsonHandler = new JsonResourceHandler(params) {
 

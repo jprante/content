@@ -16,9 +16,6 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-/**
- *
- */
 public class JsonContentGenerator implements RdfContentGenerator<JsonContentParams>, Flushable {
 
     private final Writer writer;
@@ -29,11 +26,11 @@ public class JsonContentGenerator implements RdfContentGenerator<JsonContentPara
 
     private JsonContentParams params = JsonContentParams.JSON_CONTENT_PARAMS;
 
-    JsonContentGenerator(OutputStream out) throws IOException {
+    JsonContentGenerator(OutputStream out) {
         this(new OutputStreamWriter(out, StandardCharsets.UTF_8));
     }
 
-    JsonContentGenerator(Writer writer) throws IOException {
+    JsonContentGenerator(Writer writer) {
         this.writer = writer;
         this.nsWritten = false;
         this.resource = new DefaultAnonymousResource();
@@ -45,9 +42,19 @@ public class JsonContentGenerator implements RdfContentGenerator<JsonContentPara
     }
 
     @Override
+    public JsonContentGenerator receive(Resource resource) throws IOException {
+        this.resource = resource;
+        return this;
+    }
+
+    @Override
+    public void flush() throws IOException {
+        writer.flush();
+    }
+
+    @Override
     public void close() throws IOException {
-        // write last resource
-        receive(resource);
+        writer.close();
     }
 
     @Override
@@ -98,8 +105,7 @@ public class JsonContentGenerator implements RdfContentGenerator<JsonContentPara
         return this;
     }
 
-    private JsonContentGenerator writeNamespaces() throws IOException {
-        nsWritten = false;
+    private void writeNamespaces() {
         for (Map.Entry<String, String> entry : params.getNamespaceContext().getNamespaces().entrySet()) {
             if (entry.getValue().length() > 0) {
                 String nsURI = entry.getValue();
@@ -108,16 +114,5 @@ public class JsonContentGenerator implements RdfContentGenerator<JsonContentPara
                 }
             }
         }
-        return this;
-    }
-
-    @Override
-    public void flush() throws IOException {
-        writer.flush();
-    }
-
-    @Override
-    public JsonContentGenerator receive(Resource resource) throws IOException {
-        return this;
     }
 }

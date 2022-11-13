@@ -13,7 +13,7 @@ public class RouteRdfXContentGenerator<R extends RouteRdfXContentParams> extends
 
     private boolean flushed;
 
-    RouteRdfXContentGenerator(OutputStream out) throws IOException {
+    RouteRdfXContentGenerator(OutputStream out) {
         super(out);
     }
 
@@ -65,5 +65,4 @@ public class RouteRdfXContentGenerator<R extends RouteRdfXContentParams> extends
             getParams().setId(object.toString());
         }
     }
-
 }

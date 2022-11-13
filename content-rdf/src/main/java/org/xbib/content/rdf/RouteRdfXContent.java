@@ -28,12 +28,12 @@ public class RouteRdfXContent implements RdfContent<RouteRdfXContentParams> {
     }
 
     @Override
-    public RdfContentGenerator<RouteRdfXContentParams> createGenerator(OutputStream out) throws IOException {
+    public RdfContentGenerator<RouteRdfXContentParams> createGenerator(OutputStream out) {
         return new RouteRdfXContentGenerator<>(out);
     }
 
     @Override
-    public RdfContentParser<RouteRdfXContentParams> createParser(InputStream in) throws IOException {
+    public RdfContentParser<RouteRdfXContentParams> createParser(InputStream in) {
         throw new UnsupportedOperationException();
     }
 

@@ -55,7 +55,7 @@ public class RdfXContentGenerator<P extends RdfXContentParams> implements RdfCon
 
     @Override
     public RdfContentGenerator<P> setBaseUri(String baseUri) {
-        startPrefixMapping("", baseUri);
+        params.getNamespaceContext().addNamespace("", baseUri);
         return this;
     }
 
@@ -92,8 +92,11 @@ public class RdfXContentGenerator<P extends RdfXContentParams> implements RdfCon
     }
 
     @Override
-    public void close() throws IOException {
-        flush();
+    public RdfXContentGenerator<P> receive(Resource resource) throws IOException {
+        if (resource != null) {
+            this.resource = resource;
+        }
+        return this;
     }
 
     @Override
@@ -102,7 +105,6 @@ public class RdfXContentGenerator<P extends RdfXContentParams> implements RdfCon
             return;
         }
         flushed = true;
-        // JSON output
         builder = DefaultXContentBuilder.builder(JsonXContent.jsonContent(), out);
         builder.startObject();
         build(this.resource);
@@ -110,12 +112,8 @@ public class RdfXContentGenerator<P extends RdfXContentParams> implements RdfCon
     }
 
     @Override
-    public RdfXContentGenerator<P> receive(Resource resource) throws IOException {
-        if (resource != null) {
-            this.resource = resource;
-        }
+    public void close() throws IOException {
         flush();
-        return this;
     }
 
     public String string() throws IOException {

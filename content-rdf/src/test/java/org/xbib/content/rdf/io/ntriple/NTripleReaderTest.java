@@ -9,9 +9,6 @@ import org.xbib.content.rdf.StreamTester;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- *
- */
 public class NTripleReaderTest extends StreamTester {
 
     @Test
@@ -25,8 +22,8 @@ public class NTripleReaderTest extends StreamTester {
         NTripleContentParser<NTripleContentParams> reader = new NTripleContentParser<>(in);
         reader.setBuilder(builder);
         reader.parse();
-        //assertStream(getClass().getResource("rdfxml.ttl").openStream(),
-        //        builder.streamInput());
+        assertStream("", getClass().getResource("rdfxml.ttl").openStream(),
+                builder.streamInput());
     }
 
 }

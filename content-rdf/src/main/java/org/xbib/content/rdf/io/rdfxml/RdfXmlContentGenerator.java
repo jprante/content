@@ -40,15 +40,21 @@ public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContent
         this(new OutputStreamWriter(out, StandardCharsets.UTF_8));
     }
 
-    public RdfXmlContentGenerator(Writer writer) throws IOException {
+    public RdfXmlContentGenerator(Writer writer) {
         this.writer = writer;
         this.resource = new DefaultAnonymousResource();
     }
 
+
+    @Override
+    public void flush() throws IOException {
+        writer.flush();
+    }
+
     @Override
     public void close() throws IOException {
-        // write last resource
-        receive(resource);
+        flush();
+        writer.close();
     }
 
     @Override
@@ -78,7 +84,7 @@ public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContent
 
     @Override
     public RdfContentGenerator<RdfXmlContentParams> setBaseUri(String baseUri) {
-        startPrefixMapping("", baseUri);
+        params.getNamespaceContext().addNamespace("", baseUri);
         return this;
     }
 
@@ -111,7 +117,7 @@ public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContent
         this.headerWritten = false;
         this.lastWrittenSubject = null;
         for (Map.Entry<String, String> entry : params.getNamespaceContext().getNamespaces().entrySet()) {
-            handleNamespace(entry.getKey(), entry.getValue());
+            setNamespace(entry.getKey(), entry.getValue());
         }
         startRDF();
         writeHeader();
@@ -120,11 +126,6 @@ public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContent
         }
         endRDF();
         return this;
-    }
-
-    @Override
-    public void flush() throws IOException {
-        writer.flush();
     }
 
     private void startRDF() throws IOException {
@@ -136,7 +137,7 @@ public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContent
 
     private void writeHeader() throws IOException {
         try {
-            setNamespace("rdf", NS_URI, false);
+            setNamespace("rdf", NS_URI);
             writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             writeStartOfStartTag(NS_URI, "RDF");
             for (Map.Entry<String, String> entry : params.getNamespaceContext().getNamespaces().entrySet()) {
@@ -178,11 +179,7 @@ public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContent
         }
     }
 
-    private void handleNamespace(String prefix, String name) {
-        setNamespace(prefix, name, false);
-    }
-
-    private void setNamespace(String prefix, String name, boolean fixedPrefix) {
+    private void setNamespace(String prefix, String name) {
         if (headerWritten) {
             return;
         }
@@ -191,13 +188,6 @@ public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContent
             String p = prefix;
             boolean isLegalPrefix = p.length() == 0 || XMLUtil.isNCName(p);
             if (!isLegalPrefix || map.containsValue(p)) {
-                if (fixedPrefix) {
-                    if (isLegalPrefix) {
-                        throw new IllegalArgumentException("Prefix is already in use: " + prefix);
-                    } else {
-                        throw new IllegalArgumentException("Prefix is not a valid XML namespace prefix: " + prefix);
-                    }
-                }
                 if (p.length() == 0 || !isLegalPrefix) {
                     p = "ns";
                 }
@@ -211,7 +201,7 @@ public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContent
         }
     }
 
-    private RdfXmlContentGenerator writeTriple(Triple triple) throws IOException {
+    private void writeTriple(Triple triple) throws IOException {
         if (!writingStarted) {
             throw new IOException("document writing has not yet been started");
         }
@@ -275,7 +265,6 @@ public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContent
             writeEndTag(predNamespace, predLocalName);
         }
         writeNewLine();
-        return this;
     }
 
     private void flushPendingStatements() throws IOException {
@@ -389,7 +378,7 @@ public class RdfXmlContentGenerator implements RdfContentGenerator<RdfXmlContent
         StringBuilder buf = new StringBuilder(text.length());
         int prevIndex = 0;
         while (oldsIndex >= 0) {
-            buf.append(text.substring(prevIndex, oldsIndex));
+            buf.append(text, prevIndex, oldsIndex);
             buf.append(news);
             prevIndex = oldsIndex + olds.length();
             oldsIndex = text.indexOf(olds, prevIndex);

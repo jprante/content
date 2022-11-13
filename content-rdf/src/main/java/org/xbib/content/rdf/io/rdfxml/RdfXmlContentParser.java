@@ -69,12 +69,20 @@ public class RdfXmlContentParser<R extends RdfContentParams> implements RdfConst
     // counter for blank node generation
     private int bn = 0;
 
-    public RdfXmlContentParser(InputStream in) {
-        this(new InputStreamReader(in, StandardCharsets.UTF_8));
+    public RdfXmlContentParser(InputStream inputStream) {
+        this(createReader(inputStream));
     }
 
     public RdfXmlContentParser(Reader reader) {
         this.reader = reader;
+    }
+
+    private static Reader createReader(InputStream inputStream) {
+        if (inputStream != null) {
+            return new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+        } else {
+            return null;
+        }
     }
 
     @Override
